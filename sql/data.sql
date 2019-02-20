@@ -152,6 +152,49 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     (SELECT  data_source_id FROM orders_ds), 'http://www.mmr.cz/getmedia/2a2ea9c8-e6d5-46f5-8d7b-f961b8fabbce/Objednavky_2.xlsx',
     'xlsx', 'monthly', 'Objednávky MMR od 1. 1. 2015', 'mappings/mmr/mapping-orders.xml', FALSE
   );
+
+-- MV: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
+
+WITH mv AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
+  ('ministry', 'Ministerstvo vnitra', '00007064', TRUE) RETURNING entity_id),
+
+    contracts_ds AS (
+    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
+      (SELECT entity_id FROM mv),
+      'contract', 'aperiodic', 'eu.profinit.opendata.control.BlankHandler', TRUE, 'Smlouvy MV')
+    RETURNING data_source_id
+  ),
+
+    invoices_ds AS (
+    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
+      (SELECT entity_id FROM mv),
+      'invoice', 'aperiodic', 'eu.profinit.opendata.control.BlankHandler', TRUE, 'Faktury MV')
+    RETURNING data_source_id
+  ),
+
+    orders_ds AS (
+    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
+      (SELECT entity_id FROM mv),
+      'order', 'aperiodic', 'eu.profinit.opendata.control.BlankHandler', TRUE, 'Objednávky MV')
+    RETURNING data_source_id
+  )
+
+INSERT INTO data_instance(data_source_id, url, format, periodicity, description, mapping_file, incremental) VALUES
+
+  (
+    (SELECT  data_source_id FROM contracts_ds), '',
+    'xlsx', 'monthly', 'Smlouvy MV od 1. 1. 2013', 'mappings/mvcr/mapping-contracts.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), '',
+    'xlsx', 'monthly', 'Faktury MV od 1. 1. 2013', 'mappings/mvcr/mapping-invoices.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM orders_ds), '',
+    'xlsx', 'monthly', 'Objednávky MV od 1. 1. 2013', 'mappings/mvcr/mapping-orders.xml', FALSE
+  );
   
 --MOCR-------------------------------------------------------------------------
 INSERT INTO entity(entity_type, name, ico, dic, is_public) VALUES ('ministry', 'Ministerstvo obrany ČR', '60162694', 'CZ60162694', TRUE);

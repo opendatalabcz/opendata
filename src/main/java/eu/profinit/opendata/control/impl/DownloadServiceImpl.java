@@ -6,6 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -28,9 +30,17 @@ public class DownloadServiceImpl implements DownloadService {
 
     @Override
     public InputStream downloadDataFile(String urlString) throws IOException {
+        if (isFileLocal(urlString)) {
+            File mvcrFile = new File(urlString);
+            return new FileInputStream(mvcrFile);
+        }
         URL url  = new URL(urlString);
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());
         log.debug("Download complete");
         return Channels.newInputStream(rbc);
+    }
+
+    private boolean isFileLocal(String urlString) {
+        return !urlString.startsWith("http");
     }
 }

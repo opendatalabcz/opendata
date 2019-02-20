@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../xsd/datasource_mapping.xsd">
+
+    <mappedSheet number="0">
+        <headerRow>0</headerRow>
+
+        <retriever className="eu.profinit.opendata.transform.convert.mvcr.MVInvoiceRetriever">
+            <sourceFileColumn originalName="cislo_dokladu" argumentName="authorityIdentifier"/>
+            <sourceFileColumn originalName="castka" argumentName="amount"/>
+            <sourceFileColumn originalName="jmeno_firmy" argumentName="partnerName"/>
+        </retriever>
+
+        <property name="recordType" value="INVOICE" onlyNewRecords="true"/>
+
+        <property name="authorityRole" onlyNewRecords="true" value="CUSTOMER"/>
+
+        <property name="authorityIdentifier" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.DirectStringSetter">
+            <sourceFileColumn originalName="cislo_dokladu" argumentName="inputString"/>
+        </property>
+
+        <property name="partner" onlyNewRecords="true"
+                  converter="eu.profinit.opendata.transform.convert.PartnerSetter">
+            <sourceFileColumn originalName="jmeno_firmy" argumentName="name"/>
+            <sourceFileColumn originalName="ico" argumentName="ico"/>
+        </property>
+
+        <property name="currency" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CurrencySetter">
+            <sourceFileColumn originalName="kod_meny" argumentName="inputCurrencyCode"/>
+        </property>
+
+        <property name="allAmounts" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.AllAmountSetter">
+            <sourceFileColumn originalName="castka" argumentName="inputAmount"/>
+        </property>
+
+        <property name="dateCreated" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.DateSetter">
+            <sourceFileColumn originalName="datum_uctovani" argumentName="inputDate"/>
+        </property>
+
+        <property name="masterId" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.RandomMasterIdSetter"/>
+
+    </mappedSheet>
+</mapping>

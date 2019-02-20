@@ -127,11 +127,11 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <database.connection.username>opendata_dev</database.connection.username>
-                <database.connection.password>oracle</database.connection.password>
+                <database.connection.username>postgres</database.connection.username>
+                <database.connection.password>postgres</database.connection.password>
 
-                <test.database.connection.username>opendata_test</test.database.connection.username>
-                <test.database.connection.password>overdose</test.database.connection.password>
+                <test.database.connection.username>postgres</test.database.connection.username>
+                <test.database.connection.password>postgres</test.database.connection.password>
 
                 <log.location>log</log.location>
             </properties>
