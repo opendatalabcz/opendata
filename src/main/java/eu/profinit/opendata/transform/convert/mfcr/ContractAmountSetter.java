@@ -31,14 +31,16 @@ public class ContractAmountSetter implements RecordPropertyConverter {
         Cell invoiceAmountCell = sourceValues.get("invoiceAmount");
         Cell contractAmountCell = sourceValues.get("contractAmount");
 
-        if(invoiceAmountCell.getCellType() == Cell.CELL_TYPE_NUMERIC &&
+        if(invoiceAmountCell != null &&
+                invoiceAmountCell.getCellType() == Cell.CELL_TYPE_NUMERIC &&
                 invoiceAmountCell.getNumericCellValue() > 0) {
             double invoiceAmount = invoiceAmountCell.getNumericCellValue();
             record.setOriginalCurrencyAmount(record.getOriginalCurrencyAmount() + invoiceAmount);
             return;
         }
 
-        if(contractAmountCell.getCellType() == Cell.CELL_TYPE_NUMERIC &&
+        if(contractAmountCell != null &&
+                contractAmountCell.getCellType() == Cell.CELL_TYPE_NUMERIC &&
                 contractAmountCell.getNumericCellValue() > 0) {
             record.setOriginalCurrencyAmount(contractAmountCell.getNumericCellValue());
         }
