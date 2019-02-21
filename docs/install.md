@@ -9,6 +9,11 @@ Databázi lze nově vytvořit použitím následující sekvence skriptů:
 + constants.sql, naplní enumerační tabulky konstantami
 + data.sql, přidá ministerstva, datové zdroje a ty instance, které není možné vytvořit automaticky
 
+# Build
+
+Doporučená verze Javy je 1.8.
+Vyšší verze nemají zajištěnou kompatibilitu (odzkoušeno s verzí 1.11, která již vůbec nepodporuje některé používané knihovny).
+
 # Classpath
 
 Sestavený jar hledá knihovny v adresáři lib/ na classpath, ideálně ve stejném adresáři jako je sám.
