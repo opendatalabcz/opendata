@@ -33,7 +33,7 @@ dsid2 AS (
 )
 
 INSERT INTO data_instance(data_source_id, url, format, periodicity, description, mapping_file, incremental) VALUES (
-  (SELECT  data_source_id FROM dsid), 'http://data.justice.cz/Personln%20informace/Smlouvy%20MSp%20ke%20sta%C5%BEen%C3%AD.xlsx',
+  (SELECT  data_source_id FROM dsid), 'https://data.justice.cz/Personln%20informace/Smlouvy%20MSp%20ke%20sta%C5%BEen%C3%AD.xlsx',
   'xlsx', 'quarterly', 'Smlouvy MSp 2011 - 2015', 'mappings/justice/mapping-contracts.xml', false
 );
 
@@ -65,17 +65,17 @@ WITH mzp AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
 
 INSERT INTO data_instance(data_source_id, url, format, periodicity, description, mapping_file, incremental) VALUES
   (
-    (SELECT  data_source_id FROM orders_ds), 'http://www.mzp.cz/www/smlouvy-web.nsf/exportOrdersValidAsXLSX.xsp',
+    (SELECT  data_source_id FROM orders_ds), 'https://www.mzp.cz/www/smlouvy-web.nsf/exportOrdersValidAsXLSX.xsp',
     'xlsx', 'weekly', 'Průběžné objednávky MŽP', 'mappings/mzp/mapping-orders.xml', FALSE
   ),
 
   (
-    (SELECT  data_source_id FROM contracts_ds), 'http://www.mzp.cz/www/smlouvy-web.nsf/exportContractsValidAsXLSX.xsp',
+    (SELECT  data_source_id FROM contracts_ds), 'https://www.mzp.cz/www/smlouvy-web.nsf/exportContractsValidAsXLSX.xsp',
     'xlsx', 'weekly', 'Platné smlouvy MŽP', 'mappings/mzp/mapping-contracts.xml', FALSE
   ),
 
   (
-    (SELECT  data_source_id FROM invoices_ds), 'http://www.mzp.cz/www/smlouvy-web.nsf/exportInvoicesAsXLSX.xsp',
+    (SELECT  data_source_id FROM invoices_ds), 'https://www.mzp.cz/www/smlouvy-web.nsf/exportInvoicesAsXLSX.xsp',
     'xlsx', 'weekly', 'Průběžné faktury MŽP', 'mappings/mzp/mapping-invoices.xml', FALSE
   );
 
@@ -101,12 +101,12 @@ WITH mk AS (INSERT INTO entity(entity_type, name, ico, dic, is_public) VALUES
 INSERT INTO data_instance(data_source_id, url, format, periodicity, description, mapping_file, incremental) VALUES
 
   (
-    (SELECT  data_source_id FROM contracts_ds), 'http://www.mkcr.cz/assets/povinne-zverejnovane-informace/MK-smlouvy-2015-03-16.xlsx',
+    (SELECT  data_source_id FROM contracts_ds), 'https://www.mkcr.cz/assets/povinne-zverejnovane-informace/MK-smlouvy-2015-03-16.xlsx',
     'xlsx', 'aperiodic', 'Platné smlouvy MK k 31. 1. 2015', 'mappings/mk/mapping-contracts.xml', FALSE
   ),
 
   (
-    (SELECT  data_source_id FROM invoices_ds), 'http://www.mkcr.cz/assets/povinne-zverejnovane-informace/Uhrazene-faktury-dobropisy-a-platebni-poukazy_leden_2015.xlsx',
+    (SELECT  data_source_id FROM invoices_ds), 'https://www.mkcr.cz/assets/povinne-zverejnovane-informace/Uhrazene-faktury-dobropisy-a-platebni-poukazy_leden_2015.xlsx',
     'xlsx', 'aperiodic', 'Faktury MK leden 2015', 'mappings/mk/mapping-invoices.xml', FALSE
   );
 
@@ -195,7 +195,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     (SELECT  data_source_id FROM orders_ds), '',
     'xlsx', 'monthly', 'Objednávky MV od 1. 1. 2013', 'mappings/mvcr/mapping-orders.xml', FALSE
   );
-  
+
 --MOCR-------------------------------------------------------------------------
 INSERT INTO entity(entity_type, name, ico, dic, is_public) VALUES ('ministry', 'Ministerstvo obrany ČR', '60162694', 'CZ60162694', TRUE);
 
@@ -234,12 +234,12 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     (SELECT  data_source_id FROM contracts_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2015/smlouvy_md_2015.xlsx',
     'xlsx', 'aperiodic', 'Smlouvy MDČR 2015', 'mappings/mdcr/mapping-contracts.xml', FALSE
   ),
-  
+
   (
     (SELECT  data_source_id FROM contracts_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2016/smlouvy_md_2016.xlsx',
     'xlsx', 'aperiodic', 'Smlouvy MDČR 2016', 'mappings/mdcr/mapping-contracts.xml', FALSE
   ),
-  
+
   (
     (SELECT  data_source_id FROM contracts_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2017/smlouvy_md_2017.xlsx',
     'xlsx', 'monthly', 'Smlouvy MDČR 2017', 'mappings/mdcr/mapping-contracts.xml', FALSE
@@ -248,7 +248,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2015/faktury_md_2015.xlsx',
     'xlsx', 'aperiodic', 'Faktury MDČR 2015', 'mappings/mdcr/mapping-invoices.xml', FALSE
   ),
-  
+
   (
     (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2016/faktury_md_2016.xlsx',
     'xlsx', 'monthly', 'Faktury MDČR 2016', 'mappings/mdcr/mapping-invoices.xml', FALSE
@@ -257,7 +257,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2017/faktury_md_2017.xlsx',
     'xlsx', 'monthly', 'Faktury MDČR 2017', 'mappings/mdcr/mapping-invoices.xml', FALSE
   );
-  
+
 -- SFDI: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
 
 WITH sfdi AS (INSERT INTO entity(entity_type, name, ico, dic, is_public) VALUES
@@ -283,7 +283,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     (SELECT  data_source_id FROM contracts_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2015/smlouvy_sfdi_2015.xlsx',
     'xlsx', 'aperiodic', 'Smlouvy SFDI 2015', 'mappings/sfdi/mapping-contracts.xml', FALSE
   ),
-  
+
   (
     (SELECT  data_source_id FROM contracts_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2016/smlouvy_sfdi_2016.xlsx',
     'xlsx', 'aperiodic', 'Smlouvy SFDI 2016', 'mappings/sfdi/mapping-contracts.xml', FALSE
@@ -296,7 +296,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2017/smlouvy_sfdi_2017.xlsx',
     'xlsx', 'aperiodic', 'Faktury SFDI 2015', 'mappings/sfdi/mapping-invoices.xml', FALSE
   ),
-  
+
   (
     (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2016/faktury_sfdi_2016.xlsx',
     'xlsx', 'aperiodic', 'Faktury SFDI 2016', 'mappings/sfdi/mapping-invoices.xml', FALSE
