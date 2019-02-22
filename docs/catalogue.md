@@ -64,6 +64,8 @@ Vyplněná pole (hvězdička znamená, že je pole v drtivé většině případ
 ## Smlouvy
 Všechny smlouvy jsou v jediném dokumentu, který obsahuje jak platné, tak neplatné smlouvy. Jednotlivé smlouvy nejsou rozpadlé na více záznamů, ale dodatek ke smlouvě má vlastní a je spojen s rodičem přes parentRecord. Toto je jediný dokument, který obsahuje vazby na jiné (na faktury), takže při zpracování jsou vytvářeny UnresolvedRelationships. Datová instance smluv není inkrementální, takže se při každém stažení zpracovává celá, nejen od posledního zpracovaného řádku. Není totiž záruka, že se nové záznamy vloží na konec dokumentu a je možné, že bude nějaká starší smlouva zveřejněna a zařazena mezi smlouvy ze stejné doby.
 
+Dokument může obsahovat (a obsahuje) záznamy s nullovými hodnotami u neplatných smluv. Dokument také obsahuje patičku jako celkovou sumu částek za všechny smlouvy. Tyto věci je nutné ošetřit pro úspěšné zpracování.
+
 + recordType*, vždy CONTRACT,
 + authorityRole*, ze sloupce "Povaha_smlouvy"
 + subject* ve formátu "Popis_smluvního_typu": "Předmět"
