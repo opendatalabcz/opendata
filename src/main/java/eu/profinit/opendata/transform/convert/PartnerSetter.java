@@ -92,6 +92,7 @@ public class PartnerSetter implements RecordPropertyConverter {
 
             if(canBeValidICO(icoCell)) {
                 String parsedIco = icoCell.getStringCellValue().replace(".", ",");
+                parsedIco = parsedIco.split(",")[0];
                 if (parsedIco.length() < 8) {
                     parsedIco = String.format("%08d", Integer.parseInt(parsedIco));
                 }
