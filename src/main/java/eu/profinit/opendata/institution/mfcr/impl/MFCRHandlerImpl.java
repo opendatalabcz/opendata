@@ -68,6 +68,9 @@ public class MFCRHandlerImpl extends GenericDataSourceHandler implements MFCRHan
     @Value("${mfcr.mapping.old.invoices}")
     private String oldInvoicesMappingFile;
 
+    @Value("${mfcr.mapping.new.invoices}")
+    private String newInvoicesMappingFile;
+
     @Value("${mfcr.mapping.contracts}")
     private String contractsMappingFile;
 
@@ -188,7 +191,7 @@ public class MFCRHandlerImpl extends GenericDataSourceHandler implements MFCRHan
         .forEach(resource -> {
             
             // Check for "uhrazene faktury" and "za rok {YYYY}" and not "privatizace"
-            String name = resource.getName();
+            String name = resource.getName().trim();
 
             if (name.contains("Seznam partnerů")) {
                 processPartnerListDataInstance(ds, resource);
@@ -212,7 +215,13 @@ public class MFCRHandlerImpl extends GenericDataSourceHandler implements MFCRHan
                 dataInstance = sameIds.get();
                 dataInstance.setUrl(resource.getUrl());
             } else {
-                dataInstance.setMappingFile(year < 2015 ? oldInvoicesMappingFile : invoicesMappingFile);
+                String mappingFile = newInvoicesMappingFile;
+                if (year < 2015) {
+                    mappingFile = oldInvoicesMappingFile;
+                } else if (year < 2018) {
+                    mappingFile = invoicesMappingFile;
+                }
+                dataInstance.setMappingFile(mappingFile);
                 dataInstance.setDataSource(ds);
                 dataInstance.setUrl(resource.getUrl());
                 dataInstance.setAuthorityId(resource.getId());
