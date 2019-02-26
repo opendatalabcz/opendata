@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by dm on 1/16/16.
@@ -62,25 +63,10 @@ public class WorkbookProcessorImpl implements WorkbookProcessor {
 
             Sheet sheet = getSheetFromWorkbook(workbook, mappingSheet);
 
-            int startRowNum = mappingSheet.getHeaderRow().intValue() + 1;
-            if (retrieval.getDataInstance().getLastProcessedRow() != null) {
-                startRowNum = retrieval.getDataInstance().getLastProcessedRow() + 1;
-            }
-            log.info("First data row will be " + startRowNum);
+            Map<String, Integer> columnNames = new HashMap<>();
 
-            // Create the column name mapping - if two or more columns share the same name, a numeric suffi
-            // is appended going from left to right. First occurrence gets no suffix, second gets 01, etc.
-            log.trace("Mapping column names to their indexes");
-            
-            Row headerRow = sheet.getRow(mappingSheet.getHeaderRow().intValue());
-            for (int i = 1; Util.isRowEmpty(headerRow); i++) {
-                headerRow = sheet.getRow(mappingSheet.getHeaderRow().intValue() + i);
-                if (retrieval.getDataInstance().getLastProcessedRow() == null) {
-                    startRowNum++;
-                }
-            }
+            int startRowNum = getStartRowNum(columnNames, mappingSheet, sheet, retrieval);
 
-            Map<String, Integer> columnNames = getColumnNamesFromHeaderRow(headerRow);
             for (int i = startRowNum; i <= sheet.getLastRowNum(); i++) {
                 log.debug("Processing row " + i);
                 try {
@@ -116,7 +102,63 @@ public class WorkbookProcessorImpl implements WorkbookProcessor {
         }
     }
 
-    private void persistAndUpdateRetrieval(Retrieval retrieval, int i, Record record) {
+    /**
+     * Determines the starting row - the first row with actual data. It also fills the parameter columnNames with
+     * names of data properties.
+     * @param columnNames - accepts an empty map of column names, fills them meanwhile
+     * @param mappingSheet - mapping sheet
+     * @param sheet - sheet
+     * @param retrieval - retrieval
+     * @return - number of the starting row
+     */
+    private int getStartRowNum(Map<String, Integer> columnNames, MappedSheet mappingSheet, Sheet sheet, Retrieval retrieval) {
+        int startRowNum = mappingSheet.getHeaderRow().intValue() + 1;
+        if (retrieval.getDataInstance().getLastProcessedRow() != null) {
+            startRowNum = retrieval.getDataInstance().getLastProcessedRow() + 1;
+        }
+        log.info("First data row will be " + startRowNum);
+
+        // Create the column name mapping - if two or more columns share the same name, a numeric suffi
+        // is appended going from left to right. First occurrence gets no suffix, second gets 01, etc.
+        log.trace("Mapping column names to their indexes");
+
+
+        Row headerRow = sheet.getRow(mappingSheet.getHeaderRow().intValue());
+        for (int i = 1; Util.isRowEmpty(headerRow); i++) {
+            headerRow = sheet.getRow(mappingSheet.getHeaderRow().intValue() + i);
+            if (retrieval.getDataInstance().getLastProcessedRow() == null) {
+                startRowNum++;
+            }
+        }
+
+        columnNames = getColumnNamesFromHeaderRow(headerRow);
+        if(headerWasBroken(columnNames)) {
+            addBrokenHeaderNames(columnNames, sheet.getRow(startRowNum));
+            startRowNum++;
+        }
+        return startRowNum;
+    }
+
+    private boolean headerWasBroken(Map<String, Integer> columnNames) {
+        Set<String> set = columnNames.keySet().stream()
+                .filter(k -> k.matches(".*\\d+.*"))
+                .collect(Collectors.toSet());
+        return !set.isEmpty();
+    }
+
+    private void addBrokenHeaderNames(Map<String, Integer> columnNames, Row row) {
+        Map<String, Integer> additionalNames = getColumnNamesFromHeaderRow(row);
+        columnNames.forEach(additionalNames::putIfAbsent);
+        // Broken header names causes additional invalid header names such as an empty name or only numerical names
+        Map<String, Integer> m = additionalNames.entrySet().stream()
+                .filter(e -> !e.getKey().matches(".*\\d+.*"))
+                .filter(e -> !e.getKey().isEmpty())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        columnNames.clear();
+        columnNames.putAll(m);
+    }
+
+        private void persistAndUpdateRetrieval(Retrieval retrieval, int i, Record record) {
         if (retrieval.equals(record.getRetrieval()) && !retrieval.getRecords().contains(record)) {
             retrieval.getRecords().add(record);
             retrieval.setNumRecordsInserted(retrieval.getNumRecordsInserted() + 1);

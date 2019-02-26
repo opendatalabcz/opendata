@@ -34,6 +34,9 @@ public class JusticeHandler extends GenericDataSourceHandler {
     @Value("${justice.invoices.2015.mapping.file}")
     private String mapping2015File;
 
+    @Value("${justice.invoices.2018.mapping.file}")
+    private String mapping2018File;
+
     private Logger log = LogManager.getLogger(JusticeHandler.class);
 
     @Override
@@ -86,7 +89,9 @@ public class JusticeHandler extends GenericDataSourceHandler {
 
     private void createDataInstance(Integer year, String url, DataSource ds) {
         String file = mappingFile;
-        if (year == 2015) {
+        if (year == 2018) {
+            file = mapping2018File;
+        } else if (year == 2015) {
             file = mapping2015File;
         } else if (year < 2015) {
             file = mappingOldFile;
