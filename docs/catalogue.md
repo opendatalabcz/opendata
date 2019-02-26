@@ -292,14 +292,18 @@ MD a SFDI jsou dva různé datové zdroje, ale jejich soubory mají stejný form
 + authorityIdentifier*, ze sloupce CISLOFA.
 + masterId* - náhodně vygenerované UUID
 
-# Ministerstvo obrany České republiky
+# Ministerstvo obrany ČR
 
-MOČR vystavuje API poskytující list dostupných dokumentů faktur a smluv. Přístup k API vyžaduje bezpečnostní protokol TLS 1.2. Fetcher se snaží položky tohoto listu zpracovat, avšak zpracování je implementováno jen pro Excel soubory. Faktury jsou však vystavovány pouze v csv formátu, pro který zpracování není řešeno.
+MOČR vystavuje API poskytující list dostupných dokumentů faktur a smluv. Přístup k API vyžaduje bezpečnostní protokol TLS 1.2. Fetcher se snaží položky tohoto listu zpracovat, avšak zpracování je implementováno jen pro Excel soubory. 
 
 ## Smlouvy
+
+Smlouvy zpracováváme pouze na "profilu TENDERMARKET", což jsou ročníky 2015 a 2016.
 
 TODO
 
 ## Faktury
+
+Faktury jsou však vystavovány pouze v csv formátu, pro který zpracování není řešeno.
 
 TODO
