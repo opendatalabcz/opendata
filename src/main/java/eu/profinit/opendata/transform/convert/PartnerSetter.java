@@ -36,7 +36,7 @@ public class PartnerSetter implements RecordPropertyConverter {
         String dic = null;
         String name = null;
 
-        ico = updateIco(sourceValues, ico);
+        ico = updateIco(sourceValues);
         dic = updateDic(sourceValues, dic);
         name = updateName(sourceValues, name);
 
@@ -85,7 +85,7 @@ public class PartnerSetter implements RecordPropertyConverter {
         return dic;
     }
 
-    private String updateIco(final Map<String, Cell> sourceValues, final String ico) {
+    private String updateIco(final Map<String, Cell> sourceValues) {
         if(sourceValues.containsKey("ico") && sourceValues.get("ico") != null) {
             Cell icoCell = sourceValues.get("ico");
             icoCell.setCellType(Cell.CELL_TYPE_STRING);
@@ -99,12 +99,16 @@ public class PartnerSetter implements RecordPropertyConverter {
                 return parsedIco;
             }
         }
-        return ico;
+        return null;
     }
 
     private boolean canBeValidICO(Cell cell) {
-        return !Util.isNullOrEmpty(cell.getStringCellValue()) && cell.getStringCellValue().length() > 3
-                && !"99999999".equals(cell.getStringCellValue());
+        boolean valid = !Util.isNullOrEmpty(cell.getStringCellValue());
+        valid = valid && cell.getStringCellValue().length() > 3;
+        valid = valid && !"99999999".equals(cell.getStringCellValue());
+        // ICO must contain a number
+        valid = valid && cell.getStringCellValue().matches(".*\\d+.*");
+        return valid;
     }
 
 

@@ -22,8 +22,17 @@ public class JusticeHandler extends GenericDataSourceHandler {
     @Value("${justice.invoices.url.scheme}")
     private String urlScheme;
 
+    @Value("${justice.invoices.url.scheme2}")
+    private String urlScheme2;
+
     @Value("${justice.invoices.mapping.file}")
     private String mappingFile;
+
+    @Value("${justice.invoices.old.mapping.file}")
+    private String mappingOldFile;
+
+    @Value("${justice.invoices.2015.mapping.file}")
+    private String mapping2015File;
 
     private Logger log = LogManager.getLogger(JusticeHandler.class);
 
@@ -46,6 +55,8 @@ public class JusticeHandler extends GenericDataSourceHandler {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         for(Integer i = currentYear; i >= 2009; i--) {
             String url = urlScheme.replace("{year}", i.toString());
+            String urlx = url + "x"; // xlsx document
+            String url2 = urlScheme2.replace("{year}", i.toString());
 
             Optional<DataInstance> oldDataInstance = ds.getDataInstances().stream().filter(d -> d.getUrl().equals(url))
                     .findAny();
@@ -59,23 +70,39 @@ public class JusticeHandler extends GenericDataSourceHandler {
                 }
             }
             else if(Util.isXLSFileAtURL(url)) {
-                DataInstance di = new DataInstance();
-                di.setDataSource(ds);
-                ds.getDataInstances().add(di);
-
-                di.setFormat("xls");
-                di.setPeriodicity(Periodicity.QUARTERLY);
-                di.setUrl(url);
-                di.setDescription("Faktury MSp za rok " + i.toString());
-                di.setMappingFile(mappingFile);
-                di.setIncremental(false);
-
-                log.debug("Adding new data instance for MSp invoices in " + i.toString());
-                em.persist(di);
+                createDataInstance(i, url, ds);
             }
-            else {
+            // try xlsx document
+            else if (Util.isXLSFileAtURL(urlx)){
+                createDataInstance(i, urlx, ds);
+            // try scheme2
+            } else if (Util.isXLSFileAtURL(url2)){
+                createDataInstance(i, url2, ds);
+            } else {
                 log.warn("Can't find an XLS document at the url " + url);
             }
         }
+    }
+
+    private void createDataInstance(Integer year, String url, DataSource ds) {
+        String file = mappingFile;
+        if (year == 2015) {
+            file = mapping2015File;
+        } else if (year < 2015) {
+            file = mappingOldFile;
+        }
+        DataInstance di = new DataInstance();
+        di.setDataSource(ds);
+        ds.getDataInstances().add(di);
+
+        di.setFormat("xls");
+        di.setPeriodicity(Periodicity.QUARTERLY);
+        di.setUrl(url);
+        di.setDescription("Faktury MSp za rok " + year.toString());
+        di.setMappingFile(file);
+        di.setIncremental(false);
+
+        log.debug("Adding new data instance for MSp invoices in " + year.toString());
+        em.persist(di);
     }
 }
