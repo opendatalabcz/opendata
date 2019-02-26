@@ -291,3 +291,15 @@ MD a SFDI jsou dva různé datové zdroje, ale jejich soubory mají stejný form
 + partner - dokument obsahuje IČO, ale u některých smluv partner úplně chybí. Kombinace sloupců ICDOD a DODAVATEL
 + authorityIdentifier*, ze sloupce CISLOFA.
 + masterId* - náhodně vygenerované UUID
+
+# Ministerstvo obrany České republiky
+
+MOČR vystavuje API poskytující list dostupných dokumentů faktur a smluv. Přístup k API vyžaduje bezpečnostní protokol TLS 1.2. Fetcher se snaží položky tohoto listu zpracovat, avšak zpracování je implementováno jen pro Excel soubory. Faktury jsou však vystavovány pouze v csv formátu, pro který zpracování není řešeno.
+
+## Smlouvy
+
+TODO
+
+## Faktury
+
+TODO
