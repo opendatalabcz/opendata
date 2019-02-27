@@ -1,14 +1,21 @@
 package eu.profinit.opendata.institution.rest;
 
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 
 import javax.annotation.PostConstruct;
+import javax.net.ssl.SSLContext;
 import java.net.URI;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by dm on 11/28/15.
@@ -16,13 +23,27 @@ import java.net.URI;
 @Component
 public class JSONClient {
 
+    @Value("${mocr.json.api.protocol}")
+    private String jsonApiProtocol;
+
     private RestTemplate restTemplate;
 
     private Logger log = LogManager.getLogger(JSONClient.class);
 
     @PostConstruct
     public void init() {
-        restTemplate = new RestTemplate();
+        SSLContext context = null;
+        try {
+            context = SSLContext.getInstance(jsonApiProtocol);
+            context.init(null, null, null);
+        } catch (NoSuchAlgorithmException|KeyManagementException e) {
+            log.error("Cannot initialize security protocol context", e);
+        }
+
+        CloseableHttpClient httpClient = HttpClientBuilder.create().setSSLContext(context)
+                .build();
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        restTemplate = new RestTemplate(factory);
     }
 
     public JSONPackageList getPackageList(String apiUrl, String packagesPath, String packageListIdentifier) {
