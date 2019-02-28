@@ -79,6 +79,8 @@ Dokument může obsahovat (a obsahuje) záznamy s nullovými hodnotami u neplatn
 + parentRecord v případě, že jde o dodatek
 + masterId* - náhodně vygenerované UUID
 
++ filter na authorityIdentifier*: pokud je není vyplna hodnota, řádek se nezpracovává
+
 # Ministerstvo spravedlnosti ČR
 
 ## Smlouvy
@@ -294,16 +296,35 @@ MD a SFDI jsou dva různé datové zdroje, ale jejich soubory mají stejný form
 
 # Ministerstvo obrany ČR
 
-MOČR vystavuje API poskytující list dostupných dokumentů faktur a smluv. Přístup k API vyžaduje bezpečnostní protokol TLS 1.2. Fetcher se snaží položky tohoto listu zpracovat, avšak zpracování je implementováno jen pro Excel soubory. 
+MOČR vystavuje API poskytující list dostupných dokumentů faktur a smluv. Přístup k API vyžaduje bezpečnostní protokol TLS 1.2. Fetcher se snaží položky tohoto listu zpracovat. 
 
 ## Smlouvy
 
 Smlouvy zpracováváme pouze na "profilu TENDERMARKET", což jsou ročníky 2015 a 2016.
 
-TODO
++ recordType*, vždy CONTRACT,
++ authorityRole*, vždy CUSTOMER
++ subject, ze sloupce "Název VZ", nebo "Název"
++ dateCreated*, ze sloupce "Datum uzavreni smlouvy"
++ currency*, vždy CZK
++ allAmounts*, ze sloupce "Smluvni cena bez DPH"
++ partner - dokument obsahuje IČO, ale u některých smluv partner úplně chybí. Kombinace sloupců "IČO dodavatele", "IČO", nebo "Úredni název "dodavatele""
++ authorityIdentifier*, ze sloupců "id", "ID VZ", nebo "ID"
++ masterId* - náhodně vygenerované UUID
 
 ## Faktury
 
-Faktury jsou však vystavovány pouze v csv formátu, pro který zpracování není řešeno.
+Faktury jsou vystavovány pouze v csv formátu.
 
-TODO
++ recordType*, vždy INVOICE,
++ authorityRole*, vždy CUSTOMER
++ subject, ze sloupce "[UCELPLATBY]", nebo "Popis"
++ dateCreated*, ze sloupce "[DATUMVYSTAVENI]", nebo "Datum UÚP"
++ currency*, vždy CZK
++ allAmounts*, ze sloupce "[CELKOVACASTKA]", nebo "Částka v Kč"
++ partner - dokument obsahuje IČO, ale u některých smluv partner úplně chybí. Kombinace sloupců "[ICO]", "IČO", "[DODAVATEL]" nebo "Název subjektu"
++ authorityIdentifier*, ze sloupců "[CISLO]", "Agendové číslo"
++ masterId* - náhodně vygenerované UUID
+
++ filter na authorityIdentifier*: pokud není hodnota číslo, řádek se nezpracuje
+
