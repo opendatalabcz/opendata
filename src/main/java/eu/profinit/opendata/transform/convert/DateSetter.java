@@ -1,11 +1,12 @@
 package eu.profinit.opendata.transform.convert;
 
 import eu.profinit.opendata.model.Record;
+import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordPropertyConverter;
 import eu.profinit.opendata.transform.TransformException;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
 import org.springframework.stereotype.Component;
+
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Map;

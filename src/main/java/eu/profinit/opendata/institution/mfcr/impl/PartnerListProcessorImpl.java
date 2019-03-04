@@ -5,7 +5,8 @@ import eu.profinit.opendata.institution.mfcr.PartnerListProcessor;
 import eu.profinit.opendata.model.DataSource;
 import eu.profinit.opendata.model.Entity;
 import eu.profinit.opendata.query.PartnerQueryService;
-import org.apache.poi.ss.usermodel.Row;
+import eu.profinit.opendata.transform.Row;
+import eu.profinit.opendata.transform.impl.WorkbookRowImpl;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -38,7 +39,7 @@ public class PartnerListProcessorImpl implements PartnerListProcessor {
         try(Workbook workbook = new XSSFWorkbook(inputStream)) {
             Sheet sheet = workbook.getSheetAt(0);
             for(int i = 1; i <= sheet.getLastRowNum(); i++) {
-                Row row = sheet.getRow(i);
+                Row row = new WorkbookRowImpl(sheet.getRow(i));
                 if(Util.isRowEmpty(row)) continue;
     
                 String partnerCode = row.getCell(0).getStringCellValue();

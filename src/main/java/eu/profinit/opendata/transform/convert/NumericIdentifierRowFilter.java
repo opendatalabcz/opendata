@@ -13,12 +13,19 @@ import java.util.Map;
  * Valid record has at least one not-null identifier field, specified by sourceFileColumn element in the mapping XML.
  */
 @Component
-public class IdentifierRowFilter implements SourceRowFilter {
+public class NumericIdentifierRowFilter implements SourceRowFilter {
 
     @Override
     public boolean proceedWithRow(Retrieval currentRetrieval, Map<String, Cell> sourceValues) throws TransformException {
         if (sourceValues.values().stream()
-                .anyMatch(cell -> cell != null)) {
+                .anyMatch(cell -> {
+                    try {
+                        cell.getNumericCellValue();
+                        return true;
+                    } catch (NumberFormatException e) {
+                        return false;
+                    }
+                })) {
             return true;
         }
         return false;

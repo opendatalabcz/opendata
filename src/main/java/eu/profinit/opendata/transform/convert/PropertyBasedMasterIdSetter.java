@@ -1,23 +1,21 @@
 package eu.profinit.opendata.transform.convert;
 
+import eu.profinit.opendata.model.Record;
+import eu.profinit.opendata.model.Retrieval;
+import eu.profinit.opendata.query.RecordQueryService;
+import eu.profinit.opendata.transform.Cell;
+import eu.profinit.opendata.transform.RecordPropertyConverter;
+import eu.profinit.opendata.transform.TransformException;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import eu.profinit.opendata.model.Record;
-import eu.profinit.opendata.model.Retrieval;
-import eu.profinit.opendata.query.RecordQueryService;
-import eu.profinit.opendata.transform.RecordPropertyConverter;
-import eu.profinit.opendata.transform.TransformException;
 
 /**
  * Sets the masterId property of a Record. Tries to find an existing Record with specified attribute values (contained

@@ -3,8 +3,12 @@ package eu.profinit.opendata.transform.impl;
 import eu.profinit.opendata.control.DownloadService;
 import eu.profinit.opendata.model.DataInstance;
 import eu.profinit.opendata.model.Retrieval;
-import eu.profinit.opendata.transform.*;
+import eu.profinit.opendata.transform.CSVProcessor;
+import eu.profinit.opendata.transform.TransformDriver;
+import eu.profinit.opendata.transform.WorkbookProcessor;
 import eu.profinit.opendata.transform.jaxb.Mapping;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -23,11 +27,13 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * Created by dm on 12/2/15.
@@ -37,6 +43,9 @@ public class TransformDriverImpl implements TransformDriver {
 
     @Autowired
     private WorkbookProcessor workbookProcessor;
+
+    @Autowired
+    private CSVProcessor csvProcessor;
 
     @Autowired
     private ResourceLoader resourceLoader;
@@ -76,13 +85,29 @@ public class TransformDriverImpl implements TransformDriver {
             if(inputStream == null) {
                 log.info("Downloading data file from " + dataInstance.getUrl());
                 inputStream = downloadService.downloadDataFile(dataInstance);
+//                File initialFile = new File("src/main/resources/temp/Uhrazené faktury k 31.12.2016 k nahrání_edit.csv");
+////                File initialFile = new File("src/main/resources/temp/1.1.2015 - 31.12.2015 sestava tendermarket_0_edit.xlsx");
+//                inputStream = new FileInputStream(initialFile);
             }
 
-            Workbook workbook = openXLSFile(inputStream, dataInstance);
             Mapping mapping = loadMapping(mappingFile);
-            workbookProcessor.processWorkbook(workbook, mapping, retrieval, log);
+            if (dataInstance.getFormat().equals("xlsx")) {
+                Workbook workbook = openXLSFile(inputStream, dataInstance);
+                workbookProcessor.processWorkbook(workbook, mapping, retrieval, log);
+                log.info("Whole workbook procesed successfully");
+            } else {
+                try (
+                        Reader reader = new InputStreamReader(inputStream);
+                        CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL
+                                .withDelimiter(';')
+                                .withFirstRecordAsHeader()
+                                .withIgnoreHeaderCase()
+                                .withTrim());
+                ) {
+                    csvProcessor.processCSVSheet(csvParser, mapping, retrieval, log);
+                }
+            }
 
-            log.info("Whole workbook procesed successfully");
             retrieval.setSuccess(true);
             em.merge(retrieval.getDataInstance()); // Save last processed row
         }
