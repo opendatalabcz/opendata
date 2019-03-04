@@ -63,7 +63,6 @@ public class WorkbookProcessorImpl implements WorkbookProcessor {
 
             Sheet sheet = getSheetFromWorkbook(workbook, mappingSheet);
 
-
             // Create the column name mapping - if two or more columns share the same name, a numeric suffi
             // is appended going from left to right. First occurrence gets no suffix, second gets 01, etc.
             log.trace("Mapping column names to their indexes");
@@ -84,38 +83,45 @@ public class WorkbookProcessorImpl implements WorkbookProcessor {
             }
 
             Map<String, Integer> columnNames = getColumnNamesFromHeaderRow(headerRow);
-            for (int i = startRowNum; i <= sheet.getLastRowNum(); i++) {
-                log.debug("Processing row " + i);
-                try {
-                    Optional<Record> optRow = processRow(
-                            sheet.getRow(i), mappingSheet, mapping.getPropertySet(), retrieval, columnNames);
 
-                    if (!optRow.isPresent()) {
-                        log.warn("Encountered empty row at index " + i + ", skipping");
-                        continue;
-                    }
-                    
-                    Record record = optRow.get();
+            processSheetData(startRowNum, sheet, mappingSheet, mapping, retrieval, columnNames);
+            log.info("Sheet finished");
+        }
+    }
 
-                    //A call to persist will throw a PersistenceException if all required attributes aren't filled
-                    //Which means the whole transaction will blow up. We need to check manually
-                    checkRecordIntegrity(record);
+    private void processSheetData(int startRowNum, Sheet sheet, MappedSheet mappingSheet, Mapping mapping, Retrieval retrieval,
+                             Map<String, Integer> columnNames) throws TransformException {
 
-                    log.debug("Record finished, persisting");
-                    persistAndUpdateRetrieval(retrieval, i, record);
-                } catch (TransformException ex) {
-                    if (ex.getSeverity().equals(TransformException.Severity.FATAL)) {
-                        throw ex;
-                    } else {
-                        //Property local exceptions should get caught deeper down, these are record local
-                        //In case we are updating an old record, we should be fine, since we don't save or merge the record
-                        //The bad row will still count as a bad record though!
-                        log.warn("A record-local exception occurred, skipping row " + i + " as bad record", ex);
-                        retrieval.setNumBadRecords(retrieval.getNumBadRecords() + 1);
-                    }
+        for (int i = startRowNum; i <= sheet.getLastRowNum(); i++) {
+            log.debug("Processing row " + i);
+            try {
+                Optional<Record> optRow = processRow(
+                        sheet.getRow(i), mappingSheet, mapping.getPropertySet(), retrieval, columnNames);
+
+                if (!optRow.isPresent()) {
+                    log.warn("Encountered empty row at index " + i + ", skipping");
+                    continue;
+                }
+
+                Record record = optRow.get();
+
+                //A call to persist will throw a PersistenceException if all required attributes aren't filled
+                //Which means the whole transaction will blow up. We need to check manually
+                checkRecordIntegrity(record);
+
+                log.debug("Record finished, persisting");
+                persistAndUpdateRetrieval(retrieval, i, record);
+            } catch (TransformException ex) {
+                if (ex.getSeverity().equals(TransformException.Severity.FATAL)) {
+                    throw ex;
+                } else {
+                    //Property local exceptions should get caught deeper down, these are record local
+                    //In case we are updating an old record, we should be fine, since we don't save or merge the record
+                    //The bad row will still count as a bad record though!
+                    log.warn("A record-local exception occurred, skipping row " + i + " as bad record", ex);
+                    retrieval.setNumBadRecords(retrieval.getNumBadRecords() + 1);
                 }
             }
-            log.info("Sheet finished");
         }
     }
 
@@ -150,13 +156,14 @@ public class WorkbookProcessorImpl implements WorkbookProcessor {
         Iterator<Cell> cellIterator = headerRow.cellIterator();
         while (cellIterator.hasNext()) {
             Cell cell = cellIterator.next();
-            String columnName = cell.getStringCellValue().trim();
+            StringBuilder columnName = new StringBuilder();
+            columnName.append(cell.getStringCellValue().trim());
             int i = 1;
             while (columnNames.containsKey(columnName)) {
-                columnName += String.format("%02d", i);
+                columnName.append(String.format("%02d", i));
                 i++;
             }
-            columnNames.put(columnName, cell.getColumnIndex());
+            columnNames.put(columnName.toString(), cell.getColumnIndex());
             log.trace("Name: " + cell.getStringCellValue() + ", Index: " + cell.getColumnIndex());
         }
         return columnNames;
