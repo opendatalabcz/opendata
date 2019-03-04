@@ -6,9 +6,8 @@
         <headerRow>0</headerRow>
 
         <retriever className="eu.profinit.opendata.transform.convert.mpo.MPOInvoiceRetriever">
-            <sourceFileColumn originalName="cislo_dokladu" argumentName="authorityIdentifier"/>
-            <sourceFileColumn originalName="castka" argumentName="amount"/>
-            <sourceFileColumn originalName="jmeno_firmy" argumentName="partnerName"/>
+            <sourceFileColumn originalName="Řada dokladů" argumentName="categoryCode"/>
+            <sourceFileColumn originalName="Evidenční číslo" argumentName="serialNumber"/>
         </retriever>
 
         <property name="recordType" value="INVOICE" onlyNewRecords="true"/>

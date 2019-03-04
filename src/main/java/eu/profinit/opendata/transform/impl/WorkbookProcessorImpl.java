@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.lang.reflect.Field;
+import java.math.BigInteger;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -62,17 +63,19 @@ public class WorkbookProcessorImpl implements WorkbookProcessor {
 
             Sheet sheet = getSheetFromWorkbook(workbook, mappingSheet);
 
+
+            // Create the column name mapping - if two or more columns share the same name, a numeric suffi
+            // is appended going from left to right. First occurrence gets no suffix, second gets 01, etc.
+            log.trace("Mapping column names to their indexes");
+            
+            Row headerRow = findHeaderRow(sheet, mappingSheet);
+
             int startRowNum = mappingSheet.getHeaderRow().intValue() + 1;
             if (retrieval.getDataInstance().getLastProcessedRow() != null) {
                 startRowNum = retrieval.getDataInstance().getLastProcessedRow() + 1;
             }
             log.info("First data row will be " + startRowNum);
 
-            // Create the column name mapping - if two or more columns share the same name, a numeric suffi
-            // is appended going from left to right. First occurrence gets no suffix, second gets 01, etc.
-            log.trace("Mapping column names to their indexes");
-            
-            Row headerRow = sheet.getRow(mappingSheet.getHeaderRow().intValue());
             for (int i = 1; Util.isRowEmpty(headerRow); i++) {
                 headerRow = sheet.getRow(mappingSheet.getHeaderRow().intValue() + i);
                 if (retrieval.getDataInstance().getLastProcessedRow() == null) {
@@ -114,6 +117,20 @@ public class WorkbookProcessorImpl implements WorkbookProcessor {
             }
             log.info("Sheet finished");
         }
+    }
+
+    private Row findHeaderRow(Sheet sheet, MappedSheet mappingSheet) {
+        int headerNumber = mappingSheet.getHeaderRow().intValue();
+        Row row = sheet.getRow(headerNumber);
+        int i = headerNumber;
+        while (row.getCell(1).getCellType() == 3){
+            row = sheet.getRow(i++);
+        }
+        if (i > 0) {
+            headerNumber = i - 1;
+        }
+        mappingSheet.setHeaderRow(BigInteger.valueOf(headerNumber));
+        return sheet.getRow(headerNumber);
     }
 
     private void persistAndUpdateRetrieval(Retrieval retrieval, int i, Record record) {

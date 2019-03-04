@@ -213,7 +213,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   (
     (SELECT  data_source_id FROM invoices_ds), 'https://www.mpo.cz/assets/cz/rozcestnik/ministerstvo/otevrena-data/lokalni-katalog/2019/2/faktury.xlsx',
     'xlsx', 'aperiodic', 'Smlouvy MPO 2013 - 2018', 'mappings/mpo/mapping-invoices.xml', FALSE
-  ),
+  );
 
 --MOCR-------------------------------------------------------------------------
 INSERT INTO entity(entity_type, name, ico, dic, is_public) VALUES ('ministry', 'Ministerstvo obrany ČR', '60162694', 'CZ60162694', TRUE);
@@ -312,7 +312,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     'xlsx', 'monthly', 'Smlouvy SFDI 2016', 'mappings/sfdi/mapping-contracts.xml', FALSE
   ),
   (
-    (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2017/smlouvy_sfdi_2017.xlsx',
+    (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2015/faktury_sfdi_2015.xlsx',
     'xlsx', 'aperiodic', 'Faktury SFDI 2015', 'mappings/sfdi/mapping-invoices.xml', FALSE
   ),
 
