@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * Represents a single published data file. Could be an XLS file, a link to generate one or a dummy container for
+ * Represents a single published data file. Could be an XLS or CSV file, a link to generate one or a dummy container for
  * metadata. A single DataSource can have multiple DataInstances. Some DataInstances are be generated automatically by
  * Handlers, some are used perpetually, others need to be inserted periodically via SQL.
  * Refer to the data catalogue for details about individual sources.
@@ -21,7 +21,7 @@ import java.util.Objects;
 @SequenceGenerator(name = "seq_pk", sequenceName = "data_instance_data_instance_id_seq", allocationSize = 1)
 public class DataInstance {
 
-    /** "xls" or "xlsx" depending on the data file format*/
+    /** "xls", "xlsx", or "csv" depending on the data file format*/
     private String format;
 
     /** The time of the last <em>successful</em> processing of this DataInstance */

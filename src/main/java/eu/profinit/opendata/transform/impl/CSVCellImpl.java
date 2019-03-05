@@ -58,11 +58,13 @@ public class CSVCellImpl implements Cell {
 
     /**
      * Type is always string, does nothing.
-     * @param type
-     * @throws UnsupportedOperationException
+     * @param type expects only string type
+     * @throws IllegalArgumentException
      */
     @Override
     public void setCellType(int type) {
-        throw new UnsupportedOperationException();
+        if (type != this.CELL_TYPE_STRING) {
+            throw new IllegalArgumentException();
+        }
     }
 }
