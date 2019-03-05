@@ -85,9 +85,6 @@ public class TransformDriverImpl implements TransformDriver {
             if(inputStream == null) {
                 log.info("Downloading data file from " + dataInstance.getUrl());
                 inputStream = downloadService.downloadDataFile(dataInstance);
-//                File initialFile = new File("src/main/resources/temp/Uhrazené faktury k 31.12.2016 k nahrání_edit.csv");
-////                File initialFile = new File("src/main/resources/temp/1.1.2015 - 31.12.2015 sestava tendermarket_0_edit.xlsx");
-//                inputStream = new FileInputStream(initialFile);
             }
 
             Mapping mapping = loadMapping(mappingFile);

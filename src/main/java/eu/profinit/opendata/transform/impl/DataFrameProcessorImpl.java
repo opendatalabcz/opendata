@@ -93,8 +93,7 @@ public abstract class DataFrameProcessorImpl implements DataFrameProcessor {
         if(!rowFilterPassed(row, mapping, retrieval, columnNames)) {
             return Optional.empty();
         }
-//        Optional<Record> record = invokeOldRecordRetriever(row, mapping, retrieval, columnNames);
-        Optional<Record> record = Optional.empty();
+        Optional<Record> record = invokeOldRecordRetriever(row, mapping, retrieval, columnNames);
 
         //Create the Record
         boolean newRecord;
