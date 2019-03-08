@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.util.Map;
 import java.util.Optional;
 
@@ -50,7 +49,7 @@ public class WorkbookProcessorImpl extends DataFrameProcessorImpl implements Wor
             // is appended going from left to right. First occurrence gets no suffix, second gets 01, etc.
             log.trace("Mapping column names to their indexes");
 
-            Row headerRow = findHeaderRow(sheet, mappingSheet);
+            Row headerRow =  new WorkbookRowImpl(sheet.getRow(mappingSheet.getHeaderRow().intValue()));
 
             int startRowNum = mappingSheet.getHeaderRow().intValue() + 1;
             if (retrieval.getDataInstance().getLastProcessedRow() != null) {
@@ -107,19 +106,4 @@ public class WorkbookProcessorImpl extends DataFrameProcessorImpl implements Wor
             }
         }
     }
-
-    private Row findHeaderRow(Sheet sheet, MappedSheet mappingSheet) {
-        int headerNumber = mappingSheet.getHeaderRow().intValue();
-        Row row = new WorkbookRowImpl(sheet.getRow(headerNumber));
-        int i = headerNumber;
-        while (row.getCell(1).getCellType() == 3){
-            row = new WorkbookRowImpl(sheet.getRow(i++));
-        }
-        if (i > 0) {
-            headerNumber = i - 1;
-        }
-        mappingSheet.setHeaderRow(BigInteger.valueOf(headerNumber));
-        return new WorkbookRowImpl(sheet.getRow(headerNumber));
-    }
-
 }
