@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
+import eu.profinit.opendata.transform.Cell;
 import org.springframework.stereotype.Component;
 
 import eu.profinit.opendata.model.Record;

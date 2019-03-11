@@ -4,6 +4,7 @@ import eu.profinit.opendata.model.DataInstance;
 import eu.profinit.opendata.model.Retrieval;
 import eu.profinit.opendata.transform.jaxb.Mapping;
 import org.apache.poi.ss.usermodel.Workbook;
+
 import javax.persistence.EntityManager;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -11,8 +12,8 @@ import java.io.InputStream;
 
 /**
  * A component for initiating the extraction of a DataInstance (a Retrieval). The TransformDriver will download the
- * physical data file, open it, load its mapping and pass it to the WorkbookProcessor to do the actual work.
- * @see WorkbookProcessor
+ * physical data file, open it, load its mapping and pass it to the DataFrameProcessor to do the actual work.
+ * @see DataFrameProcessor
  * @see DataInstance
  */
 public interface TransformDriver {

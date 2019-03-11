@@ -196,6 +196,25 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     'xlsx', 'monthly', 'Objednávky MV od 1. 1. 2013', 'mappings/mvcr/mapping-orders.xml', FALSE
   );
 
+-- MPO: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
+
+WITH mpo AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
+  ('ministry', 'Ministerstvo průmyslu a obchodu', '47609109', TRUE) RETURNING entity_id),
+
+    invoices_ds AS (
+    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
+      (SELECT entity_id FROM mpo),
+      'invoice', 'aperiodic', 'eu.profinit.opendata.control.BlankHandler', TRUE, 'Faktury MPO')
+    RETURNING data_source_id
+  )
+
+INSERT INTO data_instance(data_source_id, url, format, periodicity, description, mapping_file, incremental) VALUES
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://www.mpo.cz/assets/cz/rozcestnik/ministerstvo/otevrena-data/lokalni-katalog/2019/2/faktury.xlsx',
+    'xlsx', 'aperiodic', 'Smlouvy MPO 2013 - 2018', 'mappings/mpo/mapping-invoices.xml', FALSE
+  );
+
 --MOCR-------------------------------------------------------------------------
 INSERT INTO entity(entity_type, name, ico, dic, is_public) VALUES ('ministry', 'Ministerstvo obrany ČR', '60162694', 'CZ60162694', TRUE);
 
@@ -293,7 +312,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     'xlsx', 'monthly', 'Smlouvy SFDI 2016', 'mappings/sfdi/mapping-contracts.xml', FALSE
   ),
   (
-    (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2017/smlouvy_sfdi_2017.xlsx',
+    (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2015/faktury_sfdi_2015.xlsx',
     'xlsx', 'aperiodic', 'Faktury SFDI 2015', 'mappings/sfdi/mapping-invoices.xml', FALSE
   ),
 
@@ -304,17 +323,4 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   (
     (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2017/faktury_sfdi_2017.xlsx',
     'xlsx', 'monthly', 'Faktury SFDI 2017', 'mappings/sfdi/mapping-invoices.xml', FALSE
-  );
-
-
---MOCR-------------------------------------------------------------------------
-WITH mocr as (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
-  ('ministry', 'Ministerstvo obrany ČR', '60162694', TRUE) RETURNING entity_id)
-
-INSERT INTO data_source(entity_id, record_type, periodicity, handling_class, active, description) VALUES
-  (
-    (SELECT entity_id FROM mocr), 'invoice', 'daily', 'eu.profinit.opendata.institution.mocr.MOCRHandler', TRUE, 'Faktury MOČR'
-  ),
-  (
-  (SELECT entity_id FROM mocr), 'contract', 'daily', 'eu.profinit.opendata.institution.mocr.MOCRHandler', TRUE, 'Smlouvy MOČR'
   );

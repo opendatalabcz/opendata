@@ -3,7 +3,6 @@ package eu.profinit.opendata.transform;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.Retrieval;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
 
 import java.util.Map;
 

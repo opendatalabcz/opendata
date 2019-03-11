@@ -1,10 +1,10 @@
 package eu.profinit.opendata.transform.convert.mocr;
 
 import eu.profinit.opendata.model.Record;
+import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordPropertyConverter;
 import eu.profinit.opendata.transform.TransformException;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
@@ -24,14 +24,7 @@ public class MOInvoiceDateSetter implements RecordPropertyConverter {
             throws TransformException {
 
         try {
-            if (sourceValues.get(INPUT_DATE).getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                Date inputDate = sourceValues.get(INPUT_DATE).getDateCellValue();
-                Field field = Record.class.getDeclaredField(fieldName);
-                field.setAccessible(true);
-                java.sql.Date sqlDate = new java.sql.Date(inputDate.getTime());
-                field.set(record, sqlDate);
-            } else {
-                sourceValues.get(INPUT_DATE).setCellType(Cell.CELL_TYPE_STRING);
+            if (sourceValues.get(INPUT_DATE).getCellType() == Cell.CELL_TYPE_STRING) {
                 String dateString = sourceValues.get(INPUT_DATE).getStringCellValue();
                 String dateFormat = "d.M.yyyy";
                 SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
@@ -43,7 +36,6 @@ public class MOInvoiceDateSetter implements RecordPropertyConverter {
 
                 field.set(record, sqlDate);
             }
-
         } catch (Exception e) {
             throw new TransformException("Couldn't set MOCR date field", e,
                     TransformException.Severity.PROPERTY_LOCAL);

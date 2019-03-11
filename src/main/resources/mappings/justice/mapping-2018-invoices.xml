@@ -3,7 +3,7 @@
          xsi:noNamespaceSchemaLocation="../../xsd/datasource_mapping.xsd">
 
     <mappedSheet number="0">
-        <headerRow>1</headerRow>
+        <headerRow>2</headerRow>
 
         <retriever className="eu.profinit.opendata.transform.convert.justice.JusticeInvoiceRecordRetriever">
             <sourceFileColumn originalName="Rok" argumentName="inputYear"/>

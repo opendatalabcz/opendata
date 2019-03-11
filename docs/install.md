@@ -27,3 +27,10 @@ Unit testy taky vyžadují připojení k internetu, protože se pokouší stahov
 # Použití aplikace
 
 Jsou-li v databázi vloženy všechny relevantní datové zdroje a instance, stačí jenom spustit aplikační jar a aplikace se o všechno ostatní postará.
+
+## Debugovací optimalizace
+V případě čístě inicializované databáze je stahované množství dat veliké. Můžeme si však pomoci vypuštěním kontrolní logiky, která z důvodu četných DB konexí výrazně spomaluje celou dávku.
+
+Dle měření (viz. https://bugzilla-externi.profinit.eu/bug/attachment.cgi?id=41298) jsou zde stěžejní tyto metody:
+ + eu.profinit.opendata.transform.impl.DataFrameProcessorImpl#invokeOldRecordRetriever
+ + eu.profinit.opendata.query.PartnerQueryService#findMatchingEntityByName

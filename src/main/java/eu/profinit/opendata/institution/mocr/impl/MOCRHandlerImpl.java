@@ -156,12 +156,12 @@ public class MOCRHandlerImpl extends GenericDataSourceHandler implements MOCRHan
         for (JSONPackageListResource resource : resourceList) {
 
             // Check if we found an xls resource
-            if (resource.getFormat().equals("excel")) {
+            if (resource.getFormat().equals("csv")) {
                 // Check for "uhrazene faktury" and "za rok {YYYY}" and not "privatizace"
                 String name = resource.getName();
                 String resourceId = resource.getUrl(); // No ID in JSON response anymore
 
-                Pattern pattern = Pattern.compile("^Uhrazené faktury za rok (?<year>\\d{4})$");
+                Pattern pattern = Pattern.compile("^Uhrazené faktury (?<year>\\d{4})$");
                 Matcher matcher = pattern.matcher(name);
                 if (!matcher.find()) {
                     continue;
@@ -183,7 +183,7 @@ public class MOCRHandlerImpl extends GenericDataSourceHandler implements MOCRHan
                     dataInstance.setDataSource(ds);
                     dataInstance.setUrl(resource.getUrl());
                     dataInstance.setAuthorityId(resourceId);
-                    dataInstance.setFormat("xlsx");
+                    dataInstance.setFormat(resource.getFormat());
                     dataInstance.setDescription(resource.getName());
                     dataInstance.setPeriodicity(Periodicity.MONTHLY);
                     dataInstance.setIncremental(false);

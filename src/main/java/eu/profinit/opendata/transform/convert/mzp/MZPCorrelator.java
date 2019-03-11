@@ -4,10 +4,10 @@ import eu.profinit.opendata.common.Util;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.RecordType;
 import eu.profinit.opendata.model.UnresolvedRelationship;
+import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordPropertyConverter;
 import eu.profinit.opendata.transform.TransformException;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;

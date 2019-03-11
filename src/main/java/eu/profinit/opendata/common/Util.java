@@ -1,9 +1,9 @@
 package eu.profinit.opendata.common;
 
+import eu.profinit.opendata.transform.Cell;
+import eu.profinit.opendata.transform.Row;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 
 import java.net.HttpURLConnection;
 import java.net.URL;

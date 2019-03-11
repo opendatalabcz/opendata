@@ -7,6 +7,7 @@ import eu.profinit.opendata.test.util.DatabaseUtils;
 import eu.profinit.opendata.transform.TransformDriver;
 import eu.profinit.opendata.transform.WorkbookProcessor;
 import eu.profinit.opendata.transform.TransformException;
+import eu.profinit.opendata.transform.impl.WorkbookRowImpl;
 import eu.profinit.opendata.transform.jaxb.Mapping;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -64,7 +65,7 @@ public class TransformDriverTest extends ApplicationContextTestCase {
         assertEquals(0, sheet.getFirstRowNum());
         int nonEmptyRows = 0;
         for(int i = 0; i < sheet.getLastRowNum(); i++) {
-            if(!Util.isRowEmpty(sheet.getRow(i))) {
+            if(!Util.isRowEmpty(new WorkbookRowImpl(sheet.getRow(i)))) {
                 nonEmptyRows++;
             }
         }
@@ -188,7 +189,6 @@ public class TransformDriverTest extends ApplicationContextTestCase {
         dataInstance.setDataSource(ds);
         em.persist(dataInstance);
 
-        //transformDriver.processWorkbook(null, null, null);
         Retrieval retrieval = transformDriver.doRetrieval(dataInstance, "bad-mapping.xml", inputStream);
         assertEquals(0, retrieval.getNumRecordsInserted());
         assertEquals(0, retrieval.getRecords().size());
