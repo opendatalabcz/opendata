@@ -35,19 +35,21 @@ public class CzechDateStringNumberSetter implements RecordPropertyConverter {
             throws TransformException {
 
         String dateString = "";
+        Date date = null;
         try {
             dateString = sourceValues.get("inputDateString").getStringCellValue();
         } catch (IllegalStateException ex) {
-            Double dateNumber = sourceValues.get("inputDateString").getNumericCellValue();
-            dateString = Double.toString(dateNumber);
+            date = org.apache.poi.ss.usermodel.DateUtil.getJavaDate(sourceValues.get("inputDateString").getNumericCellValue());
         }
-        if(Util.isNullOrEmpty(dateString)) {
-            throw new TransformException("Couldn't set date value, date string is null or empty",
+        if(Util.isNullOrEmpty(dateString) && date == null) {
+            throw new TransformException("Couldn't set date value, date is null or empty",
                     TransformException.Severity.PROPERTY_LOCAL);
         }
 
         try {
-            Date date = dateFormat.parse(dateString);
+            if (date == null) {
+                date = dateFormat.parse(dateString);
+            }
             dateSetter.setField(record, date, fieldName, logger);
         } catch (ParseException e) {
             throw new TransformException("Couldn't set date value because of a parse error", e,

@@ -73,21 +73,21 @@ public class JusticeHandler extends GenericDataSourceHandler {
                 }
             }
             else if(Util.isXLSFileAtURL(url)) {
-                createDataInstance(i, url, ds);
+                createDataInstance(i, url, ds, "xls");
             }
             // try xlsx document
             else if (Util.isXLSFileAtURL(urlx)){
-                createDataInstance(i, urlx, ds);
+                createDataInstance(i, urlx, ds, "xlsx");
             // try scheme2
             } else if (Util.isXLSFileAtURL(url2)){
-                createDataInstance(i, url2, ds);
+                createDataInstance(i, url2, ds, "xls");
             } else {
                 log.warn("Can't find an XLS document at the url " + url);
             }
         }
     }
 
-    private void createDataInstance(Integer year, String url, DataSource ds) {
+    private void createDataInstance(Integer year, String url, DataSource ds, String format) {
         String file = mappingFile;
         if (year == 2018) {
             file = mapping2018File;
@@ -100,7 +100,7 @@ public class JusticeHandler extends GenericDataSourceHandler {
         di.setDataSource(ds);
         ds.getDataInstances().add(di);
 
-        di.setFormat("xls");
+        di.setFormat(format);
         di.setPeriodicity(Periodicity.QUARTERLY);
         di.setUrl(url);
         di.setDescription("Faktury MSp za rok " + year.toString());

@@ -9,6 +9,7 @@
             <sourceFileColumn originalName="Rok" argumentName="inputYear"/>
             <sourceFileColumn originalName="DŘ" argumentName="categoryCode"/>
             <sourceFileColumn originalName="Č.dokladu" argumentName="serialNumber"/>
+            <sourceFileColumn originalName="Částka" argumentName="inputAmount"/>
         </retriever>
 
         <property name="recordType" value="INVOICE" onlyNewRecords="true"/>

@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Workbook implementation of a data frame processor.
@@ -65,6 +67,9 @@ public class WorkbookProcessorImpl extends DataFrameProcessorImpl implements Wor
             }
 
             Map<String, Integer> columnNames = getColumnNamesFromHeaderRow(headerRow);
+            if(headerIsBroken(columnNames)) {
+                addBrokenHeaderNames(columnNames, new WorkbookRowImpl(sheet.getRow(startRowNum++)));
+            }
 
             processSheetData(startRowNum, sheet, mappingSheet, mapping, retrieval, columnNames);
             log.info("Sheet finished");
@@ -105,5 +110,36 @@ public class WorkbookProcessorImpl extends DataFrameProcessorImpl implements Wor
                 }
             }
         }
+    }
+
+    /**
+     * Sometimes the header in a file is broken - some header names are located in the header row set in the mapping file,
+     * while some other header names are located in the following row (the reason for this can be that some header cells
+     * are merged but some are not - this is obviously a bad formatted file).
+     * @param columnNames - the map of column names
+     * @return - true if the header is broken indeed
+     */
+    private boolean headerIsBroken(Map<String, Integer> columnNames) {
+        Set<String> set = columnNames.keySet().stream()
+                .filter(String::isEmpty)
+                .collect(Collectors.toSet());
+        return !set.isEmpty();
+    }
+
+    /**
+     * It collects additional header names and adds them to the current map of header rows.
+     * @param columnNames - the map of column names
+     * @param row - the row from which additional header names should be collected
+     */
+    private void addBrokenHeaderNames(Map<String, Integer> columnNames, Row row) {
+        Map<String, Integer> additionalNames = getColumnNamesFromHeaderRow(row);
+        columnNames.forEach(additionalNames::putIfAbsent);
+        // Broken header names causes additional invalid header names such as an empty name or only numerical names
+        Map<String, Integer> m = additionalNames.entrySet().stream()
+                .filter(e -> !e.getKey().matches(".*01\\d*.*"))
+                .filter(e -> !e.getKey().isEmpty())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        columnNames.clear();
+        columnNames.putAll(m);
     }
 }
