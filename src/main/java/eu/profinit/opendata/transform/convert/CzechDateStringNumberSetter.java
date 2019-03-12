@@ -4,7 +4,6 @@ import eu.profinit.opendata.common.Util;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.transform.RecordPropertyConverter;
 import eu.profinit.opendata.transform.TransformException;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import eu.profinit.opendata.transform.Cell;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,6 @@ public class CzechDateStringNumberSetter implements RecordPropertyConverter {
 
     @Autowired
     private DateSetter dateSetter;
-
-    private Logger log = LogManager.getLogger(CzechDateStringNumberSetter.class);
 
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
