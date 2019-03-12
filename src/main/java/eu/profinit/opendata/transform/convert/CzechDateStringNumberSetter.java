@@ -41,7 +41,6 @@ public class CzechDateStringNumberSetter implements RecordPropertyConverter {
             Double dateNumber = sourceValues.get("inputDateString").getNumericCellValue();
             dateString = Double.toString(dateNumber);
         }
-        log.info("LS: DATE STRING: " + dateString);
         if(Util.isNullOrEmpty(dateString)) {
             throw new TransformException("Couldn't set date value, date string is null or empty",
                     TransformException.Severity.PROPERTY_LOCAL);

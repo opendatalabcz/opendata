@@ -46,4 +46,6 @@ public class WorkbookCellImpl implements Cell {
     public void setCellType(int type) {
         cell.setCellType(type);
     }
+
+    public boolean isCellNull() { return cell == null;}
 }

@@ -6,6 +6,7 @@
         <headerRow>1</headerRow>
 
         <retriever className="eu.profinit.opendata.transform.convert.justice.JusticeInvoiceRecordRetriever">
+            <sourceFileColumn originalName="Rok" argumentName="inputYear"/>
             <sourceFileColumn originalName="Dokladová řada" argumentName="categoryCode"/>
             <sourceFileColumn originalName="Číslo" argumentName="serialNumber"/>
         </retriever>

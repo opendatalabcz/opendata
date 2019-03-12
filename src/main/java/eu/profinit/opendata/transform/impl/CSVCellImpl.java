@@ -67,4 +67,6 @@ public class CSVCellImpl implements Cell {
             throw new IllegalArgumentException();
         }
     }
+
+    public boolean isCellNull() {return value == null;}
 }

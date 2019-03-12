@@ -88,11 +88,7 @@ public class TransformDriverImpl implements TransformDriver {
             }
 
             Mapping mapping = loadMapping(mappingFile);
-            if (dataInstance.getFormat().equals("xlsx")) {
-                Workbook workbook = openXLSFile(inputStream, dataInstance);
-                workbookProcessor.processWorkbook(workbook, mapping, retrieval, log);
-                log.info("Whole workbook procesed successfully");
-            } else {
+            if (dataInstance.getFormat().equals("csv")) {
                 try (
                         Reader reader = new InputStreamReader(inputStream);
                         CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL
@@ -103,6 +99,10 @@ public class TransformDriverImpl implements TransformDriver {
                 ) {
                     csvProcessor.processCSVSheet(csvParser, mapping, retrieval, log);
                 }
+            } else {
+                Workbook workbook = openXLSFile(inputStream, dataInstance);
+                workbookProcessor.processWorkbook(workbook, mapping, retrieval, log);
+                log.info("Whole workbook procesed successfully");
             }
 
             retrieval.setSuccess(true);

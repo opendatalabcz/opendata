@@ -26,4 +26,6 @@ public interface Cell{
 
     void setCellType(int type);
 
+    boolean isCellNull();
+
 }

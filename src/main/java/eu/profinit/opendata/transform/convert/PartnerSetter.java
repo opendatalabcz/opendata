@@ -88,6 +88,9 @@ public class PartnerSetter implements RecordPropertyConverter {
     private String updateIco(final Map<String, Cell> sourceValues) {
         if(sourceValues.containsKey("ico") && sourceValues.get("ico") != null) {
             Cell icoCell = sourceValues.get("ico");
+            if (icoCell.isCellNull()) {
+                return null;
+            }
             icoCell.setCellType(Cell.CELL_TYPE_STRING);
 
             if(canBeValidICO(icoCell)) {
