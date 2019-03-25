@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -120,10 +119,12 @@ public class WorkbookProcessorImpl extends DataFrameProcessorImpl implements Wor
      * @return - true if the header is broken indeed
      */
     private boolean headerIsBroken(Map<String, Integer> columnNames) {
-        Set<String> set = columnNames.keySet().stream()
-                .filter(String::isEmpty)
-                .collect(Collectors.toSet());
-        return !set.isEmpty();
+        if (columnNames.containsKey("")) {
+            // sometimes the first empty cell is still considered as part of the header row and the header row is still ok
+            boolean lastIsEmpty = columnNames.get("") == (columnNames.size() - 1);
+            return !lastIsEmpty;
+        }
+        return  false;
     }
 
     /**
