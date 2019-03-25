@@ -275,6 +275,14 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   (
     (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2017/faktury_md_2017.xlsx',
     'xlsx', 'monthly', 'Faktury MDČR 2017', 'mappings/mdcr/mapping-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2018/faktury_md_2018.xlsx',
+    'xlsx', 'monthly', 'Faktury MDČR 2018', 'mappings/mdcr/mapping-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2019/faktury_md_2019.xlsx',
+    'xlsx', 'monthly', 'Faktury MDČR 2019', 'mappings/mdcr/mapping-invoices.xml', FALSE
   );
 
 -- SFDI: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
