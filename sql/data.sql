@@ -76,7 +76,12 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
 
   (
     (SELECT  data_source_id FROM invoices_ds), 'https://www.mzp.cz/www/smlouvy-web.nsf/exportInvoicesAsXLSX.xsp',
-    'xlsx', 'weekly', 'Průběžné faktury MŽP', 'mappings/mzp/mapping-invoices.xml', FALSE
+    'xlsx', 'weekly', 'Průběžné faktury MŽP do 2016', 'mappings/mzp/mapping-invoices.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://www.mzp.cz/opendata/mzp-faktury_2016.csv',
+    'csv', 'weekly', 'Průběžné faktury MŽP od 2016', 'mappings/mzp/mapping-csv-invoices.xml', FALSE
   );
 
 -- MK: Data instances are manual and must be periodically updated ----------------------------

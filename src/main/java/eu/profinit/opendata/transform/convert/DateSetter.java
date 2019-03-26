@@ -24,10 +24,11 @@ public class DateSetter implements RecordPropertyConverter {
 
         try {
             Date inputDate;
-            if (sourceValues.get("inputDate") == null) {
+            Cell cellInputDate = sourceValues.get("inputDate");
+            if (cellInputDate == null || cellInputDate.getStringCellValue().isEmpty()) {
                 inputDate = new java.sql.Date(0L);
             } else {
-                inputDate = sourceValues.get("inputDate").getDateCellValue();
+                inputDate = cellInputDate.getDateCellValue();
             }
             setField(record, inputDate, fieldName, logger);
         } catch (IllegalStateException ex) {
