@@ -2,6 +2,7 @@ package eu.profinit.opendata.transform.impl;
 
 import eu.profinit.opendata.transform.Cell;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -53,7 +54,18 @@ public class CSVCellImpl implements Cell {
      */
     @Override
     public Date getDateCellValue() {
-        throw new UnsupportedOperationException();
+        SimpleDateFormat format;
+        if (value.contains("Z")) {
+            format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        } else {
+            format = new SimpleDateFormat("yyyy-MM-dd");
+        }
+        try {
+            return format.parse(value);
+        } catch (Exception e) {
+            throw new UnsupportedOperationException(
+                    "So far only yyyy-MM-dd'T'HH:mm:ss.SSSZ or yyyy-MM-dd format is supported. Extend, if necessary.\n" + e.getMessage());
+        }
     }
 
     /**

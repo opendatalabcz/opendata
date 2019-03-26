@@ -80,7 +80,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   ),
 
   (
-    (SELECT  data_source_id FROM invoices_ds), 'http://www.mzp.cz/opendata/mzp-faktury_2016.csv',
+    (SELECT  data_source_id FROM invoices_ds), 'https://www.mzp.cz/opendata/mzp-faktury_2016.csv',
     'csv', 'weekly', 'Průběžné faktury MŽP od 2016', 'mappings/mzp/mapping-csv-invoices.xml', FALSE
   );
 
