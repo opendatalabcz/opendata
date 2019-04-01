@@ -6,6 +6,7 @@ import eu.profinit.opendata.transform.CSVProcessor;
 import eu.profinit.opendata.transform.TransformException;
 import eu.profinit.opendata.transform.jaxb.MappedSheet;
 import eu.profinit.opendata.transform.jaxb.Mapping;
+import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.logging.log4j.LogManager;
@@ -14,8 +15,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-import java.util.Optional;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.*;
 
 /**
  * CSV implementation of a data frame processor.
@@ -30,8 +34,8 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW,
             rollbackFor = {TransformException.class, RuntimeException.class})
-    public void processCSVSheet(CSVParser parser, Mapping mapping, Retrieval retrieval, Logger logger)
-            throws TransformException {
+    public void processCSVSheet(InputStream inputStream, InputStream initialStream, Mapping mapping, Retrieval retrieval, Logger logger)
+            throws TransformException, IOException {
 
         if(logger != null) {
             log = logger;
@@ -39,7 +43,9 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
 
         log.info("Started processing sheet");
 
+
         for(MappedSheet mappingSheet : mapping.getMappedSheet()) {
+            CSVParser parser = createCsvParser(inputStream, initialStream, mappingSheet);
 
             int startRowNum = mappingSheet.getHeaderRow().intValue() + 1;
             if (retrieval.getDataInstance().getLastProcessedRow() != null) {
@@ -52,6 +58,7 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
             log.trace("Mapping column names to their indexes");
 
             Map<String, Integer> headerMap = parser.getHeaderMap();
+
             for (CSVRecord row: parser) {
                 int i = (int)row.getRecordNumber();
                 log.debug("Processing row " + i);
@@ -86,6 +93,68 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
             }
         }
         log.info("Sheet finished");
+    }
+
+
+    /**
+     * Creates a CSV parser. It determines which delimiter is used in the file and returns such parser.
+     * So far, semicolon, comma and tabulator are supported, however any other delimiter can be easily added.
+     * @param inputStream input stream of the downloading file
+     * @param mappingSheet current mapping sheet
+     * @return CSVParser CSV parser with correct delimiter
+     */
+    private CSVParser createCsvParser(InputStream inputStream, InputStream initialStream, MappedSheet mappingSheet) throws IOException {
+        CSVParser csvParser = null;
+        List<Character> delimiters = new ArrayList<>();
+        delimiters.add(';');
+        delimiters.add(',');
+        delimiters.add('\t');
+
+        try {
+            csvParser = getCsvParser(inputStream, delimiters.get(0));
+            Map<String, Integer> headerMap = csvParser.getHeaderMap();
+            int mappedProperties = mappingSheet.getPropertyOrPropertySet().size();
+            int headerProperties = headerMap.keySet().size();
+
+            if (headerProperties == 1) {
+                for(int i = 1; i < delimiters.size(); i++) {
+                    String headerLine = headerMap.keySet().iterator().next();
+                    if (isSeparatedWithDelimiter(headerLine, delimiters.get(i), mappedProperties)) {
+                        csvParser = getCsvParser(initialStream, delimiters.get(i));
+                        break;
+                    }
+                }
+            }
+        } catch(Exception e) {
+            log.error("Unable to create CSVParser. " + e.getMessage());
+            throw e;
+        }
+        return csvParser;
+    }
+
+    private CSVParser getCsvParser(InputStream fileStream, Character delimiter) throws IOException {
+        Reader reader = new InputStreamReader(fileStream);
+        return new CSVParser(reader, CSVFormat.EXCEL
+                .withDelimiter(delimiter)
+                .withFirstRecordAsHeader()
+                .withIgnoreHeaderCase()
+                .withTrim());
+    }
+
+    /**
+     * Determines whether the header is formatted with the provided delimiter. Note, that the method is
+     * not bullet proof, a header containing f.e. as many commas as is the number of mapped properties
+     * would return true although the delimiter could be different. The method expects reasonable input
+     * as is the case of all the contract/order/invoice files so far.
+     * @param header - header line of a file
+     * @param delimiter - delimiter to be checked
+     * @param mappedPropertiesSize - number of mapped properties in a mapping file
+     * @return
+     */
+    private boolean isSeparatedWithDelimiter(String header, Character delimiter, int mappedPropertiesSize) {
+        String[] delimitedColumns = header.split(String.valueOf(delimiter));
+        int columnsSize = delimitedColumns.length;
+        return columnsSize >= mappedPropertiesSize;
     }
 
 }

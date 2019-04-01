@@ -7,8 +7,6 @@ import eu.profinit.opendata.transform.CSVProcessor;
 import eu.profinit.opendata.transform.TransformDriver;
 import eu.profinit.opendata.transform.WorkbookProcessor;
 import eu.profinit.opendata.transform.jaxb.Mapping;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -27,8 +25,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -89,16 +85,8 @@ public class TransformDriverImpl implements TransformDriver {
 
             Mapping mapping = loadMapping(mappingFile);
             if (dataInstance.getFormat().equals("csv")) {
-                try (
-                        Reader reader = new InputStreamReader(inputStream);
-                        CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL
-                                .withDelimiter(';')
-                                .withFirstRecordAsHeader()
-                                .withIgnoreHeaderCase()
-                                .withTrim());
-                ) {
-                    csvProcessor.processCSVSheet(csvParser, mapping, retrieval, log);
-                }
+                InputStream initialStream = downloadService.downloadDataFile(dataInstance);
+                csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
             } else {
                 Workbook workbook = openXLSFile(inputStream, dataInstance);
                 workbookProcessor.processWorkbook(workbook, mapping, retrieval, log);
