@@ -163,6 +163,26 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   (
     (SELECT  data_source_id FROM orders_ds), 'http://www.mmr.cz/getmedia/2a2ea9c8-e6d5-46f5-8d7b-f961b8fabbce/Objednavky_2.xlsx',
     'xlsx', 'monthly', 'Objednávky MMR od 1. 1. 2015', 'mappings/mmr/mapping-orders.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://data.mmr.cz/dataset/cc7ef807-36a7-4058-886f-e352d6979026/resource/537dd862-5b5e-4068-8ffb-a4f2270de46b/download/cusersvanlukonedrive-mmrstaene-souboryfaktury_2015.csv',
+    'csv', 'monthly', 'Faktury MMR 2015', 'mappings/mmr/mapping-csv-2015-invoices.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://data.mmr.cz/dataset/012d9e10-3779-484f-a8f9-ce8445d02141/resource/19691295-09e0-4f2b-8d10-3e36e023d873/download/cusersvanlukonedrive-mmrstaene-souboryfaktury_2016.csv',
+    'csv', 'monthly', 'Faktury MMR 2016', 'mappings/mmr/mapping-csv-invoices.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://data.mmr.cz/dataset/89717919-5db4-469d-842c-01d4f54b0ed9/resource/922a41d9-9bf2-4ba6-a9b3-0ab48a197077/download/cusersvanlukonedrive-mmrstaene-souboryfaktury_2017.csv',
+    'csv', 'monthly', 'Faktury MMR 2017', 'mappings/mmr/mapping-csv-invoices.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://data.mmr.cz/dataset/5f2d1e58-f7e5-4c00-af9c-2cdfe9a4965f/resource/0909932c-f6fc-4ca7-9126-f8c79ce0eecc/download/jsdilenedata-pro-katalogoufs___k-uveejnnifaktury_2018-12_20190101.csv',
+    'csv', 'monthly', 'Faktury MMR 2018', 'mappings/mmr/mapping-csv-invoices.xml', FALSE
   );
 
 -- MV: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
