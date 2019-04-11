@@ -57,11 +57,11 @@ public class JSONClient {
         }
     }
 
-    public JSONPackageListMOCR getPackageListMOCR(String apiUrl, String packagesPath, String packageListIdentifier) {
+    public JSONPackageListStrict getPackageListStrict(String apiUrl, String packagesPath, String packageListIdentifier) {
         try {
             URI uri = URI.create(apiUrl + packagesPath + "?id=" + packageListIdentifier);
             log.debug("Downloading package list from " + uri.toString());
-            return restTemplate.getForObject(uri, JSONPackageListMOCR.class);
+            return restTemplate.getForObject(uri, JSONPackageListStrict.class);
         } catch (RestClientException e) {
             log.error("Could not retreive package list", e);
             return null;

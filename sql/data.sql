@@ -134,6 +134,13 @@ WITH mmr AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
     RETURNING data_source_id
   ),
 
+    invoices_csv_ds AS (
+    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
+      (SELECT entity_id FROM mmr),
+      'invoice', 'yearly', 'eu.profinit.opendata.institution.mmr.MMRHandler', TRUE, 'Faktury MMR CSV')
+    RETURNING data_source_id
+  ),
+
     orders_ds AS (
     INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
       (SELECT entity_id FROM mmr),

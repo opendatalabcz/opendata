@@ -133,7 +133,7 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
     }
 
     private CSVParser getCsvParser(InputStream fileStream, Character delimiter) throws IOException {
-        Reader reader = new InputStreamReader(fileStream);
+        Reader reader = new InputStreamReader(fileStream, "UTF-8");
         return new CSVParser(reader, CSVFormat.EXCEL
                 .withDelimiter(delimiter)
                 .withFirstRecordAsHeader()

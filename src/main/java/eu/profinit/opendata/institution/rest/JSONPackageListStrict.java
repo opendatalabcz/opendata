@@ -3,7 +3,7 @@ package eu.profinit.opendata.institution.rest;
 /**
  * Created by dm on 6/29/16.
  */
-public class JSONPackageListMOCR {
+public class JSONPackageListStrict {
     private String help;
     private boolean success;
     private JSONPackageListResult result;

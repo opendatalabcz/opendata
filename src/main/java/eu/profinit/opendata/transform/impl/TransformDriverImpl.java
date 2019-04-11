@@ -84,7 +84,7 @@ public class TransformDriverImpl implements TransformDriver {
             }
 
             Mapping mapping = loadMapping(mappingFile);
-            if (dataInstance.getFormat().equals("csv")) {
+            if (dataInstance.getFormat().equalsIgnoreCase("csv")) {
                 InputStream initialStream = downloadService.downloadDataFile(dataInstance);
                 csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
             } else {

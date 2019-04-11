@@ -68,13 +68,27 @@ public class PartnerSetter implements RecordPropertyConverter {
         }
     }
 
-    private String updateName(final Map<String, Cell> sourceValues, final String name) {
+    private String updateName(final Map<String, Cell> sourceValues, final String inputName) {
+        String firstname = null;
+        String name = null;
+        if (sourceValues.containsKey("firstname") && sourceValues.get("firstname") != null
+                && sourceValues.get("name").getCellType() == Cell.CELL_TYPE_STRING
+                && !isNullOrEmpty(sourceValues.get("name").getStringCellValue())) {
+            firstname = sourceValues.get("name").getStringCellValue();
+        }
         if(sourceValues.containsKey("name") && sourceValues.get("name") != null
                 && sourceValues.get("name").getCellType() == Cell.CELL_TYPE_STRING
                 && !isNullOrEmpty(sourceValues.get("name").getStringCellValue())) {
-            return sourceValues.get("name").getStringCellValue();
+            name = sourceValues.get("name").getStringCellValue();
         }
-        return name;
+
+        if (firstname != null && name != null) {
+            return firstname + " " + name;
+        }
+        if (name != null) {
+            return name;
+        }
+        return inputName;
     }
 
     private String updateDic(final Map<String, Cell> sourceValues, final String dic) {

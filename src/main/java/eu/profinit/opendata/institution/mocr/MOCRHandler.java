@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 
 /**
  * Interface for the MF handler. See implementation class for behavior details.
- * @see eu.profinit.opendata.institution.mocr.MFCRHandlerImpl
+ * @see eu.profinit.opendata.institution.mocr.MOCRHandler
  */
 public interface MOCRHandler extends DataSourceHandler {
     /**

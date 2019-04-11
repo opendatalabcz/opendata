@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import eu.profinit.opendata.control.GenericDataSourceHandler;
 import eu.profinit.opendata.institution.mocr.MOCRHandler;
 import eu.profinit.opendata.institution.rest.JSONClient;
-import eu.profinit.opendata.institution.rest.JSONPackageListMOCR;
+import eu.profinit.opendata.institution.rest.JSONPackageListStrict;
 import eu.profinit.opendata.institution.rest.JSONPackageListResource;
 import eu.profinit.opendata.model.DataInstance;
 import eu.profinit.opendata.model.DataSource;
@@ -77,7 +77,7 @@ public class MOCRHandlerImpl extends GenericDataSourceHandler implements MOCRHan
     public void updateContractsDataInstance(DataSource ds) {
 
         //Load list of resources from the JSON API
-        JSONPackageListMOCR packageList = jsonClient.getPackageListMOCR(jsonApiUrl, packagesPath, this.contractsIdentifier);
+        JSONPackageListStrict packageList = jsonClient.getPackageListStrict(jsonApiUrl, packagesPath, this.contractsIdentifier);
         if (packageList == null) {
             log.warn("JSONClient returned null package list. Exiting.");
             return;
@@ -144,7 +144,7 @@ public class MOCRHandlerImpl extends GenericDataSourceHandler implements MOCRHan
     public void updateInvoicesDataInstance(DataSource ds) {
         log.info("Updating information about data instances containing invoices");
 
-        JSONPackageListMOCR packageList = jsonClient.getPackageListMOCR(jsonApiUrl, packagesPath, invoicesIdentifier);
+        JSONPackageListStrict packageList = jsonClient.getPackageListStrict(jsonApiUrl, packagesPath, invoicesIdentifier);
         if (packageList == null) {
             log.warn("JSONClient returned null package list. Exiting.");
             return;
