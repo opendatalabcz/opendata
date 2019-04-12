@@ -30,7 +30,8 @@ public class AllAmountSetter implements RecordPropertyConverter {
                 amount = sourceValues.get(INPUT_AMOUNT).getNumericCellValue();
             } else if (sourceValues.get(INPUT_AMOUNT).getCellType() == Cell.CELL_TYPE_STRING) {
                 String rawVal = sourceValues.get(INPUT_AMOUNT).getStringCellValue();
-                String formattedVal = rawVal.trim().replace(" ","").replace(',','.');
+                String wtfSign = String.valueOf((char) 160);
+                String formattedVal = rawVal.trim().replaceAll("\\s","").replace(',','.').replaceAll(wtfSign, "");
                 amount = Double.parseDouble(formattedVal);
             }
         }

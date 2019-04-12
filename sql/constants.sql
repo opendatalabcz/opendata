@@ -16,6 +16,7 @@ INSERT INTO periodicity (periodicity) VALUES ('quarterly');
 INSERT INTO periodicity (periodicity) VALUES ('aperiodic');
 
 INSERT INTO entity_type (entity_type) VALUES ('ministry');
+INSERT INTO entity_type (entity_type) VALUES ('ministry-organization');
 INSERT INTO entity_type (entity_type) VALUES ('company');
 INSERT INTO entity_type (entity_type) VALUES ('individual');
 INSERT INTO entity_type (entity_type) VALUES ('other');

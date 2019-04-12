@@ -46,15 +46,15 @@
             <sourceFileColumn originalName="Částka" argumentName="inputAmount"/>
         </property>
 
-        <property name="dateCreated" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CzechDateStringNumberSetter">
+        <property name="dateCreated" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CzechDateStringNumberNumberSetter">
             <sourceFileColumn originalName="Zapsáno" argumentName="inputDateString"/>
         </property>
 
-        <property name="dueDate" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CzechDateStringNumberSetter">
+        <property name="dueDate" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CzechDateStringNumberNumberSetter">
             <sourceFileColumn originalName="Splatnost" argumentName="inputDateString"/>
         </property>
 
-        <property name="dateOfPayment" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CzechDateStringNumberSetter">
+        <property name="dateOfPayment" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CzechDateStringNumberNumberSetter">
             <sourceFileColumn originalName="Uhrazeno" argumentName="inputDateString"/>
         </property>
 

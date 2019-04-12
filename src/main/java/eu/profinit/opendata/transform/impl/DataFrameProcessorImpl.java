@@ -210,7 +210,14 @@ public abstract class DataFrameProcessorImpl implements DataFrameProcessor {
                                    Map<String, Integer> columnNames) throws TransformException {
 
         log.trace("Instantiating property converter " + recordProperty.getConverter());
-        RecordPropertyConverter rpc = (RecordPropertyConverter) instantiateComponent(recordProperty.getConverter());
+
+        RecordPropertyConverter rpc;
+        String converterParameter = recordProperty.getConverterParameter();
+        if (converterParameter != null) {
+            rpc = (RecordPropertyConverter) instantiateComponent(recordProperty.getConverter(), converterParameter);
+        } else {
+            rpc = (RecordPropertyConverter) instantiateComponent(recordProperty.getConverter());
+        }
         Map<String, Cell> argumentMap = getCellMapForArguments(row, recordProperty.getSourceFileColumn(), columnNames);
 
         try {
@@ -334,6 +341,15 @@ public abstract class DataFrameProcessorImpl implements DataFrameProcessor {
         try {
             return converterFactory.getComponent(className);
         } catch (ClassNotFoundException | ClassCastException e) {
+            String message = "Could not instantiate component " + className;
+            throw new TransformException(message, e, TransformException.Severity.FATAL);
+        }
+    }
+
+    protected TransformComponent instantiateComponent(String className, String parameter) throws TransformException {
+        try {
+            return converterFactory.getComponent(className, parameter);
+        } catch(ClassNotFoundException | ClassCastException e) {
             String message = "Could not instantiate component " + className;
             throw new TransformException(message, e, TransformException.Severity.FATAL);
         }

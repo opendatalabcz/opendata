@@ -40,6 +40,7 @@
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="converter" type="xs:string" use="optional"/>
+        <xs:attribute name="converterParameter" type="xs:string" use="optional"/>
         <xs:attribute name="value" type="xs:string" use="optional"/>
         <xs:attribute name="required" type="xs:boolean" use="optional"/>
         <xs:attribute name="onlyNewRecords" type="xs:boolean" use="required"/>

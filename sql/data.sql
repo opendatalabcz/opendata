@@ -185,6 +185,15 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     'csv', 'monthly', 'Faktury MMR 2018', 'mappings/mmr/mapping-csv-invoices.xml', FALSE
   );
 
+-- MMR SFRB
+
+WITH sfrb AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
+  ('ministry-organization', 'Státní fond rozvoje bydlení', '70856788', TRUE) RETURNING entity_id)
+
+    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
+      (SELECT entity_id FROM sfrb),
+      'invoice', 'monthly', 'eu.profinit.opendata.institution.mmr.sfrb.SFRBHandler', TRUE, 'Faktury MMR SFRB')
+
 -- MV: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
 
 WITH mv AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES

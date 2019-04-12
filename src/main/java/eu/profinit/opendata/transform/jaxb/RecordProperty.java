@@ -30,6 +30,7 @@ import java.util.List;
  *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="converter" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="converterParameter" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="onlyNewRecords" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -51,6 +52,8 @@ public class RecordProperty {
     protected String name;
     @XmlAttribute(name = "converter")
     protected String converter;
+    @XmlAttribute(name = "converterParameter")
+    protected String converterParameter;
     @XmlAttribute(name = "value")
     protected String value;
     @XmlAttribute(name = "required")
@@ -133,6 +136,30 @@ public class RecordProperty {
      */
     public void setConverter(String value) {
         this.converter = value;
+    }
+
+    /**
+     * Gets the value of the converterParameter property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getConverterParameter() {
+        return converterParameter;
+    }
+
+    /**
+     * Sets the value of the converterParameter property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setConverterParameter(String value) {
+        this.converterParameter = value;
     }
 
     /**

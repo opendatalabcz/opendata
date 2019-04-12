@@ -23,6 +23,10 @@ public class ComponentFactory implements ApplicationContextAware {
         return (TransformComponent) applicationContext.getBean(Class.forName(className));
     }
 
+    public TransformComponent getComponent(String className, String parameter) throws ClassNotFoundException {
+        return (TransformComponent) applicationContext.getBean(Class.forName(className), parameter);
+    }
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;

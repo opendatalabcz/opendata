@@ -15,10 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -111,16 +108,16 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
         delimiters.add('\t');
 
         try {
-            csvParser = getCsvParser(inputStream, delimiters.get(0));
+            csvParser = getCsvParser(inputStream, delimiters.get(0), mappingSheet.getHeaderRow().intValue());
             Map<String, Integer> headerMap = csvParser.getHeaderMap();
             int mappedProperties = mappingSheet.getPropertyOrPropertySet().size();
             int headerProperties = headerMap.keySet().size();
 
-            if (headerProperties == 1) {
+            if (headerProperties < 2) {
                 for(int i = 1; i < delimiters.size(); i++) {
                     String headerLine = headerMap.keySet().iterator().next();
                     if (isSeparatedWithDelimiter(headerLine, delimiters.get(i), mappedProperties)) {
-                        csvParser = getCsvParser(initialStream, delimiters.get(i));
+                        csvParser = getCsvParser(initialStream, delimiters.get(i), mappingSheet.getHeaderRow().intValue());
                         break;
                     }
                 }
@@ -132,13 +129,31 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
         return csvParser;
     }
 
-    private CSVParser getCsvParser(InputStream fileStream, Character delimiter) throws IOException {
-        Reader reader = new InputStreamReader(fileStream, "UTF-8");
+    private CSVParser getCsvParser(InputStream fileStream, Character delimiter, Integer headerRow) throws IOException {
+        Reader reader = getReader(fileStream, headerRow);
         return new CSVParser(reader, CSVFormat.EXCEL
                 .withDelimiter(delimiter)
                 .withFirstRecordAsHeader()
                 .withIgnoreHeaderCase()
                 .withTrim());
+    }
+
+    private Reader getReader(InputStream fileStream, Integer headerRow) throws IOException {
+        Reader reader = new InputStreamReader(fileStream, "UTF-8");
+        if (headerRow == 0) {
+            return reader;
+        }
+        for (int i = 0; i < headerRow; i++){
+            int ch = reader.read();
+            while(!isEOL(ch)) {
+                ch = reader.read();
+            }
+        }
+        return reader;
+    }
+
+    private boolean isEOL(int ch) {
+        return ch == '\n'; // watch out - mac os not handled (that is, CR char)
     }
 
     /**
@@ -154,7 +169,7 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
     private boolean isSeparatedWithDelimiter(String header, Character delimiter, int mappedPropertiesSize) {
         String[] delimitedColumns = header.split(String.valueOf(delimiter));
         int columnsSize = delimitedColumns.length;
-        return columnsSize >= mappedPropertiesSize;
+        return columnsSize >= mappedPropertiesSize - 3;
     }
 
 }

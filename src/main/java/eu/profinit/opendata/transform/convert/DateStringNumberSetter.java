@@ -2,30 +2,22 @@ package eu.profinit.opendata.transform.convert;
 
 import eu.profinit.opendata.common.Util;
 import eu.profinit.opendata.model.Record;
+import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordPropertyConverter;
 import eu.profinit.opendata.transform.TransformException;
 import org.apache.logging.log4j.Logger;
-import eu.profinit.opendata.transform.Cell;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-/**
- * Sets a Date property from a string cell containing a date in the Czech format (dd.MM.yyyy). The fieldName attribute
- * is used to specify which field should be set. Expects a string cell with argumentName "inputDateString".
- */
-@Component
-public class CzechDateStringNumberSetter implements RecordPropertyConverter {
-
-    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-
+public abstract class DateStringNumberSetter implements RecordPropertyConverter {
     @Autowired
     private DateSetter dateSetter;
+
+    protected abstract DateFormat getDateFormat();
 
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
@@ -45,7 +37,7 @@ public class CzechDateStringNumberSetter implements RecordPropertyConverter {
 
         try {
             if (date == null) {
-                date = dateFormat.parse(dateString);
+                date = getDateFormat().parse(dateString);
             }
             dateSetter.setField(record, date, fieldName, logger);
         } catch (ParseException e) {
