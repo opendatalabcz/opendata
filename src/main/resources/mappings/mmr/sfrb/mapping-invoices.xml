@@ -38,11 +38,11 @@
             <sourceFileColumn originalName="Variabilní symbol" argumentName="inputString"/>
         </property>
 
-        <property name="dateCreated" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.SlashedDateStringNumberSetter">
+        <property name="dateCreated" required="false" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">
             <sourceFileColumn originalName="Datum  přijetí" argumentName="inputDateString"/>
         </property>
 
-        <property name="dateOfPayment" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.SlashedDateStringNumberSetter">
+        <property name="dateOfPayment" required="false" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">
             <sourceFileColumn originalName="Datum  úhrady" argumentName="inputDateString"/>
         </property>
 

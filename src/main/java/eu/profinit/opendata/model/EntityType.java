@@ -6,6 +6,7 @@ package eu.profinit.opendata.model;
  */
 public enum EntityType {
     MINISTRY,
+    MINISTRYORGANIZATION,
     INDIVIDUAL,
     COMPANY,
     OTHER;
