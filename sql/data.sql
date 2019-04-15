@@ -188,7 +188,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
 -- MMR SFRB
 
 WITH sfrb AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
-  ('ministry-organization', 'Státní fond rozvoje bydlení', '70856788', TRUE) RETURNING entity_id)
+  ('ministry-organization', 'Státní fond rozvoje bydlení', '70856788', TRUE) RETURNING entity_id),
 
     invoices_ds AS (
     INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
@@ -212,6 +212,36 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   (
     (SELECT  data_source_id FROM invoices_ds), 'http://www.sfrb.cz/fileadmin/user_upload/Seznam_faktur_2018.csv',
     'csv', 'monthly', 'Faktury MMR SFRB 2018', 'mappings/mmr/sfrb/mapping-2018-invoices.xml', FALSE
+  );
+
+
+-- MMR CZT
+
+WITH czt AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
+  ('ministry-organization', 'Agentura CzechTourism', '49277600', TRUE) RETURNING entity_id),
+
+    invoices_ds AS (
+    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
+      (SELECT entity_id FROM czt),
+      'invoice', 'monthly', 'eu.profinit.opendata.institution.mmr.sfrb.CZTHandler', TRUE, 'Faktury MMR CZT')
+    RETURNING data_source_id
+  )
+
+INSERT INTO data_instance(data_source_id, url, format, periodicity, description, mapping_file, incremental) VALUES
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://www.czechtourism.cz/getmedia/36f7347e-4bb1-4b2f-a0cf-8e3f9c9d8083/CzT_faktury_4.csv.aspx',
+    'csv', 'monthly', 'Faktury MMR CZT 2016', 'mappings/mmr/czt/mapping-invoices.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://www.czechtourism.cz/getmedia/b06e9b04-0128-4f97-8195-b4ca0990c565/CzT_faktury_2017_10.csv.aspx',
+    'csv', 'monthly', 'Faktury MMR CZT 2017', 'mappings/mmr/czt/mapping-invoices.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://www.czechtourism.cz/getmedia/7809aee4-a221-4774-bd84-0a44da419570/CzT_faktury_2018.csv.aspx',
+    'csv', 'monthly', 'Faktury MMR CZT 2018', 'mappings/mmr/czt/mapping-invoices.xml', FALSE
   );
 
 -- MV: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
