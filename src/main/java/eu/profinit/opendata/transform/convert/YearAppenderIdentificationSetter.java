@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class YearAppenderIdentificationSetter implements RecordPropertyConverter {
+public class YearAppenderIdentificationSetter implements RecordPropertyParameterConverter {
 
     private String year;
 
@@ -32,5 +32,10 @@ public class YearAppenderIdentificationSetter implements RecordPropertyConverter
         Double serialNumber = sourceValues.get("serialNumber").getNumericCellValue();
         String serialNumberString = Integer.toString(serialNumber.intValue());
         return year + "-" + categoryCode + "-" + serialNumberString;
+    }
+
+    @Override
+    public void setParameter(String parameter) {
+        year = parameter;
     }
 }

@@ -4,6 +4,7 @@ import eu.profinit.opendata.common.Util;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.Retrieval;
 import eu.profinit.opendata.transform.*;
+import eu.profinit.opendata.transform.convert.RecordPropertyParameterConverter;
 import eu.profinit.opendata.transform.jaxb.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -214,7 +215,8 @@ public abstract class DataFrameProcessorImpl implements DataFrameProcessor {
         RecordPropertyConverter rpc;
         String converterParameter = recordProperty.getConverterParameter();
         if (converterParameter != null) {
-            rpc = (RecordPropertyConverter) instantiateComponent(recordProperty.getConverter(), converterParameter);
+            rpc = (RecordPropertyParameterConverter) instantiateComponent(recordProperty.getConverter(), converterParameter);
+            ((RecordPropertyParameterConverter) rpc).setParameter(converterParameter); // when instantiation has already proceeded before
         } else {
             rpc = (RecordPropertyConverter) instantiateComponent(recordProperty.getConverter());
         }
