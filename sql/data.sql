@@ -190,9 +190,29 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
 WITH sfrb AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
   ('ministry-organization', 'Státní fond rozvoje bydlení', '70856788', TRUE) RETURNING entity_id)
 
+    invoices_ds AS (
     INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
       (SELECT entity_id FROM sfrb),
       'invoice', 'monthly', 'eu.profinit.opendata.institution.mmr.sfrb.SFRBHandler', TRUE, 'Faktury MMR SFRB')
+    RETURNING data_source_id
+  )
+
+INSERT INTO data_instance(data_source_id, url, format, periodicity, description, mapping_file, incremental) VALUES
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://data.mmr.cz/dataset/a18ec18b-5f24-465a-bc7a-292f5629ea73/resource/1cc0fbf0-b851-43f9-a46e-97ef03d8ff78/download/seznam_faktur_do_13_12_2016.csv',
+    'csv', 'monthly', 'Faktury MMR SFRB 2016', 'mappings/mmr/sfrb/mapping-2016-invoices.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://www.sfrb.cz/fileadmin/user_upload/Seznam_faktur_2017.csv',
+    'csv', 'monthly', 'Faktury MMR SFRB 2017', 'mappings/mmr/sfrb/mapping-2017-invoices.xml', FALSE
+  ),
+
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'http://www.sfrb.cz/fileadmin/user_upload/Seznam_faktur_2018.csv',
+    'csv', 'monthly', 'Faktury MMR SFRB 2018', 'mappings/mmr/sfrb/mapping-2018-invoices.xml', FALSE
+  );
 
 -- MV: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
 
