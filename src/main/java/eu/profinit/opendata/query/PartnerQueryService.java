@@ -130,7 +130,7 @@ public class PartnerQueryService {
         }
         if(candidates.isEmpty() && !isNullOrEmpty(dic)) {
             candidates = em.createNamedQuery("findByDIC", Entity.class)
-                    .setParameter("dic", ico)
+                    .setParameter("dic", dic)
                     .getResultList();
         }
 
