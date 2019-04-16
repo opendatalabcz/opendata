@@ -55,6 +55,7 @@ public abstract class KANAPIHandler extends GenericDataSourceHandler implements 
                 // Check if we already have a data instance with the same given id - if yes, simply update the URL
                 // If not, create a new one
                 Optional<DataInstance> sameIds = currentInstances.stream()
+                        .filter(i -> i.getAuthorityId() != null)
                         .filter(i -> i.getAuthorityId().equals(resourceId)).findFirst();
                 if (sameIds.isPresent()) {
                     dataInstance = sameIds.get();
