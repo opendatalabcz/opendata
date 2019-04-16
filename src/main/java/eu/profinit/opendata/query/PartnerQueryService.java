@@ -216,7 +216,7 @@ public class PartnerQueryService {
             result.append(abbreviation.charAt(i));
             result.append("(\\. |\\.| | \\.)");
         }
-        result.append("?");
+        result.append("?$");
         return result.toString();
     }
 
