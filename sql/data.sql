@@ -188,7 +188,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
 -- MMR SFRB
 
 WITH sfrb AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
-  ('ministry-organization', 'Státní fond rozvoje bydlení', '70856788', TRUE) RETURNING entity_id)
+  ('ministry-organization', 'Státní fond rozvoje bydlení', '70856788', TRUE) RETURNING entity_id),
 
     invoices_ds AS (
     INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
