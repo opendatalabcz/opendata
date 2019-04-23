@@ -3,7 +3,7 @@
          xsi:noNamespaceSchemaLocation="../../xsd/datasource_mapping.xsd">
 
     <mappedSheet number="0">
-        <headerRow>1</headerRow>
+        <headerRow>0</headerRow>
 
         <retriever className="eu.profinit.opendata.transform.convert.PropertyBasedRecordRetriever">
             <sourceFileColumn originalName="faktura" argumentName="authorityIdentifier"/>
