@@ -50,6 +50,9 @@ public class DataInstance {
      * Should be false unless new records are only ever added at the end of this data file. */
     private Boolean incremental = true;
 
+    /** Determines what encoding is used in the data file. */
+    private String encoding;
+
     /** The row at which the last retrieval has ended. Only applicable if incremental is true. */
     private Integer lastProcessedRow;
 
@@ -173,6 +176,16 @@ public class DataInstance {
         this.incremental = incremental;
     }
 
+    @Basic
+    @Column(name = "encoding")
+    public String getEncoding() {
+        return encoding;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -187,6 +200,7 @@ public class DataInstance {
         if (format != null ? !format.equals(that.format) : that.format != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
         if (incremental != ((DataInstance) o).isIncremental()) return false;
+        if (encoding != null ? !encoding.equals(that.encoding) : that.encoding != null) return false;
 
         return true;
     }
@@ -199,6 +213,7 @@ public class DataInstance {
         result = 31 * result + periodicity.hashCode();
         result = 31 * result + ((lastProcessedDate != null) ? lastProcessedDate.hashCode() : 0);
         result = 31 * result + (incremental ? 1 : 0);
+        result = 31 * result + (encoding != null ? encoding.hashCode() : 0);
         return result;
     }
 

@@ -186,6 +186,7 @@ public class MOCRHandlerImpl extends GenericDataSourceHandler implements MOCRHan
                     dataInstance.setFormat(resource.getFormat());
                     dataInstance.setDescription(resource.getName());
                     dataInstance.setPeriodicity(Periodicity.MONTHLY);
+                    dataInstance.setEncoding("windows-1250");
                     dataInstance.setIncremental(false);
                     ds.getDataInstances().add(dataInstance);
                     em.persist(dataInstance);
