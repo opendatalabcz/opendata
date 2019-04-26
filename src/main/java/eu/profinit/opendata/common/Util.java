@@ -80,7 +80,8 @@ public class Util {
             
             return (responseCode == HttpURLConnection.HTTP_OK
                     && (contentType.toLowerCase().contains("xls")
-                        || contentType.toLowerCase().contains("excel")));
+                        || contentType.toLowerCase().contains("excel")
+                        || contentType.toLowerCase().contains("spreadsheet")));
         }
         catch (Exception e) {
             log.error("Could not verify isXLSFileAtURL", e);

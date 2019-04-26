@@ -48,16 +48,16 @@
             <sourceFileColumn originalName="Částka" argumentName="inputAmount"/>
         </property>
 
-        <property name="dateCreated" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.DateSetter">
-            <sourceFileColumn originalName="Zapsáno" argumentName="inputDate"/>
+        <property name="dateCreated" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">
+            <sourceFileColumn originalName="Zapsáno" argumentName="inputDateString"/>
         </property>
 
-        <property name="dueDate" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.DateSetter">
-            <sourceFileColumn originalName="Splatnost" argumentName="inputDate"/>
+        <property name="dueDate" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">
+            <sourceFileColumn originalName="Splatnost" argumentName="inputDateString"/>
         </property>
 
-        <property name="dateOfPayment" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.DateSetter">
-            <sourceFileColumn originalName="Uhrazeno" argumentName="inputDate"/>
+        <property name="dateOfPayment" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">
+            <sourceFileColumn originalName="Uhrazeno" argumentName="inputDateString"/>
         </property>
 
         <property name="masterId" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.RandomMasterIdSetter">
