@@ -72,11 +72,12 @@ public class PartnerSetter implements RecordPropertyConverter {
         String firstname = null;
         String name = null;
         if (sourceValues.containsKey("firstname") && sourceValues.get("firstname") != null
+                && isValuePresent(sourceValues, "name")
                 && sourceValues.get("name").getCellType() == Cell.CELL_TYPE_STRING
                 && !isNullOrEmpty(sourceValues.get("name").getStringCellValue())) {
             firstname = sourceValues.get("name").getStringCellValue();
         }
-        if(sourceValues.containsKey("name") && sourceValues.get("name") != null
+        if(isValuePresent(sourceValues, "name")
                 && sourceValues.get("name").getCellType() == Cell.CELL_TYPE_STRING
                 && !isNullOrEmpty(sourceValues.get("name").getStringCellValue())) {
             name = sourceValues.get("name").getStringCellValue();
@@ -89,6 +90,10 @@ public class PartnerSetter implements RecordPropertyConverter {
             return name;
         }
         return inputName;
+    }
+
+    private boolean isValuePresent(Map<String, Cell> sourceValues, String key) {
+        return sourceValues.containsKey(key) && sourceValues.get(key) != null && !sourceValues.get(key).isCellNull();
     }
 
     private String updateDic(final Map<String, Cell> sourceValues, final String dic) {
