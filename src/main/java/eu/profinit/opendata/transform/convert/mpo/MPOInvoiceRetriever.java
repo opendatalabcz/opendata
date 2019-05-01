@@ -7,6 +7,8 @@ import eu.profinit.opendata.query.PartnerQueryService;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
 import eu.profinit.opendata.transform.TransformException;
+import eu.profinit.opendata.transform.convert.AllAmountSetter;
+import eu.profinit.opendata.transform.convert.SplitIdentifierSetter;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,15 +34,22 @@ public class MPOInvoiceRetriever implements RecordRetriever {
     @Autowired
     private PartnerQueryService partnerQueryService;
 
-    @Override
+    @Autowired
+    private SplitIdentifierSetter splitIdentifierSetter;
+
+    @Autowired
+    private AllAmountSetter allAmountSetter;
+
+
+        @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
             throws TransformException {
         try {
             // Get filter values
 
-            String authorityIdentifier = Double.toString(sourceValues.get("authorityIdentifier").getNumericCellValue());
+            String authorityIdentifier = splitIdentifierSetter.getIdentifierFromSourceValues(sourceValues);
 
-            Double amount = sourceValues.get("amount").getNumericCellValue();
+            Double amount = allAmountSetter.getAmountFromSourceValues(sourceValues);
 
             // Get all MK contracts from the DB
             List<Record> allContracts = em.createQuery(

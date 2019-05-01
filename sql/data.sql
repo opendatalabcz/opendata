@@ -273,7 +273,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
 
   (
     (SELECT  data_source_id FROM invoices_ds), 'https://www.mpo.cz/assets/cz/rozcestnik/ministerstvo/otevrena-data/lokalni-katalog/2019/2/faktury.xlsx',
-    'xlsx', 'aperiodic', 'Smlouvy MPO 2013 - 2018', 'mappings/mpo/mapping-invoices.xml', FALSE
+    'xlsx', 'aperiodic', 'Faktury MPO 2013 - 2018', 'mappings/mpo/mapping-invoices.xml', FALSE
   );
 
 --MOCR-------------------------------------------------------------------------
