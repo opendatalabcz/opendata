@@ -33,8 +33,8 @@
             <sourceFileColumn originalName="castka" argumentName="inputAmount"/>
         </property>
 
-        <property name="dateCreated" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.DateSetter">
-            <sourceFileColumn originalName="datum_uctovani" argumentName="inputDate"/>
+        <property name="dateCreated" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">
+            <sourceFileColumn originalName="datum_uctovani" argumentName="inputDateString"/>
         </property>
 
         <property name="masterId" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.RandomMasterIdSetter"/>
