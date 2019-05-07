@@ -113,6 +113,150 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   (
     (SELECT  data_source_id FROM invoices_ds), 'https://www.mkcr.cz/assets/povinne-zverejnovane-informace/Uhrazene-faktury-dobropisy-a-platebni-poukazy_leden_2015.xlsx',
     'xlsx', 'aperiodic', 'Faktury MK leden 2015', 'mappings/mk/mapping-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/5505b49c-1bdd-44d4-87ea-e438fa3da86d',
+    'csv', 'aperiodic', 'MK Faktury 2010', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/90a1e97b-b391-4689-b2d8-6d28d2d8c416',
+    'csv', 'aperiodic', 'MK Zalohove faktury 2010', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/905a2e36-6376-43dc-bee8-b9c88383b996',
+    'csv', 'aperiodic', 'MK Platebni poukazy 2010', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/d051461e-6868-4f39-abf0-d9e5cb6132eb',
+    'csv', 'aperiodic', 'MK Dobropisy 2010', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/abf77b13-2d0e-4526-8c43-0f7356ca82f8',
+    'csv', 'aperiodic', 'MK Faktury 2011', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/8061bf6e-d37b-48c4-9d02-853ec8449970',
+    'csv', 'aperiodic', 'MK Zalohove faktury 2011', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/0671a2a2-161f-40e8-9c10-2d1a13ea95e4',
+    'csv', 'aperiodic', 'MK Platebni poukazy 2011', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/c695dc33-2255-49a0-9c9e-bcb491df8d2b',
+    'csv', 'aperiodic', 'MK Dobropisy 2011', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/4d723d0e-9df4-416a-940b-170db52a4d5c',
+    'csv', 'aperiodic', 'MK Faktury 2012', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/5940e3c0-ff9d-4ab8-a702-c4f724fedb01',
+    'csv', 'aperiodic', 'MK Zalohove faktury 2012', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/6c579e50-1924-49e6-a1c1-92c1fb7356b8',
+    'csv', 'aperiodic', 'MK Platebni poukazy 2012', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/94b84ad3-4b40-43be-862b-e4a48780ace3',
+    'csv', 'aperiodic', 'MK Dobropisy 2012', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/3df5d757-db60-466e-87fd-225f5f9563db',
+    'csv', 'aperiodic', 'MK Faktury 2013', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/ac55a50e-5eeb-4931-b6d3-143257b160ec',
+    'csv', 'aperiodic', 'MK Zalohove faktury 2013', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/d0601c9e-407e-439d-9141-5050d35f4c3b',
+    'csv', 'aperiodic', 'MK Platebni poukazy 2013', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/8664a69a-c8e7-45df-9fb0-0cb3f6fc9081',
+    'csv', 'aperiodic', 'MK Dobropisy 2013', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/ebbb77fc-9178-45b4-9413-0558054a51ca',
+    'csv', 'aperiodic', 'MK Faktury 2014', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/e35d4d48-14cb-400f-8b00-88f3a4cf3816',
+    'csv', 'aperiodic', 'MK Zalohove faktury 2014', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/5e2dc05e-fe80-4ce4-b293-a2637594b976',
+    'csv', 'aperiodic', 'MK Platebni poukazy 2014', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/11773e0e-152b-403a-b981-5f593881cadd',
+    'csv', 'aperiodic', 'MK Dobropisy 2014', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/fdbef526-c6fd-4ae0-b0b8-e74d1b249a62',
+    'csv', 'aperiodic', 'MK Faktury 2015', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/3e3b2f43-e187-42f8-8859-5c8413eb1703',
+    'csv', 'aperiodic', 'MK Zalohove faktury 2015', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/4f9a44a5-d10c-414a-b278-a215a28d34f8',
+    'csv', 'aperiodic', 'MK Platebni poukazy 2015', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/a4689c8d-ab3c-424a-b619-529de4f6b657',
+    'csv', 'aperiodic', 'MK Dobropisy 2015', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/932c3724-c1c0-446d-9b7e-96879f7c7f44',
+    'csv', 'aperiodic', 'MK Faktury 2016', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/48dca890-f205-4d13-9555-08befedce799',
+    'csv', 'aperiodic', 'MK Zalohove faktury 2016', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/2f73769f-eebc-491b-a672-8a9405469db3',
+    'csv', 'aperiodic', 'MK Platebni poukazy 2016', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/2a50336f-4e5d-4097-8848-94b3c3219b7c',
+    'csv', 'aperiodic', 'MK Dobropisy 2016', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/7885b288-7824-4b5f-a495-fa3239447d4e',
+    'csv', 'aperiodic', 'MK Faktury 2017', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/23f9366b-8c0f-450a-b629-4f0c67198d47',
+    'csv', 'aperiodic', 'MK Zalohove faktury 2017', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/5860c9a0-055f-4d76-b312-047d6a75df61',
+    'csv', 'aperiodic', 'MK Platebni poukazy 2017', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/6743b253-7e01-47fe-8fad-5b79f2aa4313',
+    'csv', 'aperiodic', 'MK Dobropisy 2017', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/44746c4f-bdea-4561-871a-25f17190a034',
+    'csv', 'aperiodic', 'MK Faktury 2018', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/cde5a665-c865-4dd6-a72f-0cc1882708eb',
+    'csv', 'aperiodic', 'MK Zalohove faktury 2018', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/44746c4f-bdea-4561-871a-25f17190a034',
+    'csv', 'aperiodic', 'MK Platebni poukazy 2018', 'mappings/mk/mapping-csv-invoices.xml', FALSE
+  ),
+  (
+    (SELECT  data_source_id FROM invoices_ds), 'https://data.mkcr.cz/homepage/download-file/06516ad6-d4b1-44c5-9efe-d6358cdc8290',
+    'csv', 'aperiodic', 'MK Dobropisy 2018', 'mappings/mk/mapping-csv-invoices.xml', FALSE
   );
 
 -- MMR: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
