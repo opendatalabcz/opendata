@@ -23,17 +23,20 @@ public class DateSetter implements RecordPropertyConverter {
             throws TransformException {
 
         try {
-            Date inputDate;
+            Date inputDate = null;
             Cell cellInputDate = sourceValues.get("inputDate");
-            if (cellInputDate == null || cellInputDate.getStringCellValue().isEmpty()) {
+            if (cellInputDate != null) {
+                try {
+                    inputDate = cellInputDate.getDateCellValue();
+                } catch (IllegalStateException ex) {
+                    throw new TransformException("Couldn't set date property - bad cell format", ex,
+                            TransformException.Severity.PROPERTY_LOCAL);
+                }
+            }
+            if (inputDate == null) {
                 inputDate = new java.sql.Date(0L);
-            } else {
-                inputDate = cellInputDate.getDateCellValue();
             }
             setField(record, inputDate, fieldName, logger);
-        } catch (IllegalStateException ex) {
-            throw new TransformException("Couldn't set date property - bad cell format", ex,
-                    TransformException.Severity.PROPERTY_LOCAL);
         } catch (Exception e) {
             String message = "Couldn't set java.sql.Date value for field " + fieldName;
             throw new TransformException(message, e, TransformException.Severity.PROPERTY_LOCAL);
