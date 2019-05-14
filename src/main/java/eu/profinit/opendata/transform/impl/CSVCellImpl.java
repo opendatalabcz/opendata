@@ -45,7 +45,8 @@ public class CSVCellImpl implements Cell {
      */
     @Override
     public double getNumericCellValue() {
-        return Double.valueOf(value);
+        String strippedValue = value.replaceAll("\"$|^\"", "");
+        return Double.valueOf(strippedValue);
     }
 
     /**

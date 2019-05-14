@@ -31,8 +31,8 @@ public class DownloadServiceImpl implements DownloadService {
     @Override
     public InputStream downloadDataFile(String urlString) throws IOException {
         if (isFileLocal(urlString)) {
-            File mvcrFile = new File(urlString);
-            return new FileInputStream(mvcrFile);
+            File localFile = new File(urlString);
+            return new FileInputStream(localFile);
         }
         URL url  = new URL(urlString);
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());

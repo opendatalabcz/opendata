@@ -23,7 +23,7 @@ public class BudgetStringSetter  implements RecordPropertyConverter {
         Double inputItemNumber = getNumericValue(sourceValues, "inputItemNumber");
         String inputItemString = getStringValue(sourceValues, "inputItemString");
 
-        if (departmentOld != null) {
+        if (departmentOld != null && !departmentOld.isEmpty()) {
             return getOldSubject(departmentOld);
         } else {
             return getNewSubject(departmentNumber, departmentString, inputItemNumber, inputItemString);
@@ -40,7 +40,7 @@ public class BudgetStringSetter  implements RecordPropertyConverter {
 
     private Double getNumericValue(Map<String, Cell> sourceValues, String key) {
         Cell cell = sourceValues.get(key);
-        if (cell != null && !cell.isCellNull()) {
+        if (cell != null && !cell.isCellNull() && !cell.getStringCellValue().isEmpty()) {
             return cell.getNumericCellValue();
         }
         return null;
@@ -53,12 +53,24 @@ public class BudgetStringSetter  implements RecordPropertyConverter {
     private String getNewSubject(Double departmentNumber, String departmentString, Double inputItemNumber, String inputItemString) {
         StringBuilder subject = new StringBuilder();
 
-        subject.append(departmentNumber.intValue());
-        subject.append(" - ");
-        subject.append(departmentString);
-        subject.append(" / ");
-        subject.append(inputItemNumber.intValue());
-        subject.append(" - ");
+        if (departmentNumber != null) {
+            subject.append(departmentNumber.intValue());
+        }
+        if (!subject.toString().isEmpty() && departmentString != null) {
+            subject.append(" - ");
+        }
+        if (departmentString != null) {
+            subject.append(departmentString);
+        }
+        if (!subject.toString().isEmpty() && inputItemNumber != null) {
+            subject.append(" / ");
+        }
+        if(inputItemNumber != null) {
+            subject.append(inputItemNumber.intValue());
+        }
+        if (!subject.toString().isEmpty() & inputItemString != null) {
+            subject.append(" - ");
+        }
         subject.append(inputItemString);
 
         return subject.toString();
