@@ -311,4 +311,8 @@ public class MFCRHandlerImpl extends GenericDataSourceHandler implements MFCRHan
         em.merge(toProcess);
     }
 
+    public void sayHi() {
+        System.out.println("Hi");
+    }
+
 }

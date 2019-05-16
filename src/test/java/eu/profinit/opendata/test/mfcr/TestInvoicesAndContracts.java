@@ -83,7 +83,7 @@ public class TestInvoicesAndContracts extends ApplicationContextTestCase {
         mfcrHandler.updateDataInstances(ds);
         Collection<DataInstance> dataInstanceList = ds.getDataInstances();
         assertEquals(1, dataInstanceList.size());
-        assertEquals(dataInstanceList.iterator().next().getDescription(), "Platné a neplatné smlouvy MF");
+        assertEquals(dataInstanceList.iterator().next().getDescription(), "Platné a neplatné smlouvy MF 11/2017");
     }
 
     @Test
