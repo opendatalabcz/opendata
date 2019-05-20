@@ -24,4 +24,6 @@ public interface DownloadService {
      * @throws IOException The data file could not be downloaded
      */
     InputStream downloadDataFile(String url) throws IOException;
+
+    InputStream downloadDataFileLocally(DataInstance dataInstance) throws IOException;
 }
