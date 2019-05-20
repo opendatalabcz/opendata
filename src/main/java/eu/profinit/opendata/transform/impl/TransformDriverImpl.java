@@ -86,7 +86,14 @@ public class TransformDriverImpl implements TransformDriver {
             Mapping mapping = loadMapping(mappingFile);
             if (dataInstance.getFormat().equalsIgnoreCase("csv")) {
                 InputStream initialStream = downloadService.downloadDataFile(dataInstance);
-                csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
+                try {
+                    csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
+                } catch (IllegalStateException e) {
+                    if (e.getMessage().contains("SocketException")) {
+                        inputStream = downloadService.downloadDataFileLocally(dataInstance);
+                        csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
+                    }
+                }
             } else {
                 Workbook workbook = openXLSFile(inputStream, dataInstance);
                 workbookProcessor.processWorkbook(workbook, mapping, retrieval, log);

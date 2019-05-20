@@ -6,13 +6,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Random;
 
 /**
  * Created by dm on 11/24/15.
@@ -38,6 +36,19 @@ public class DownloadServiceImpl implements DownloadService {
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());
         log.debug("Download complete");
         return Channels.newInputStream(rbc);
+    }
+
+    @Override
+    public InputStream downloadDataFileLocally(DataInstance dataInstance) throws IOException {
+        Random random = new Random();
+
+        URL url = new URL(dataInstance.getUrl());
+        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+        String fileName = System.getProperty("java.io.tmpdir") + "/faktura-" + random.nextInt(100000);
+        FileOutputStream fos = new FileOutputStream(fileName);
+        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+
+        return downloadDataFile(fileName);
     }
 
     private boolean isFileLocal(String urlString) {
