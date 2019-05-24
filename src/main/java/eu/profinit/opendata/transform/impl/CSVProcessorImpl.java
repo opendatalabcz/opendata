@@ -138,11 +138,12 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
 
     private CSVParser getCsvParser(InputStream fileStream, Character delimiter, Integer headerRow, String encoding) throws IOException {
         Reader reader = getReader(fileStream, headerRow, encoding);
-        return new CSVParser(reader, CSVFormat.EXCEL
+        return new CSVParser(reader, CSVFormat.DEFAULT
                 .withDelimiter(delimiter)
                 .withFirstRecordAsHeader()
                 .withIgnoreHeaderCase()
-                .withTrim());
+                .withTrim()
+                .withQuote(null));
     }
 
     private Reader getReader(InputStream fileStream, Integer headerRow, String encoding) throws IOException {
