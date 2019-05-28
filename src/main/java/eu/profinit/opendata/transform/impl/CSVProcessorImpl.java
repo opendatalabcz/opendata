@@ -40,9 +40,11 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
 
         log.info("Started processing sheet");
 
+        String encoding = getEncoding(retrieval);
+
 
         for(MappedSheet mappingSheet : mapping.getMappedSheet()) {
-            CSVParser parser = createCsvParser(inputStream, initialStream, mappingSheet);
+            CSVParser parser = createCsvParser(inputStream, initialStream, mappingSheet, encoding);
 
             int startRowNum = mappingSheet.getHeaderRow().intValue() + 1;
             if (retrieval.getDataInstance().getLastProcessedRow() != null) {
@@ -92,6 +94,11 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
         log.info("Sheet finished");
     }
 
+    private String getEncoding(Retrieval retrieval) {
+        String encoding = retrieval.getDataInstance().getEncoding();
+        return (encoding == null) ? "UTF-8" : encoding;
+    }
+
 
     /**
      * Creates a CSV parser. It determines which delimiter is used in the file and returns such parser.
@@ -100,7 +107,7 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
      * @param mappingSheet current mapping sheet
      * @return CSVParser CSV parser with correct delimiter
      */
-    private CSVParser createCsvParser(InputStream inputStream, InputStream initialStream, MappedSheet mappingSheet) throws IOException {
+    private CSVParser createCsvParser(InputStream inputStream, InputStream initialStream, MappedSheet mappingSheet, String encoding) throws IOException {
         CSVParser csvParser = null;
         List<Character> delimiters = new ArrayList<>();
         delimiters.add(';');
@@ -108,7 +115,7 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
         delimiters.add('\t');
 
         try {
-            csvParser = getCsvParser(inputStream, delimiters.get(0), mappingSheet.getHeaderRow().intValue());
+            csvParser = getCsvParser(inputStream, delimiters.get(0), mappingSheet.getHeaderRow().intValue(), encoding);
             Map<String, Integer> headerMap = csvParser.getHeaderMap();
             int mappedProperties = mappingSheet.getPropertyOrPropertySet().size();
             int headerProperties = headerMap.keySet().size();
@@ -117,7 +124,7 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
                 for(int i = 1; i < delimiters.size(); i++) {
                     String headerLine = headerMap.keySet().iterator().next();
                     if (isSeparatedWithDelimiter(headerLine, delimiters.get(i), mappedProperties)) {
-                        csvParser = getCsvParser(initialStream, delimiters.get(i), mappingSheet.getHeaderRow().intValue());
+                        csvParser = getCsvParser(initialStream, delimiters.get(i), mappingSheet.getHeaderRow().intValue(), encoding);
                         break;
                     }
                 }
@@ -129,17 +136,18 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
         return csvParser;
     }
 
-    private CSVParser getCsvParser(InputStream fileStream, Character delimiter, Integer headerRow) throws IOException {
-        Reader reader = getReader(fileStream, headerRow);
-        return new CSVParser(reader, CSVFormat.EXCEL
+    private CSVParser getCsvParser(InputStream fileStream, Character delimiter, Integer headerRow, String encoding) throws IOException {
+        Reader reader = getReader(fileStream, headerRow, encoding);
+        return new CSVParser(reader, CSVFormat.DEFAULT
                 .withDelimiter(delimiter)
                 .withFirstRecordAsHeader()
                 .withIgnoreHeaderCase()
-                .withTrim());
+                .withTrim()
+                .withQuote(null));
     }
 
-    private Reader getReader(InputStream fileStream, Integer headerRow) throws IOException {
-        Reader reader = new InputStreamReader(fileStream, "UTF-8");
+    private Reader getReader(InputStream fileStream, Integer headerRow, String encoding) throws IOException {
+        Reader reader = new InputStreamReader(fileStream, encoding);
         if (headerRow == 0) {
             return reader;
         }

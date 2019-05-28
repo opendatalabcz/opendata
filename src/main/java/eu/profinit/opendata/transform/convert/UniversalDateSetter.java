@@ -26,10 +26,13 @@ public class UniversalDateSetter implements RecordPropertyConverter {
 
         String dateString = "";
         Date date = null;
-        try {
-            dateString = sourceValues.get("inputDateString").getStringCellValue();
-        } catch (IllegalStateException ex) {
-            date = org.apache.poi.ss.usermodel.DateUtil.getJavaDate(sourceValues.get("inputDateString").getNumericCellValue());
+        Cell sourceValue = sourceValues.get("inputDateString");
+        if (sourceValue != null && !sourceValue.isCellNull()) {
+            try {
+                dateString = sourceValue.getStringCellValue();
+            } catch (IllegalStateException ex) {
+                date = org.apache.poi.ss.usermodel.DateUtil.getJavaDate(sourceValue.getNumericCellValue());
+            }
         }
         if(Util.isNullOrEmpty(dateString) && date == null) {
             throw new TransformException("Couldn't set date value, date is null or empty",

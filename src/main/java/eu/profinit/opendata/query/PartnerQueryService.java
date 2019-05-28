@@ -4,6 +4,8 @@ import eu.profinit.opendata.model.Entity;
 import eu.profinit.opendata.model.EntityType;
 import eu.profinit.opendata.model.PartnerListEntry;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -74,6 +76,7 @@ public class PartnerQueryService {
      * @return A retrieved or newly created Entity with the specified atttributes. If more than one Entity is
      * found, only the first result is returned.
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Entity findOrCreateEntity(String name, String ico, String dic) {
         Entity found = findEntity(name, ico, dic);
 
@@ -130,7 +133,7 @@ public class PartnerQueryService {
         }
         if(candidates.isEmpty() && !isNullOrEmpty(dic)) {
             candidates = em.createNamedQuery("findByDIC", Entity.class)
-                    .setParameter("dic", ico)
+                    .setParameter("dic", dic)
                     .getResultList();
         }
 
@@ -216,7 +219,7 @@ public class PartnerQueryService {
             result.append(abbreviation.charAt(i));
             result.append("(\\. |\\.| | \\.)");
         }
-        result.append("?");
+        result.append("?$");
         return result.toString();
     }
 

@@ -23,6 +23,15 @@ public class AllAmountSetter implements RecordPropertyConverter {
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
             throws TransformException {
 
+        Double amount = getAmountFromSourceValues(sourceValues);
+
+        record.setOriginalCurrencyAmount(amount);
+        if (record.getCurrency().equals("CZK")) {
+            record.setAmountCzk(amount);
+        }
+    }
+
+    public Double getAmountFromSourceValues(Map<String, Cell> sourceValues) {
         Double amount = 0d;
         //fix for excels without values
         if (sourceValues.get(INPUT_AMOUNT) != null) {
@@ -35,9 +44,6 @@ public class AllAmountSetter implements RecordPropertyConverter {
                 amount = Double.parseDouble(formattedVal);
             }
         }
-        record.setOriginalCurrencyAmount(amount);
-        if (record.getCurrency().equals("CZK")) {
-            record.setAmountCzk(amount);
-        }
+        return amount;
     }
 }

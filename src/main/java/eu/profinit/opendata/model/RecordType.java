@@ -7,5 +7,8 @@ public enum RecordType {
     ORDER,
     CONTRACT,
     PAYMENT,
-    INVOICE;
+    INVOICE,
+    TRANSFERORDER,
+    DEPOSIT,
+    CREDITNOTE;
 }

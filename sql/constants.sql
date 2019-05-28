@@ -7,6 +7,9 @@ INSERT INTO record_type (record_type) VALUES ('contract');
 INSERT INTO record_type (record_type) VALUES ('invoice');
 INSERT INTO record_type (record_type) VALUES ('order');
 INSERT INTO record_type (record_type) VALUES ('payment');
+INSERT INTO record_type (record_type) VALUES ('transferorder');
+INSERT INTO record_type (record_type) VALUES ('deposit');
+INSERT INTO record_type (record_type) VALUES ('creditnote');
 
 INSERT INTO periodicity (periodicity) VALUES ('daily');
 INSERT INTO periodicity (periodicity) VALUES ('weekly');

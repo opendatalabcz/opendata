@@ -32,7 +32,7 @@ public class MiscTests extends TestCase {
     public void testCheckForXLSFileAtURL() {
         boolean res = Util.isXLSFileAtURL("http://nothing.here.com");
         assertFalse(res);
-        res = Util.isXLSFileAtURL("http://data.justice.cz/Faktury%20Ministerstva%20spravedlnosti/Faktury%20MSp%202013.xls");
+        res = Util.isXLSFileAtURL("https://data.justice.cz/Faktury%20Ministerstva%20spravedlnosti/Faktury%20MSp%202013.xls");
         assertTrue(res);
         res = Util.isXLSFileAtURL("http://google.com");
         assertFalse(res);

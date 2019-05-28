@@ -25,6 +25,9 @@ public class JusticeHandler extends GenericDataSourceHandler {
     @Value("${justice.invoices.url.scheme2}")
     private String urlScheme2;
 
+    @Value("${justice.invoices.url.scheme3}")
+    private String urlScheme3;
+
     @Value("${justice.invoices.mapping.file}")
     private String mappingFile;
 
@@ -60,6 +63,8 @@ public class JusticeHandler extends GenericDataSourceHandler {
             String url = urlScheme.replace("{year}", i.toString());
             String urlx = url + "x"; // xlsx document
             String url2 = urlScheme2.replace("{year}", i.toString());
+            String url3 = urlScheme3.replace("{year}", i.toString());
+            String url3x = url3 + "x";
 
             Optional<DataInstance> oldDataInstance = ds.getDataInstances().stream().filter(d -> d.getUrl().equals(url))
                     .findAny();
@@ -79,8 +84,12 @@ public class JusticeHandler extends GenericDataSourceHandler {
             else if (Util.isXLSFileAtURL(urlx)){
                 createDataInstance(i, urlx, ds, "xlsx");
             // try scheme2
-            } else if (Util.isXLSFileAtURL(url2)){
+            } else if (Util.isXLSFileAtURL(url2)) {
                 createDataInstance(i, url2, ds, "xls");
+            } else if (Util.isXLSFileAtURL(url3)) {
+                createDataInstance(i, url3, ds, "xls");
+            } else if (Util.isXLSFileAtURL(url3x)) {
+                createDataInstance(i, url3x, ds, "xlsx");
             } else {
                 log.warn("Can't find an XLS document at the url " + url);
             }

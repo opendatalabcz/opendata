@@ -18,6 +18,11 @@ public class CSVCellImpl implements Cell {
 
     public CSVCellImpl(String value, int colIdx) {
         this.value = value;
+        // manually removing quotes instead of using ".withQuotes('\"')" in csvParser definition because
+        // the apache csvParser cannot handle cases when quotes are stated within quotes (such as: "Say "Hi!"")
+        if (value != null && value.length() > 0 && value.charAt(0) == '"' && value.charAt(value.length()-1) == '"') {
+            this.value = value.replaceAll("\"$|^\"", "");
+        }
         this.colIdx = colIdx;
     }
 
@@ -45,7 +50,8 @@ public class CSVCellImpl implements Cell {
      */
     @Override
     public double getNumericCellValue() {
-        return Double.valueOf(value);
+        String strippedValue = value.replaceAll("\"$|^\"", "");
+        return Double.valueOf(strippedValue);
     }
 
     /**

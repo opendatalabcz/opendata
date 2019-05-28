@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../xsd/datasource_mapping.xsd">
+
+    <mappedSheet number="0">
+
+        <headerRow>0</headerRow>
+
+        <retriever className="eu.profinit.opendata.transform.convert.mk.MKCsvInvoiceRetriever">
+            <sourceFileColumn originalName="DatumPrijeti" argumentName="dateCreated"/>
+            <sourceFileColumn originalName="Rozliseni" argumentName="inputType"/>
+            <sourceFileColumn originalName="Cislo" argumentName="record"/>
+        </retriever>
+
+        <property name="authorityIdentifier" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.YearTypeNumberIdentifierSetter">
+            <sourceFileColumn originalName="DatumPrijeti" argumentName="dateCreated"/>
+            <sourceFileColumn originalName="Rozliseni" argumentName="inputType"/>
+            <sourceFileColumn originalName="Cislo" argumentName="record"/>
+        </property>
+
+        <property name="recordType" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.mk.TypeSetter">
+            <sourceFileColumn originalName="Rozliseni" argumentName="inputType"/>
+        </property>
+
+        <property name="subject" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.DirectStringSetter">
+            <sourceFileColumn originalName="UcelPlatby" argumentName="inputString"/>
+        </property>
+
+        <property name="budgetCategory" onlyNewRecords="false" converter="eu.profinit.opendata.transform.convert.mk.BudgetStringSetter">
+            <sourceFileColumn originalName="Stredisko" argumentName="departmentOld"/>
+            <sourceFileColumn originalName="KodStredisko" argumentName="departmentNumber"/>
+            <sourceFileColumn originalName="NazevStredisko" argumentName="departmentString"/>
+            <sourceFileColumn originalName="KodRozpPolozka" argumentName="inputItemNumber"/>
+            <sourceFileColumn originalName="NazevRozpPolozka" argumentName="inputItemString"/>
+        </property>
+
+        <property name="variableSymbol" onlyNewRecords="false" converter="eu.profinit.opendata.transform.convert.DirectStringSetter">
+            <sourceFileColumn originalName="VS" argumentName="inputString"/>
+        </property>
+
+        <property name="currency" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CurrencySetter">
+            <sourceFileColumn originalName="Mena" argumentName="inputCurrencyCode"/>
+        </property>
+
+        <property name="originalCurrencyAmount" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.DirectMoneySetter">
+            <sourceFileColumn originalName="Uhrada" argumentName="inputAmount"/>
+        </property>
+
+        <property name="amountCzk" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CZKAmountSetter">
+            <sourceFileColumn originalName="Uhrada" argumentName="inputAmount"/>
+        </property>
+
+        <property name="partner" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.PartnerSetter">
+            <sourceFileColumn originalName="Dodavatel" argumentName="name"/>
+            <sourceFileColumn originalName="IcDodavatele" argumentName="ico"/>
+        </property>
+
+        <property name="dateCreated" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">
+            <sourceFileColumn originalName="DatumPrijeti" argumentName="inputDateString"/>
+        </property>
+
+        <property name="dueDate" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">
+            <sourceFileColumn originalName="DatumSplatnosti" argumentName="inputDateString"/>
+        </property>
+
+        <property name="dateOfPayment" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">
+            <sourceFileColumn originalName="DatumUhrady" argumentName="inputDateString"/>
+        </property>
+
+        <!-- Kazdy zaznam je nezavisly, dostane nove masterID -->
+        <property name="masterId" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.RandomMasterIdSetter"/>
+
+    </mappedSheet>
+
+</mapping>

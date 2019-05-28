@@ -18,12 +18,12 @@ V případě úspěšného projektu počítáme se zveřejněním získaných da
 
 ## Očekávané zdroje jsou:
 
-Ministerstva - faktury, smlouvy, objednavky
-Otevřená data Ministerstva financí ČR - http://data.mfcr.cz/
-Otevřená data Ministerstva vnitra ČR - zde (NKOD)
-Otevřená data Ministerstva spravedlnosti ČR - http://data.justice.cz/ (smlouvy a faktury)
-Otevřená data Ministerstva životního prostředí ČR - http://www.mzp.cz/cz/otevrena_data (smlouvy a faktury)
-Otevřená data Ministerstva kultury ČR - zde (smlouvy a faktury)
+Ministerstva - faktury, smlouvy  
+Otevřená data Ministerstva financí ČR - http://data.mfcr.cz/  
+Otevřená data Ministerstva vnitra ČR - zde (NKOD)  
+Otevřená data Ministerstva spravedlnosti ČR - http://data.justice.cz/ (smlouvy a faktury)  
+Otevřená data Ministerstva životního prostředí ČR - http://www.mzp.cz/cz/otevrena_data (smlouvy a faktury)  
+Otevřená data Ministerstva kultury ČR - zde (smlouvy a faktury)  
 
 Data z Ministerstva pro místní rozvoj ČR - zde
 Data z Informačního systému o veřejných zakázkách - zde (MMR)
