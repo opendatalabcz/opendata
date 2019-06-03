@@ -40,7 +40,15 @@ public class AllAmountSetter implements RecordPropertyConverter {
             } else if (sourceValues.get(INPUT_AMOUNT).getCellType() == Cell.CELL_TYPE_STRING) {
                 String rawVal = sourceValues.get(INPUT_AMOUNT).getStringCellValue();
                 String wtfSign = String.valueOf((char) 160);
-                String formattedVal = rawVal.trim().replaceAll("\\s","").replace(',','.').replaceAll(wtfSign, "");
+                String formattedVal = rawVal.trim().replaceAll("\\s","").replaceAll(wtfSign, "");
+
+                if(formattedVal.matches("^.+,.+..+$")) {
+                    // f.e. 10,000,000.50 -> 10000000.50
+                    formattedVal = formattedVal.replaceAll(",", "");
+                } else {
+                    // f.e.
+                    formattedVal = formattedVal.replace(',','.');
+                }
                 amount = Double.parseDouble(formattedVal);
             }
         }

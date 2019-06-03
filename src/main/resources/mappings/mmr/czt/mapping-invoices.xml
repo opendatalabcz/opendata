@@ -15,7 +15,7 @@
         <property name="authorityRole" onlyNewRecords="true" value="CUSTOMER"/>
 
         <property name="authorityIdentifier" onlyNewRecords="true"
-                  converterParameter="2018" converter="eu.profinit.opendata.transform.convert.TripleSplitIdentifierSetter">
+                  converter="eu.profinit.opendata.transform.convert.TripleSplitIdentifierSetter">
             <sourceFileColumn originalName="Rok" argumentName="inputYear"/>
             <sourceFileColumn originalName="Dokladová řada" argumentName="categoryCode"/>
             <sourceFileColumn originalName="Číslo dokladu" argumentName="serialNumber"/>
@@ -26,6 +26,10 @@
             <sourceFileColumn originalName="Osoba" argumentName="name"/>
         </property>
 
+        <property name="currency" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CurrencySetter">
+            <sourceFileColumn originalName="Měna" argumentName="inputCurrencyCode"/>
+        </property>
+
         <property name="subject" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.mmr.czt.DirectStringSemicolonTrimSetter">
             <sourceFileColumn originalName="Popis" argumentName="inputString"/>
             <sourceFileColumn originalName="Popis;" argumentName="inputString"/>
@@ -33,10 +37,6 @@
 
         <property name="allAmounts" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.AllAmountSetter">
             <sourceFileColumn originalName="Částka" argumentName="inputAmount"/>
-        </property>
-
-        <property name="currency" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.CurrencySetter">
-            <sourceFileColumn originalName="Měna" argumentName="inputCurrencyCode"/>
         </property>
 
         <property name="dateCreated" required="false" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">

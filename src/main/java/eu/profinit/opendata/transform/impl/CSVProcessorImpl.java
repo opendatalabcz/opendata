@@ -115,7 +115,7 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
         delimiters.add('\t');
 
         try {
-            csvParser = getCsvParser(inputStream, delimiters.get(0), mappingSheet.getHeaderRow().intValue(), encoding);
+            csvParser = getCsvParser(inputStream, delimiters.get(0), null, mappingSheet.getHeaderRow().intValue(), encoding);
             Map<String, Integer> headerMap = csvParser.getHeaderMap();
             int mappedProperties = mappingSheet.getPropertyOrPropertySet().size();
             int headerProperties = headerMap.keySet().size();
@@ -123,8 +123,11 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
             if (headerProperties < 2) {
                 for(int i = 1; i < delimiters.size(); i++) {
                     String headerLine = headerMap.keySet().iterator().next();
+                    CSVRecord firstDataLine = csvParser.iterator().next();
                     if (isSeparatedWithDelimiter(headerLine, delimiters.get(i), mappedProperties)) {
-                        csvParser = getCsvParser(initialStream, delimiters.get(i), mappingSheet.getHeaderRow().intValue(), encoding);
+                        Character quote = getQuotes(firstDataLine, delimiters.get(i));
+                        csvParser = getCsvParser(initialStream, delimiters.get(i), quote,
+                                mappingSheet.getHeaderRow().intValue(), encoding);
                         break;
                     }
                 }
@@ -136,14 +139,15 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
         return csvParser;
     }
 
-    private CSVParser getCsvParser(InputStream fileStream, Character delimiter, Integer headerRow, String encoding) throws IOException {
+    private CSVParser getCsvParser(InputStream fileStream, Character delimiter, Character quote, Integer headerRow, String encoding)
+            throws IOException {
         Reader reader = getReader(fileStream, headerRow, encoding);
         return new CSVParser(reader, CSVFormat.DEFAULT
                 .withDelimiter(delimiter)
                 .withFirstRecordAsHeader()
                 .withIgnoreHeaderCase()
                 .withTrim()
-                .withQuote(null));
+                .withQuote(quote));
     }
 
     private Reader getReader(InputStream fileStream, Integer headerRow, String encoding) throws IOException {
@@ -178,6 +182,28 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
         String[] delimitedColumns = header.split(String.valueOf(delimiter));
         int columnsSize = delimitedColumns.length;
         return columnsSize >= mappedPropertiesSize - 3;
+    }
+
+    private Character getQuotes (CSVRecord firstLine, Character delimiter) {
+        boolean begWithQuote = false;
+        boolean endWithQuote = false;
+        if(firstLine.get(0) == null) {
+            return null;
+        }
+        String[] delimitedColumns = firstLine.get(0).split(String.valueOf(delimiter));
+
+        for (int i = 0; i < delimitedColumns.length; i++) {
+            if (!begWithQuote) {
+                begWithQuote = delimitedColumns[i].matches("^\"[^\"]*$");
+            }
+            if (begWithQuote && !endWithQuote) {
+                endWithQuote = delimitedColumns[i].matches("^[^\"]*\"$");
+            }
+        }
+        if (begWithQuote && endWithQuote) {
+            return '\"';
+        }
+        return null;
     }
 
 }
