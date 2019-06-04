@@ -120,10 +120,10 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
             int mappedProperties = mappingSheet.getPropertyOrPropertySet().size();
             int headerProperties = headerMap.keySet().size();
 
-            if (headerProperties < 2) {
-                for(int i = 1; i < delimiters.size(); i++) {
-                    String headerLine = headerMap.keySet().iterator().next();
-                    CSVRecord firstDataLine = csvParser.iterator().next();
+            if (headerProperties < 3) {
+                String headerLine = getHeaderLine(headerMap);
+                CSVRecord firstDataLine = csvParser.iterator().next();
+                for(int i = 0; i < delimiters.size(); i++) {
                     if (isSeparatedWithDelimiter(headerLine, delimiters.get(i), mappedProperties)) {
                         Character quote = getQuotes(firstDataLine, delimiters.get(i));
                         csvParser = getCsvParser(initialStream, delimiters.get(i), quote,
@@ -137,6 +137,21 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
             throw e;
         }
         return csvParser;
+    }
+
+    private String getHeaderLine(Map<String, Integer> header) {
+        Iterator<String> headerIterator = header.keySet().iterator();
+        if (header.size() == 1) {
+            return headerIterator.next();
+        }
+        String key = headerIterator.next();
+        while (headerIterator.hasNext()) {
+            if (key.length() > 3) {
+                return key;
+            }
+            key = headerIterator.next();
+        }
+        return key;
     }
 
     private CSVParser getCsvParser(InputStream fileStream, Character delimiter, Character quote, Integer headerRow, String encoding)
@@ -194,10 +209,11 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
 
         for (int i = 0; i < delimitedColumns.length; i++) {
             if (!begWithQuote) {
-                begWithQuote = delimitedColumns[i].matches("^\"[^\"]*$");
+                begWithQuote = delimitedColumns[i].matches("^(\"|\"\")[^\"]*$");
             }
             if (begWithQuote && !endWithQuote) {
-                endWithQuote = delimitedColumns[i].matches("^[^\"]*\"$");
+                endWithQuote = delimitedColumns[i].matches("^[^\"]*(\"|\"\")$");
+                break;
             }
         }
         if (begWithQuote && endWithQuote) {
