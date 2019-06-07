@@ -77,7 +77,7 @@ public class Util {
                 String protocolWarning = protocol.equals("http") ? " You are using http protocol. Try to use https instead!" : "";
                 log.warn("Url {} moved to another location!{}", url, protocolWarning);
             }
-            
+
             return (responseCode == HttpURLConnection.HTTP_OK
                     && (contentType.toLowerCase().contains("xls")
                         || contentType.toLowerCase().contains("excel")
@@ -85,6 +85,23 @@ public class Util {
         }
         catch (Exception e) {
             log.error("Could not verify isXLSFileAtURL", e);
+            return false;
+        }
+    }
+
+    public static boolean isFileAtURL(String url) {
+        try {
+            URL parsedUrl = new URL(url);
+            HttpURLConnection.setFollowRedirects(false);
+            HttpURLConnection con = (HttpURLConnection) parsedUrl.openConnection();
+            con.setRequestMethod("HEAD");
+
+            int responseCode = con.getResponseCode();
+
+            return responseCode == HttpURLConnection.HTTP_OK;
+        }
+        catch (Exception e) {
+            log.error("Could not verify whether a file is at the url " + url, e);
             return false;
         }
     }

@@ -37,6 +37,17 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   'xlsx', 'quarterly', 'Smlouvy MSp 2011 - 2015', 'mappings/justice/mapping-contracts.xml', false
 );
 
+-- MZ: invoices are automatic----------------------------
+WITH mz AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
+  ('ministry', 'Ministerstvo zdravotnictví', '00024341', TRUE) RETURNING entity_id)
+
+INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
+    (SELECT entity_id FROM msp),
+    'invoice', 'monthly', 'eu.profinit.opendata.institution.mzcr.MZCRHandler', TRUE, 'Faktury MZČR')
+    RETURNING data_source_id
+;
+
+
 -- MZP: All data instances are manual----------------------------
 
 WITH mzp AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
