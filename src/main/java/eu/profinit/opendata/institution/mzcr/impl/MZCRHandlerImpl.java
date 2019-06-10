@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Optional;
 
 @Component
@@ -42,6 +44,7 @@ public class MZCRHandlerImpl extends GenericDataSourceHandler implements MZCRHan
 
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+        DataInstance mostRecentlyAdded = getMostRecentlyAddedDataInstance(ds);
 
         for(Integer year = 2018; year <= currentYear; year++) {
             for(Integer month = 1; month < 13; month++) {
@@ -55,12 +58,21 @@ public class MZCRHandlerImpl extends GenericDataSourceHandler implements MZCRHan
                 Optional<DataInstance> oldDataInstance = ds.getDataInstances().stream().filter(d -> d.getUrl().equals(url))
                         .findAny();
 
+
                 if(oldDataInstance.isPresent()) {
-                    // Expire processed data instances where at least two years have elapsed since the file's year
-                    if(currentYear - year > 1 && oldDataInstance.get().getLastProcessedDate() != null) {
+
+                    // the most recently added dataset could have not included all records
+                    if (mostRecentlyAdded.getUrl().equals(url)) {
                         oldDataInstance.get().expire();
                         em.merge(oldDataInstance.get());
-                        log.info("Expired MZ invoices data instance for year " + year.toString());
+                        log.info("Expired MZ invoices data instance for year " + year.toString() + ", month " + month.toString());
+                    }
+
+                    // Expire processed data instances where at least two years have elapsed since the file's year
+                    if(currentYear - year > 1 && currentMonth - month > 1 && oldDataInstance.get().getLastProcessedDate() != null) {
+                        oldDataInstance.get().expire();
+                        em.merge(oldDataInstance.get());
+                        log.info("Expired MZ invoices data instance for year " + year.toString() + ", month " + month.toString());
                     }
                 } else if(Util.isFileAtURL(url)) {
                     createDataInstance(year, month, url, ds, "csv");
@@ -69,6 +81,23 @@ public class MZCRHandlerImpl extends GenericDataSourceHandler implements MZCRHan
                 }
             }
         }
+    }
+
+    private DataInstance getMostRecentlyAddedDataInstance(DataSource ds) {
+        Optional<DataInstance> mzInstances = ds.getDataInstances().stream()
+                .filter(d -> d.getDescription().matches("Faktury MZ 2.*"))
+                .max(Comparator.comparing(i -> getDescriptionDate(i.getDescription())));
+        return mzInstances.get();
+    }
+
+    private Date getDescriptionDate(String description) {
+        String[] split = description.split("-");
+        int year = Integer.parseInt(split[0].substring(split[0].length()-4));
+        int month = Integer.parseInt(split[1]);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month - 1, 1);
+        return cal.getTime();
     }
 
     private void createDataInstance(Integer year, Integer month, String url, DataSource ds, String format) {

@@ -119,7 +119,7 @@ public abstract class GenericDataSourceHandler implements DataSourceHandler {
             log.debug("(isProcessed, isPeriodic, hasExpired) = " +
                     "(" + isProcessed + ", " + isPeriodic + ", " + hasExpired + ")");
 
-            if (!hasExpired && (!isProcessed || (isPeriodic && Util.hasEnoughTimeElapsed(lpd, p.getDuration())))) {
+            if (hasExpired || (!isProcessed || (isPeriodic && Util.hasEnoughTimeElapsed(lpd, p.getDuration())))) {
                 log.info("Marked data instance " + dataInstance.getDataInstanceId() + " for processing");
                 result.add(dataInstance);
             }

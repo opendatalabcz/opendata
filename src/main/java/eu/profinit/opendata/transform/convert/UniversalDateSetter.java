@@ -61,11 +61,19 @@ public class UniversalDateSetter implements RecordPropertyConverter {
         delimiters.add("-");
 
         for (int i = 0; i < delimiters.size(); i++) {
-            if (date.split(delimiters.get(i)).length > 2) {
+            String[] dateSplit = date.split(delimiters.get(i));
+            if (dateSplit.length > 2) {
                 String delimiter = delimiters.get(i).replace("\\", "");
-                return new SimpleDateFormat("dd" + delimiter + "MM" + delimiter + "yyyy");
+                return new SimpleDateFormat(getPattern(dateSplit, delimiter));
             }
         }
         throw new UnknownFormatConversionException("Date format is not supported.");
+    }
+
+    private String getPattern(String[] dateSplit, String delimiter) {
+        if (dateSplit[0].length() == 4) {
+            return "yyyy" + delimiter + "MM" + delimiter + "dd";
+        }
+        return "dd" + delimiter + "MM" + delimiter + "yyyy";
     }
 }

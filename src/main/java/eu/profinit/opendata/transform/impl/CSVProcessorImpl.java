@@ -143,7 +143,7 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
                 .withFirstRecordAsHeader()
                 .withIgnoreHeaderCase()
                 .withTrim()
-                .withQuote(null));
+                .withQuote('\"'));
     }
 
     private Reader getReader(InputStream fileStream, Integer headerRow, String encoding) throws IOException {
