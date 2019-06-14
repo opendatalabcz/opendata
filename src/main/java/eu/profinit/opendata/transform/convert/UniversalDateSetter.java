@@ -18,15 +18,22 @@ import java.util.*;
 public class UniversalDateSetter implements RecordPropertyConverter {
     @Autowired
     private DateSetter dateSetter;
-    private List<String> delimiters;
 
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
             throws TransformException {
 
+        Date date = getDateFromSourceValue(sourceValues.get("inputDateString"));
+        try {
+            dateSetter.setField(record, date, fieldName, logger);
+        } catch (Exception e) {
+            throw new TransformException("Date setter can't set a field.", e, TransformException.Severity.PROPERTY_LOCAL);
+        }
+    }
+
+    public static Date getDateFromSourceValue(Cell sourceValue) throws TransformException {
         String dateString = "";
         Date date = null;
-        Cell sourceValue = sourceValues.get("inputDateString");
         if (sourceValue != null && !sourceValue.isCellNull()) {
             try {
                 dateString = sourceValue.getStringCellValue();
@@ -44,7 +51,7 @@ public class UniversalDateSetter implements RecordPropertyConverter {
                 DateFormat dateFormat = getDateFormat(dateString);
                 date = dateFormat.parse(dateString);
             }
-            dateSetter.setField(record, date, fieldName, logger);
+            return date;
         } catch (ParseException e) {
             throw new TransformException("Couldn't set date value because of a parse error", e,
                     TransformException.Severity.PROPERTY_LOCAL);
@@ -54,8 +61,8 @@ public class UniversalDateSetter implements RecordPropertyConverter {
         }
     }
 
-    private DateFormat getDateFormat(String date) {
-        delimiters = new ArrayList<>();
+    private static DateFormat getDateFormat(String date) {
+        List<String> delimiters = new ArrayList<>();
         delimiters.add("\\.");
         delimiters.add("/");
         delimiters.add("-");
@@ -70,7 +77,7 @@ public class UniversalDateSetter implements RecordPropertyConverter {
         throw new UnknownFormatConversionException("Date format is not supported.");
     }
 
-    private String getPattern(String[] dateSplit, String delimiter) {
+    private static String getPattern(String[] dateSplit, String delimiter) {
         if (dateSplit[0].length() == 4) {
             return "yyyy" + delimiter + "MM" + delimiter + "dd";
         }

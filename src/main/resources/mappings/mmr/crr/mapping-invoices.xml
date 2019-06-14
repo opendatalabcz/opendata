@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../xsd/datasource_mapping.xsd">
+
+    <mappedSheet number="0">
+        <headerRow>0</headerRow>
+
+        <retriever className="eu.profinit.opendata.transform.convert.mmr.crr.CRRInvoiceRetriever">
+            <sourceFileColumn originalName="Řada" argumentName="categoryType"/>
+            <sourceFileColumn originalName="Poř.č." argumentName="serialNumber"/>
+            <sourceFileColumn originalName="Datum případu (DMR)" argumentName="date"/>
+        </retriever>
+
+        <property name="recordType" value="INVOICE" onlyNewRecords="true"/>
+
+        <property name="authorityRole" onlyNewRecords="true" value="CUSTOMER"/>
+
+        <property name="authorityIdentifier" onlyNewRecords="true"
+                  converterParameter="2019" converter="eu.profinit.opendata.transform.convert.DateCategorySetter">
+            <sourceFileColumn originalName="Řada" argumentName="categoryType"/>
+            <sourceFileColumn originalName="Poř.č." argumentName="serialNumber"/>
+            <sourceFileColumn originalName="Datum případu (DMR)" argumentName="date"/>
+        </property>
+
+        <property name="partner" onlyNewRecords="true"
+                  converter="eu.profinit.opendata.transform.convert.PartnerSetter">
+            <sourceFileColumn originalName="Název" argumentName="name"/>
+            <sourceFileColumn originalName="IČO" argumentName="ico"/>
+        </property>
+
+        <property name="subject" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.DirectStringSetter">
+            <sourceFileColumn originalName="Poznámka 2 - 255" argumentName="inputString"/>
+        </property>
+
+        <property name="currency" onlyNewRecords="true" value="CZK"/>
+
+        <property name="allAmounts" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.AllAmountSetter">
+            <sourceFileColumn originalName="HM celkem po zaokrouhlení" argumentName="inputAmount"/>
+        </property>
+
+        <property name="dateOfPayment" required="false" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.UniversalDateSetter">
+            <sourceFileColumn originalName="Datum úhrady (DMR)" argumentName="inputDateString"/>
+        </property>
+
+        <property name="masterId" onlyNewRecords="true" converter="eu.profinit.opendata.transform.convert.RandomMasterIdSetter"/>
+
+    </mappedSheet>
+</mapping>
