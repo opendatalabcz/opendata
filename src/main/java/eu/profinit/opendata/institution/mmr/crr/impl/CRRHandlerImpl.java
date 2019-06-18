@@ -111,6 +111,9 @@ public class CRRHandlerImpl  extends KANAPIHandler implements CRRHandler {
         di.setFormat(format);
         di.setPeriodicity(Periodicity.YEARLY);
         di.setUrl(url);
+        if (year == 2016) { // yep, only 2016 file is in windows-1250, others have utf-8 encoding
+            di.setEncoding("windows-1250");
+        }
         di.setDescription("Faktury MMR CRR " + year.toString());
         di.setMappingFile(file);
         di.setIncremental(false);

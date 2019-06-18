@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
-public class DateCategorySetter  implements RecordPropertyConverter {
+public class DateCategorySetter implements RecordPropertyConverter {
 
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger) throws TransformException {
@@ -20,8 +20,8 @@ public class DateCategorySetter  implements RecordPropertyConverter {
     }
 
     public String getIdentifierFromSourceValues(Map<String, Cell> sourceValues, Logger logger) {
-        String categoryCode = sourceValues.get("serialNumber").getStringCellValue();
-        Double serialNumber = sourceValues.get("date").getNumericCellValue();
+        String categoryCode = sourceValues.get("categoryType").getStringCellValue();
+        String serialNumber = sourceValues.get("serialNumber").getStringCellValue();
 
         try {
             Date date = UniversalDateSetter.getDateFromSourceValue(sourceValues.get("date"));
