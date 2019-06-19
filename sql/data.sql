@@ -42,7 +42,7 @@ WITH mz AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
   ('ministry', 'Ministerstvo zdravotnictví', '00024341', TRUE) RETURNING entity_id)
 
 INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
-    (SELECT entity_id FROM msp),
+    (SELECT entity_id FROM mz),
     'invoice', 'monthly', 'eu.profinit.opendata.institution.mzcr.MZCRHandler', TRUE, 'Faktury MZČR')
     RETURNING data_source_id
 ;
