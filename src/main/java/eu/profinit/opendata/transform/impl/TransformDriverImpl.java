@@ -25,6 +25,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -88,11 +89,12 @@ public class TransformDriverImpl implements TransformDriver {
                 InputStream initialStream = downloadService.downloadDataFile(dataInstance);
                 try {
                     csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
-                } catch (IllegalStateException e) {
-                    if (e.getMessage().contains("SocketException")) {
-                        inputStream = downloadService.downloadDataFileLocally(dataInstance);
-                        csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
+                } catch (IllegalStateException | SocketException e) {
+                    if (e instanceof IllegalStateException && !e.getMessage().contains("SocketException")) {
+                        throw new IllegalStateException(e);
                     }
+                    inputStream = downloadService.downloadDataFileLocally(dataInstance);
+                    csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
                 }
             } else {
                 Workbook workbook = openXLSFile(inputStream, dataInstance);
@@ -103,10 +105,10 @@ public class TransformDriverImpl implements TransformDriver {
             retrieval.setSuccess(true);
             em.merge(retrieval.getDataInstance()); // Save last processed row
         }
-        catch (Exception e) {
-            log.error("An irrecoverable error occurred while performing transformation", e);
+        catch (Exception ex) {
+            log.error("An irrecoverable error occurred while performing transformation", ex);
             retrieval.setSuccess(false);
-            retrieval.setFailureReason(e.getMessage());
+            retrieval.setFailureReason(ex.getMessage());
             retrieval.setNumRecordsInserted(0);
             retrieval.setRecords(new ArrayList<>());
             dataInstance.setLastProcessedRow(oldLastProcessedRow);
