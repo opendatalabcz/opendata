@@ -1,6 +1,7 @@
 package eu.profinit.opendata.transform;
 
 import eu.profinit.opendata.model.Record;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
@@ -23,5 +24,5 @@ public interface RecordPropertyConverter extends TransformComponent {
      * @throws TransformException
      */
     void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
-            throws TransformException;
+            throws TransformException, DateFormatException;
 }

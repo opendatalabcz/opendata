@@ -17,7 +17,7 @@ import java.util.Map;
 public class TripleSplitIdentifierSetter implements RecordPropertyConverter{
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
-            throws TransformException {
+            throws TransformException, DateFormatException {
 
         record.setAuthorityIdentifier(getIdentifierFromSourceValues(sourceValues));
     }

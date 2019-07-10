@@ -2,6 +2,7 @@ package eu.profinit.opendata.transform;
 
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.Retrieval;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
@@ -22,5 +23,6 @@ public interface RecordRetriever extends TransformComponent {
      * @return A single Record, if found, or null. If more than one is found, a FATAL exception is thrown.
      * @throws TransformException
      */
-    Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger) throws TransformException;
+    Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
+            throws TransformException, DateFormatException;
 }

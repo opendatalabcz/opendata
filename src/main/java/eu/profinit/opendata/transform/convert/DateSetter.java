@@ -20,7 +20,7 @@ public class DateSetter implements RecordPropertyConverter {
 
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
-            throws TransformException {
+            throws TransformException, DateFormatException {
 
         try {
             Date inputDate = null;

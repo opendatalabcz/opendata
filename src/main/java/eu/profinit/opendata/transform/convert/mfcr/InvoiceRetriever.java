@@ -6,6 +6,7 @@ import eu.profinit.opendata.model.Retrieval;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
 import eu.profinit.opendata.transform.TransformException;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import eu.profinit.opendata.transform.convert.PropertyBasedRecordRetriever;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class InvoiceRetriever implements RecordRetriever {
 
     @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
-            throws TransformException {
+            throws TransformException, DateFormatException {
 
         String type = sourceValues.get("inputType").getStringCellValue();
         RecordType recordType = type.equals("Přijaté faktury") ? RecordType.INVOICE : RecordType.PAYMENT;

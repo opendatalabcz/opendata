@@ -19,7 +19,8 @@ public class DirectStringSetter implements RecordPropertyConverter {
     private static final String INPUT_STRING = "inputString";
 
     @Override
-    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger log) throws TransformException {
+    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger log)
+            throws TransformException, DateFormatException {
 
         try {
             Field field = Record.class.getDeclaredField(fieldName);

@@ -5,6 +5,7 @@ import eu.profinit.opendata.model.RecordType;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordPropertyConverter;
 import eu.profinit.opendata.transform.TransformException;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,8 @@ import java.util.Map;
 public class TypeSetter implements RecordPropertyConverter {
 
     @Override
-    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger) throws TransformException {
+    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
+            throws TransformException, DateFormatException {
         record.setRecordType(getRecordType(sourceValues));
     }
 

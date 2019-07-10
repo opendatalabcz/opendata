@@ -4,6 +4,7 @@ import eu.profinit.opendata.common.Util;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.Retrieval;
 import eu.profinit.opendata.transform.*;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import eu.profinit.opendata.transform.convert.RecordPropertyParameterConverter;
 import eu.profinit.opendata.transform.jaxb.*;
 import org.apache.logging.log4j.LogManager;
@@ -85,7 +86,7 @@ public abstract class DataFrameProcessorImpl implements DataFrameProcessor {
     }
 
     protected Optional<Record> processRow(Row row, MappedSheet mapping, List<PropertySet> propertySets,
-                              Retrieval retrieval, Map<String, Integer> columnNames) throws TransformException {
+                              Retrieval retrieval, Map<String, Integer> columnNames) throws TransformException, DateFormatException {
 
         if (Util.isRowEmpty(row)) {
             return Optional.empty();
@@ -146,7 +147,8 @@ public abstract class DataFrameProcessorImpl implements DataFrameProcessor {
     /** 
      * Invoke an old record retriever, if there is one in the mapping
      * */
-    protected Optional<Record> invokeOldRecordRetriever(Row row, MappedSheet mapping, Retrieval retrieval, Map<String, Integer> columnNames) throws TransformException {
+    protected Optional<Record> invokeOldRecordRetriever(Row row, MappedSheet mapping, Retrieval retrieval, Map<String, Integer> columnNames)
+            throws TransformException, DateFormatException {
         if(mapping.getRetriever() != null) {
             log.trace("Mapping specifies a retriever with class " + mapping.getRetriever().getClassName() + ", instantiating");
             RecordRetriever retriever = (RecordRetriever) instantiateComponent(mapping.getRetriever().getClassName());
@@ -175,7 +177,7 @@ public abstract class DataFrameProcessorImpl implements DataFrameProcessor {
     }
 
     protected void setRecordProperty(Optional<Record> record, RecordProperty recordProperty, boolean newRecord,
-                                   Row row, Map<String, Integer> columnNames) throws TransformException{
+                                   Row row, Map<String, Integer> columnNames) throws TransformException, DateFormatException{
 
         if(record.isPresent()) {
             log.trace("Updating property " + recordProperty.getName());
@@ -208,7 +210,7 @@ public abstract class DataFrameProcessorImpl implements DataFrameProcessor {
      * @see RecordPropertyConverter#updateRecordProperty(Record, Map, String, Logger)
      */
     protected void setProcessedValue(RecordProperty recordProperty, Record record, Row row,
-                                   Map<String, Integer> columnNames) throws TransformException {
+                                   Map<String, Integer> columnNames) throws TransformException, DateFormatException {
 
         log.trace("Instantiating property converter " + recordProperty.getConverter());
 

@@ -44,7 +44,7 @@ public class ExtractionServiceImpl implements ExtractionService {
         }
 
         for(DataSource ds : activeDataSources) {
-            if (!(ds.getDescription().contains("Faktury MMR CRR"))) continue;
+//            if (!(ds.getDescription().contains("Faktury MMR CRR"))) continue;
             Class<? extends DataSourceHandler> handlingClass = ds.getHandlingClass();
             log.debug("Instantiating handling class " + handlingClass.getName() + " for data source " + ds.getDataSourceId());
             DataSourceHandler handler = dataSourceHandlerFactory.getHandlerFromClass(handlingClass);

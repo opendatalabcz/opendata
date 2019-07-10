@@ -5,8 +5,13 @@ import eu.profinit.opendata.model.DataInstance;
 import eu.profinit.opendata.model.Retrieval;
 import eu.profinit.opendata.transform.CSVProcessor;
 import eu.profinit.opendata.transform.TransformDriver;
+import eu.profinit.opendata.transform.TransformException;
 import eu.profinit.opendata.transform.WorkbookProcessor;
+import eu.profinit.opendata.transform.convert.DateFormatException;
+import eu.profinit.opendata.transform.convert.MMddyyyyDateSetter;
+import eu.profinit.opendata.transform.convert.UniversalDateSetter;
 import eu.profinit.opendata.transform.jaxb.Mapping;
+import eu.profinit.opendata.transform.jaxb.RecordProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -31,6 +36,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dm on 12/2/15.
@@ -71,10 +77,7 @@ public class TransformDriverImpl implements TransformDriver {
         log = LogManager.getLogger("transform");
         log.info("Starting retrieval on data instance " + dataInstance.getDataInstanceId());
 
-        Retrieval retrieval = new Retrieval();
-        retrieval.setDataInstance(dataInstance);
-        retrieval.setDate(Timestamp.from(Instant.now()));
-        retrieval.setRecords(new ArrayList<>());
+        Retrieval retrieval = createRetrieval(dataInstance);
 
         Integer oldLastProcessedRow = dataInstance.getLastProcessedRow();
 
@@ -94,7 +97,15 @@ public class TransformDriverImpl implements TransformDriver {
                         throw new IllegalStateException(e);
                     }
                     inputStream = downloadService.downloadDataFileLocally(dataInstance);
-                    csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
+                    try {
+                        csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
+                    } catch (DateFormatException ex) {
+                        retrieval = createRetrieval(dataInstance);
+                        redownloadAndProcessWithDifferentFormat(dataInstance, mapping, retrieval);
+                    }
+                } catch (DateFormatException e) {
+                    retrieval = createRetrieval(dataInstance);
+                    redownloadAndProcessWithDifferentFormat(dataInstance, mapping, retrieval);
                 }
             } else {
                 Workbook workbook = openXLSFile(inputStream, dataInstance);
@@ -116,6 +127,32 @@ public class TransformDriverImpl implements TransformDriver {
 
         ThreadContext.clearAll();
         return retrieval;
+    }
+
+    private Retrieval createRetrieval(DataInstance dataInstance) {
+        Retrieval retrieval = new Retrieval();
+        retrieval.setDataInstance(dataInstance);
+        retrieval.setDate(Timestamp.from(Instant.now()));
+        retrieval.setRecords(new ArrayList<>());
+        return retrieval;
+    }
+
+    private void redownloadAndProcessWithDifferentFormat(DataInstance dataInstance, Mapping mapping, Retrieval retrieval)
+            throws TransformException, IOException, DateFormatException {
+        List<Object> propertyList = mapping.getMappedSheet().get(0).getPropertyOrPropertySet();
+
+        // for each property containing a date, change its converter
+        propertyList.forEach(p -> {
+            // each object in the property list should be a RecordProperty
+            RecordProperty property = (RecordProperty)p;
+            if (property.getName().toLowerCase().contains("date")) {
+                property.setConverter(MMddyyyyDateSetter.class.getName());
+            }
+        });
+
+        InputStream inputStream = downloadService.downloadDataFileLocally(dataInstance);
+        InputStream initialStream = downloadService.downloadDataFileLocally(dataInstance);
+        csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
     }
 
     @Override

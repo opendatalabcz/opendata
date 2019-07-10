@@ -35,7 +35,8 @@ public class PropertyBasedRecordRetriever implements RecordRetriever {
     private RecordQueryService recordQueryService;
 
     @Override
-    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger) throws TransformException {
+    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
+            throws TransformException, DateFormatException {
         HashMap<String, String> filters = new HashMap<>();
 
         for(Entry<String, Cell> entry : sourceValues.entrySet()) {

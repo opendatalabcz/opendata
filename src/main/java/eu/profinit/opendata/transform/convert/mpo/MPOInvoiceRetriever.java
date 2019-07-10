@@ -8,6 +8,7 @@ import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
 import eu.profinit.opendata.transform.TransformException;
 import eu.profinit.opendata.transform.convert.AllAmountSetter;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import eu.profinit.opendata.transform.convert.SplitIdentifierSetter;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class MPOInvoiceRetriever implements RecordRetriever {
 
         @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
-            throws TransformException {
+            throws TransformException, DateFormatException {
         try {
             // Get filter values
 

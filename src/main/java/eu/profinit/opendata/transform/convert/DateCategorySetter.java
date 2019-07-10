@@ -15,17 +15,17 @@ import java.util.Map;
 public class DateCategorySetter implements RecordPropertyConverter {
 
     @Override
-    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger) throws TransformException {
+    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
+            throws TransformException, DateFormatException {
         record.setAuthorityIdentifier(getIdentifierFromSourceValues(sourceValues, logger));
     }
 
-    public String getIdentifierFromSourceValues(Map<String, Cell> sourceValues, Logger logger) {
+    public String getIdentifierFromSourceValues(Map<String, Cell> sourceValues, Logger logger) throws DateFormatException {
         String categoryCode = sourceValues.get("categoryType").getStringCellValue();
         String serialNumber = sourceValues.get("serialNumber").getStringCellValue();
 
         try {
-            Date date = UniversalDateSetter.getDateFromSourceValue(sourceValues.get("date"));
-            int year = getYearFromDate(date);
+            int year = UniversalDateSetter.getYearFromSourceValue(sourceValues.get("date"));
             return year + "-" + categoryCode + "-" + serialNumber;
         } catch (TransformException e) {
             logger.error("Exception thrown when a date being retrieved for authority identifier. " +

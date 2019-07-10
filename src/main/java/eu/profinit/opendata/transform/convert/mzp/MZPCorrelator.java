@@ -7,6 +7,7 @@ import eu.profinit.opendata.model.UnresolvedRelationship;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordPropertyConverter;
 import eu.profinit.opendata.transform.TransformException;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +34,7 @@ public class MZPCorrelator implements RecordPropertyConverter {
 
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
-            throws TransformException {
+            throws TransformException, DateFormatException {
 
 
         if(sourceValues.get(CONTRACT_ID) != null

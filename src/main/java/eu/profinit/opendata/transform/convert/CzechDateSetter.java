@@ -29,7 +29,7 @@ public class CzechDateSetter implements RecordPropertyConverter {
 
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
-            throws TransformException {
+            throws TransformException, DateFormatException {
 
         String dateString = sourceValues.get("inputDateString").getStringCellValue();
         if(Util.isNullOrEmpty(dateString)) {

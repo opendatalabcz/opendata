@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 
 @Component
 public class CRRInvoiceRetriever implements RecordRetriever {
@@ -27,7 +28,8 @@ public class CRRInvoiceRetriever implements RecordRetriever {
     private EntityManager em;
 
     @Override
-    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger) throws TransformException {
+    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
+            throws TransformException, DateFormatException {
         String authorityIdentifier = dateCategorySetter.getIdentifierFromSourceValues(sourceValues, logger);
 
         List<Record> allContracts = em.createQuery(

@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import org.apache.logging.log4j.Logger;
 import eu.profinit.opendata.transform.Cell;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,8 @@ public class RandomOldRecordRetriever implements RecordRetriever {
     private EntityManager em;
 
     @Override
-    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger) throws TransformException {
+    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
+            throws TransformException, DateFormatException {
         if(sourceValues.get("orderNumber").getStringCellValue().equals("1403000370")) {
             Record record = new Record();
             record.setRecordId(-666L);
