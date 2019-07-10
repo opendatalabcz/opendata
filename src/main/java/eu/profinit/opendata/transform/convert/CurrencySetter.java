@@ -41,7 +41,8 @@ public class CurrencySetter implements RecordPropertyConverter{
             "USD", "MOP", "XEU");
 
     @Override
-    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger) throws TransformException {
+    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
+            throws TransformException, DateFormatException {
         if(sourceValues.get("inputCurrencyCode") == null) {
             record.setCurrency("CZK");
             return;

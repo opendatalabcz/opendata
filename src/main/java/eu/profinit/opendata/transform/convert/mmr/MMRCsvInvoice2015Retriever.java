@@ -7,6 +7,7 @@ import eu.profinit.opendata.query.PartnerQueryService;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
 import eu.profinit.opendata.transform.TransformException;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,7 +27,8 @@ public class MMRCsvInvoice2015Retriever implements RecordRetriever {
     private PartnerQueryService partnerQueryService;
 
     @Override
-    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger) throws TransformException {
+    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
+            throws TransformException, DateFormatException {
         try {
             String authorityIdentifier = sourceValues.get("authorityIdentifier").getStringCellValue();
             int year = 2015;

@@ -21,7 +21,7 @@ public abstract class DateStringNumberSetter implements RecordPropertyConverter 
 
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
-            throws TransformException {
+            throws TransformException, DateFormatException {
 
         String dateString = "";
         Date date = null;

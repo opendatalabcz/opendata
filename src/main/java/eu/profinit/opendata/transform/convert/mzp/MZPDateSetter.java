@@ -5,6 +5,7 @@ import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordPropertyConverter;
 import eu.profinit.opendata.transform.TransformException;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ import java.util.regex.Pattern;
 public class MZPDateSetter implements RecordPropertyConverter{
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
-            throws TransformException {
+            throws TransformException, DateFormatException {
 
         sourceValues.get("inputDate").setCellType(Cell.CELL_TYPE_STRING);
         String inputDateString = sourceValues.get("inputDate").getStringCellValue();

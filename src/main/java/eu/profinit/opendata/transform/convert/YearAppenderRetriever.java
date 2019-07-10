@@ -25,7 +25,8 @@ public class YearAppenderRetriever implements RecordRetriever {
     private EntityManager em;
 
     @Override
-    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger) throws TransformException {
+    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
+            throws TransformException, DateFormatException {
         try {
             String categoryType = sourceValues.get("categoryType").getStringCellValue();
             String serialNumber = sourceValues.get("serialNumber").getStringCellValue();

@@ -15,7 +15,7 @@ import java.util.Map;
 public abstract class MoneySetter implements RecordPropertyConverter {
     @Override
     public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
-            throws TransformException {
+            throws TransformException, DateFormatException {
 
         try {
             Field field = Record.class.getDeclaredField(fieldName);

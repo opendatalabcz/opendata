@@ -369,6 +369,17 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
     'csv', 'monthly', 'Faktury MMR SFRB 2018', 'mappings/mmr/sfrb/mapping-2018-invoices.xml', FALSE
   );
 
+-- MMR CRR
+
+WITH crr AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES
+  ('ministry-organization', 'Centrum pro regionální rozvoj', '04095316', TRUE) RETURNING entity_id)
+
+INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
+      (SELECT entity_id FROM crr),
+      'invoice', 'monthly', 'eu.profinit.opendata.institution.mmr.crr.CRRHandler', TRUE, 'Faktury MMR CRR')
+    RETURNING data_source_id
+;
+
 -- MV: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
 
 WITH mv AS (INSERT INTO entity(entity_type, name, ico, is_public) VALUES

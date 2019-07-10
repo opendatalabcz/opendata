@@ -4,6 +4,7 @@ import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.Retrieval;
 import eu.profinit.opendata.transform.CSVProcessor;
 import eu.profinit.opendata.transform.TransformException;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import eu.profinit.opendata.transform.jaxb.MappedSheet;
 import eu.profinit.opendata.transform.jaxb.Mapping;
 import org.apache.commons.csv.CSVFormat;
@@ -32,7 +33,7 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
     @Transactional(propagation = Propagation.REQUIRES_NEW,
             rollbackFor = {TransformException.class, RuntimeException.class})
     public void processCSVSheet(InputStream inputStream, InputStream initialStream, Mapping mapping, Retrieval retrieval, Logger logger)
-            throws TransformException, IOException {
+            throws TransformException, IOException, DateFormatException {
 
         if(logger != null) {
             log = logger;
@@ -92,6 +93,10 @@ public class CSVProcessorImpl extends DataFrameProcessorImpl implements CSVProce
             }
         }
         log.info("Sheet finished");
+    }
+
+    public void processCSVSheetWithDataFormat(InputStream inputStream, InputStream initialStream, Mapping mapping, Retrieval retrieval){
+
     }
 
     private String getEncoding(Retrieval retrieval) {

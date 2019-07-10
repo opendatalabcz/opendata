@@ -6,6 +6,7 @@ import eu.profinit.opendata.model.Retrieval;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
 import eu.profinit.opendata.transform.TransformException;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import eu.profinit.opendata.transform.convert.PropertyBasedRecordRetriever;
 import eu.profinit.opendata.transform.convert.YearTypeNumberIdentifierSetter;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +25,8 @@ public class MKCsvInvoiceRetriever implements RecordRetriever {
     private YearTypeNumberIdentifierSetter yearTypeNumberIdentifierSetter;
 
     @Override
-    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger) throws TransformException {
+    public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
+            throws TransformException, DateFormatException {
         String identifier = yearTypeNumberIdentifierSetter.getIdentifierFromSourceValues(sourceValues);
         Map<String, String> stringFilters = new HashMap<>();
         stringFilters.put("authorityIdentifier", identifier);

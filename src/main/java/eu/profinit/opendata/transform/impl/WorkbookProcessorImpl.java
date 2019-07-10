@@ -6,6 +6,7 @@ import eu.profinit.opendata.model.Retrieval;
 import eu.profinit.opendata.transform.Row;
 import eu.profinit.opendata.transform.TransformException;
 import eu.profinit.opendata.transform.WorkbookProcessor;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import eu.profinit.opendata.transform.jaxb.MappedSheet;
 import eu.profinit.opendata.transform.jaxb.Mapping;
 import org.apache.logging.log4j.LogManager;
@@ -69,14 +70,17 @@ public class WorkbookProcessorImpl extends DataFrameProcessorImpl implements Wor
             if(headerIsBroken(columnNames)) {
                 addBrokenHeaderNames(columnNames, new WorkbookRowImpl(sheet.getRow(startRowNum++)));
             }
-
-            processSheetData(startRowNum, sheet, mappingSheet, mapping, retrieval, columnNames);
+            try {
+                processSheetData(startRowNum, sheet, mappingSheet, mapping, retrieval, columnNames);
+            } catch (DateFormatException ex) {
+                log.error("Date format exception. ", ex);
+            }
             log.info("Sheet finished");
         }
     }
 
     private void processSheetData(int startRowNum, Sheet sheet, MappedSheet mappingSheet, Mapping mapping, Retrieval retrieval,
-                             Map<String, Integer> columnNames) throws TransformException {
+                             Map<String, Integer> columnNames) throws TransformException, DateFormatException {
 
         for (int i = startRowNum; i <= sheet.getLastRowNum(); i++) {
             log.debug("Processing row " + i);

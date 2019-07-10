@@ -12,7 +12,8 @@ import java.util.Map;
 @Component
 public class YearTypeNumberIdentifierSetter implements RecordPropertyConverter {
     @Override
-    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger) throws TransformException {
+    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
+            throws TransformException, DateFormatException {
         record.setAuthorityIdentifier(getIdentifierFromSourceValues(sourceValues));
     }
 

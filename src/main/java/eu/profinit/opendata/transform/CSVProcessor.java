@@ -1,6 +1,7 @@
 package eu.profinit.opendata.transform;
 
 import eu.profinit.opendata.model.Retrieval;
+import eu.profinit.opendata.transform.convert.DateFormatException;
 import eu.profinit.opendata.transform.jaxb.Mapping;
 import org.apache.logging.log4j.Logger;
 
@@ -27,5 +28,5 @@ public interface CSVProcessor extends DataFrameProcessor {
      * @throws IOException Only FATAL exceptions will be thrown by this method.
      */
     void processCSVSheet(InputStream inputStream, InputStream initialStream, Mapping mapping, Retrieval retrieval, Logger log)
-            throws TransformException, IOException;
+            throws TransformException, IOException, DateFormatException;
 }

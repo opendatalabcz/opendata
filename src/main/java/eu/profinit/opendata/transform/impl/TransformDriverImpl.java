@@ -5,8 +5,13 @@ import eu.profinit.opendata.model.DataInstance;
 import eu.profinit.opendata.model.Retrieval;
 import eu.profinit.opendata.transform.CSVProcessor;
 import eu.profinit.opendata.transform.TransformDriver;
+import eu.profinit.opendata.transform.TransformException;
 import eu.profinit.opendata.transform.WorkbookProcessor;
+import eu.profinit.opendata.transform.convert.DateFormatException;
+import eu.profinit.opendata.transform.convert.MMddyyyyDateSetter;
+import eu.profinit.opendata.transform.convert.UniversalDateSetter;
 import eu.profinit.opendata.transform.jaxb.Mapping;
+import eu.profinit.opendata.transform.jaxb.RecordProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -25,11 +30,13 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dm on 12/2/15.
@@ -70,10 +77,7 @@ public class TransformDriverImpl implements TransformDriver {
         log = LogManager.getLogger("transform");
         log.info("Starting retrieval on data instance " + dataInstance.getDataInstanceId());
 
-        Retrieval retrieval = new Retrieval();
-        retrieval.setDataInstance(dataInstance);
-        retrieval.setDate(Timestamp.from(Instant.now()));
-        retrieval.setRecords(new ArrayList<>());
+        Retrieval retrieval = createRetrieval(dataInstance);
 
         Integer oldLastProcessedRow = dataInstance.getLastProcessedRow();
 
@@ -88,11 +92,20 @@ public class TransformDriverImpl implements TransformDriver {
                 InputStream initialStream = downloadService.downloadDataFile(dataInstance);
                 try {
                     csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
-                } catch (IllegalStateException e) {
-                    if (e.getMessage().contains("SocketException")) {
-                        inputStream = downloadService.downloadDataFileLocally(dataInstance);
-                        csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
+                } catch (IllegalStateException | SocketException e) {
+                    if (e instanceof IllegalStateException && !e.getMessage().contains("SocketException")) {
+                        throw new IllegalStateException(e);
                     }
+                    inputStream = downloadService.downloadDataFileLocally(dataInstance);
+                    try {
+                        csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
+                    } catch (DateFormatException ex) {
+                        retrieval = createRetrieval(dataInstance);
+                        redownloadAndProcessWithDifferentFormat(dataInstance, mapping, retrieval);
+                    }
+                } catch (DateFormatException e) {
+                    retrieval = createRetrieval(dataInstance);
+                    redownloadAndProcessWithDifferentFormat(dataInstance, mapping, retrieval);
                 }
             } else {
                 Workbook workbook = openXLSFile(inputStream, dataInstance);
@@ -103,10 +116,10 @@ public class TransformDriverImpl implements TransformDriver {
             retrieval.setSuccess(true);
             em.merge(retrieval.getDataInstance()); // Save last processed row
         }
-        catch (Exception e) {
-            log.error("An irrecoverable error occurred while performing transformation", e);
+        catch (Exception ex) {
+            log.error("An irrecoverable error occurred while performing transformation", ex);
             retrieval.setSuccess(false);
-            retrieval.setFailureReason(e.getMessage());
+            retrieval.setFailureReason(ex.getMessage());
             retrieval.setNumRecordsInserted(0);
             retrieval.setRecords(new ArrayList<>());
             dataInstance.setLastProcessedRow(oldLastProcessedRow);
@@ -114,6 +127,32 @@ public class TransformDriverImpl implements TransformDriver {
 
         ThreadContext.clearAll();
         return retrieval;
+    }
+
+    private Retrieval createRetrieval(DataInstance dataInstance) {
+        Retrieval retrieval = new Retrieval();
+        retrieval.setDataInstance(dataInstance);
+        retrieval.setDate(Timestamp.from(Instant.now()));
+        retrieval.setRecords(new ArrayList<>());
+        return retrieval;
+    }
+
+    private void redownloadAndProcessWithDifferentFormat(DataInstance dataInstance, Mapping mapping, Retrieval retrieval)
+            throws TransformException, IOException, DateFormatException {
+        List<Object> propertyList = mapping.getMappedSheet().get(0).getPropertyOrPropertySet();
+
+        // for each property containing a date, change its converter
+        propertyList.forEach(p -> {
+            // each object in the property list should be a RecordProperty
+            RecordProperty property = (RecordProperty)p;
+            if (property.getName().toLowerCase().contains("date")) {
+                property.setConverter(MMddyyyyDateSetter.class.getName());
+            }
+        });
+
+        InputStream inputStream = downloadService.downloadDataFileLocally(dataInstance);
+        InputStream initialStream = downloadService.downloadDataFileLocally(dataInstance);
+        csvProcessor.processCSVSheet(inputStream, initialStream, mapping, retrieval, log);
     }
 
     @Override

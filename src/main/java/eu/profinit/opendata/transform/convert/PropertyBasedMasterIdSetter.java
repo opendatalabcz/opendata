@@ -37,7 +37,8 @@ public class PropertyBasedMasterIdSetter implements RecordPropertyConverter {
     private EntityManager em;
 
     @Override
-    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger) throws TransformException {
+    public void updateRecordProperty(Record record, Map<String, Cell> sourceValues, String fieldName, Logger logger)
+            throws TransformException, DateFormatException {
         HashMap<String, String> filters = new HashMap<>();
 
         for(Entry<String, Cell> entry : sourceValues.entrySet()) {
