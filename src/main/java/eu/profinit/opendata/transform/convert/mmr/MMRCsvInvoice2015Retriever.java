@@ -10,6 +10,7 @@ import eu.profinit.opendata.transform.TransformException;
 import eu.profinit.opendata.transform.convert.DateFormatException;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
 public class MMRCsvInvoice2015Retriever implements RecordRetriever {
 
     @PersistenceContext
