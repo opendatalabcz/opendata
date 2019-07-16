@@ -41,7 +41,8 @@ public class PartnerSetter implements RecordPropertyConverter {
         name = updateName(sourceValues, name);
 
         //Sanity check
-        if(isNullOrEmpty(ico) && isNullOrEmpty(dic) && isNullOrEmpty(name)) {
+        if((isNullOrEmpty(ico) && isNullOrEmpty(dic) && isNullOrEmpty(name)) ||
+                (isNullOrEmpty(name))) {
             throw new TransformException("Could not set partner because ico, dic and name are all null or blank",
                     TransformException.Severity.PROPERTY_LOCAL);
         }

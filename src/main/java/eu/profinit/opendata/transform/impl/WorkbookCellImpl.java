@@ -1,6 +1,7 @@
 package eu.profinit.opendata.transform.impl;
 
 import eu.profinit.opendata.transform.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 
 import java.util.Date;
 
@@ -19,7 +20,7 @@ public class WorkbookCellImpl implements Cell {
 
     @Override
     public int getCellType() {
-        return cell.getCellType();
+        return cell.getCellType().getCode();
     }
 
     @Override
@@ -44,7 +45,7 @@ public class WorkbookCellImpl implements Cell {
 
     @Override
     public void setCellType(int type) {
-        cell.setCellType(type);
+        cell.setCellType(CellType.forInt(type));
     }
 
     public boolean isCellNull() { return cell == null;}

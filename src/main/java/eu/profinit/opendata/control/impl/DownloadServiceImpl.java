@@ -4,7 +4,11 @@ import eu.profinit.opendata.control.DownloadService;
 import eu.profinit.opendata.model.DataInstance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
 import java.io.*;
 import java.net.URL;
@@ -20,6 +24,9 @@ public class DownloadServiceImpl implements DownloadService {
 
     private Logger log = LogManager.getLogger(DownloadServiceImpl.class);
 
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     @Override
     public InputStream downloadDataFile(DataInstance dataInstance) throws IOException {
         log.debug("Downloading from " + dataInstance.getUrl() + "...");
@@ -29,8 +36,8 @@ public class DownloadServiceImpl implements DownloadService {
     @Override
     public InputStream downloadDataFile(String urlString) throws IOException {
         if (isFileLocal(urlString)) {
-            File localFile = new File(urlString);
-            return new FileInputStream(localFile);
+            Resource resource = resourceLoader.getResource(urlString);
+            return resource.getURL().openStream();
         }
         URL url  = new URL(urlString);
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());

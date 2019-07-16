@@ -19,7 +19,7 @@
             <sourceFileColumn originalName="cislo_dokladu" argumentName="inputString"/>
         </property>
 
-        <property name="partner" onlyNewRecords="true"
+        <property name="partner" onlyNewRecords="true" required="false"
                   converter="eu.profinit.opendata.transform.convert.PartnerSetter">
             <sourceFileColumn originalName="jmeno_firmy" argumentName="name"/>
             <sourceFileColumn originalName="ico" argumentName="ico"/>

@@ -414,7 +414,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   ),
 
   (
-    (SELECT  data_source_id FROM invoices_ds), '',
+    (SELECT  data_source_id FROM invoices_ds), 'invoices/mvcr-invoice-enriched.xlsx',
     'xlsx', 'monthly', 'Faktury MV od 1. 1. 2013', 'mappings/mvcr/mapping-invoices.xml', FALSE
   ),
 
