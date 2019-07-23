@@ -36,8 +36,11 @@ public class DownloadServiceImpl implements DownloadService {
     @Override
     public InputStream downloadDataFile(String urlString) throws IOException {
         if (isFileLocal(urlString)) {
-            Resource resource = resourceLoader.getResource(urlString);
-            return resource.getURL().openStream();
+            File f = new File(urlString);
+            return new FileInputStream(f);
+//            Resource resource = resourceLoader.getResource(urlString);
+//            URL url = resource.getURL();
+//            return resource.getURL().openStream();
         }
         URL url  = new URL(urlString);
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());
@@ -51,7 +54,7 @@ public class DownloadServiceImpl implements DownloadService {
 
         URL url = new URL(dataInstance.getUrl());
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-        String fileName = System.getProperty("java.io.tmpdir") + "/faktura-" + random.nextInt(100000);
+        String fileName = System.getProperty("java.io.tmpdir") + "faktura-" + random.nextInt(100000) + ".xlsx";
         FileOutputStream fos = new FileOutputStream(fileName);
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
