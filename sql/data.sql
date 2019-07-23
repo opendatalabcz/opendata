@@ -539,39 +539,39 @@ WITH sfdi AS (INSERT INTO entity(entity_type, name, ico, dic, is_public) VALUES
 INSERT INTO data_instance(data_source_id, url, format, periodicity, description, mapping_file, incremental) VALUES
 
   (
-    (SELECT  data_source_id FROM contracts_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2015/smlouvy_sfdi_2015.xlsx',
+    (SELECT  data_source_id FROM contracts_ds), 'https://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2015/smlouvy_sfdi_2015.xlsx',
     'xlsx', 'aperiodic', 'Smlouvy SFDI 2015', 'mappings/sfdi/mapping-contracts.xml', FALSE
   ),
 
   (
-    (SELECT  data_source_id FROM contracts_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2016/smlouvy_sfdi_2016.xlsx',
+    (SELECT  data_source_id FROM contracts_ds), 'https://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2016/smlouvy_sfdi_2016.xlsx',
     'xlsx', 'aperiodic', 'Smlouvy SFDI 2016', 'mappings/sfdi/mapping-contracts.xml', FALSE
   ),
 
   (
-    (SELECT  data_source_id FROM contracts_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2017/smlouvy_sfdi_2017.xlsx',
+    (SELECT  data_source_id FROM contracts_ds), 'https://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2017/smlouvy_sfdi_2017.xlsx',
     'xlsx', 'aperiodic', 'Smlouvy SFDI 2017', 'mappings/sfdi/mapping-contracts.xml', FALSE
   ),
 
   (
-    (SELECT  data_source_id FROM contracts_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2018/smlouvy_sfdi_2018.xlsx',
+    (SELECT  data_source_id FROM contracts_ds), 'https://www.mdcr.cz/MDCR/media/otevrenadata/smlouvy/2018/smlouvy_sfdi_2018.xlsx',
     'xlsx', 'aperiodic', 'Smlouvy SFDI 2018', 'mappings/sfdi/mapping-contracts.xml', FALSE
   ),
   (
-    (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2015/faktury_sfdi_2015.xlsx',
+    (SELECT  data_source_id FROM invoices_ds), 'https://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2015/faktury_sfdi_2015.xlsx',
     'xlsx', 'aperiodic', 'Faktury SFDI 2015', 'mappings/sfdi/mapping-invoices.xml', FALSE
   ),
 
   (
-    (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2016/faktury_sfdi_2016.xlsx',
+    (SELECT  data_source_id FROM invoices_ds), 'https://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2016/faktury_sfdi_2016.xlsx',
     'xlsx', 'aperiodic', 'Faktury SFDI 2016', 'mappings/sfdi/mapping-invoices.xml', FALSE
   ),
   (
-    (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2017/faktury_sfdi_2017.xlsx',
+    (SELECT  data_source_id FROM invoices_ds), 'https://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2017/faktury_sfdi_2017.xlsx',
     'xlsx', 'monthly', 'Faktury SFDI 2017', 'mappings/sfdi/mapping-invoices.xml', FALSE
   ),
 
   (
-    (SELECT  data_source_id FROM invoices_ds), 'http://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2018/faktury_sfdi_2018.xlsx',
+    (SELECT  data_source_id FROM invoices_ds), 'https://www.mdcr.cz/MDCR/media/otevrenadata/faktury/2018/faktury_sfdi_2018.xlsx',
     'xlsx', 'aperiodic', 'Faktury SFDI 2018', 'mappings/sfdi/mapping-invoices.xml', FALSE
   );
