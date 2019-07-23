@@ -62,7 +62,7 @@ public class MZCRHandlerImpl extends GenericDataSourceHandler implements MZCRHan
                 if(oldDataInstance.isPresent()) {
 
                     // the most recently added dataset could have not included all records
-                    if (mostRecentlyAdded.getUrl().equals(url)) {
+                    if (mostRecentlyAdded != null && mostRecentlyAdded.getUrl().equals(url)) {
                         oldDataInstance.get().expire();
                         em.merge(oldDataInstance.get());
                         log.info("Expired MZ invoices data instance for year " + year.toString() + ", month " + month.toString());
@@ -87,7 +87,7 @@ public class MZCRHandlerImpl extends GenericDataSourceHandler implements MZCRHan
         Optional<DataInstance> mzInstances = ds.getDataInstances().stream()
                 .filter(d -> d.getDescription().matches("Faktury MZ 2.*"))
                 .max(Comparator.comparing(i -> getDescriptionDate(i.getDescription())));
-        return mzInstances.get();
+        return mzInstances.orElse(null);
     }
 
     private Date getDescriptionDate(String description) {
