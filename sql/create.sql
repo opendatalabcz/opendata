@@ -128,7 +128,7 @@ CREATE TABLE "entity"
 	"dic" varchar(50)	 NULL,
 	"ico" varchar(50)	 NULL,
 	"is_public" boolean NOT NULL,
-	"name" varchar(2000)	 NOT NULL,
+	"name" varchar(2000)	 NULL,
 	"entity_id" integer NOT NULL DEFAULT nextval(('"entity_entity_id_seq"'::text)::regclass),
 	"entity_type" varchar(50)	 NOT NULL
 )
@@ -337,6 +337,9 @@ FOREIGN KEY ("record_type") REFERENCES "record_type" ("record_type") ON DELETE N
 ALTER TABLE "record" ADD CONSTRAINT "FK_record_periodicity"
 FOREIGN KEY ("periodicity") REFERENCES "periodicity" ("periodicity") ON DELETE No Action ON UPDATE No Action
 ;
+
+ALTER TABLE "entity" ADD CONSTRAINT "CH_name_or_ico"
+CHECK ("name" is not null or "ico" is not null);
 
 -- Indexes
 

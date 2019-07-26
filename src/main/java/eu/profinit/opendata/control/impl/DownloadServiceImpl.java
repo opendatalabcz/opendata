@@ -36,16 +36,22 @@ public class DownloadServiceImpl implements DownloadService {
     @Override
     public InputStream downloadDataFile(String urlString) throws IOException {
         if (isFileLocal(urlString)) {
-            File f = new File(urlString);
-            return new FileInputStream(f);
-//            Resource resource = resourceLoader.getResource(urlString);
-//            URL url = resource.getURL();
-//            return resource.getURL().openStream();
+            if (isPathAbsolute(urlString)) {
+                File f = new File(urlString);
+                return new FileInputStream(f);
+            }
+            Resource resource = resourceLoader.getResource(urlString);
+            URL url = resource.getURL();
+            return resource.getURL().openStream();
         }
         URL url  = new URL(urlString);
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());
         log.debug("Download complete");
         return Channels.newInputStream(rbc);
+    }
+
+    private boolean isPathAbsolute(String urlPath) {
+        return urlPath.contains(":");
     }
 
     @Override
