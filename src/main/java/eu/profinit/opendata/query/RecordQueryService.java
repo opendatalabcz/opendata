@@ -63,10 +63,12 @@ public class RecordQueryService {
         CriteriaQuery<Record> qr = cb.createQuery(Record.class);
         Root<Record> root = qr.from(Record.class);
         qr.select(root);
+        javax.persistence.criteria.Predicate predicate = cb.conjunction();
 
         for(Entry<String, String> entry : filter.entrySet()) {
-            qr = qr.where(cb.equal(root.get(entry.getKey()), entry.getValue()));
+            predicate = cb.and(predicate, cb.equal(root.get(entry.getKey()), entry.getValue()));
         }
+        qr = qr.where(predicate);
 
         return em.createQuery(qr).getResultList();
     }

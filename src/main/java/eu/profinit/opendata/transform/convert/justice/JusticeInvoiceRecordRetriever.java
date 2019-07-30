@@ -6,10 +6,7 @@ import eu.profinit.opendata.model.Retrieval;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
 import eu.profinit.opendata.transform.TransformException;
-import eu.profinit.opendata.transform.convert.DateFormatException;
-import eu.profinit.opendata.transform.convert.PropertyBasedRecordRetriever;
-import eu.profinit.opendata.transform.convert.SplitIdentifierSetter;
-import eu.profinit.opendata.transform.convert.TripleSplitIdentifierSetter;
+import eu.profinit.opendata.transform.convert.*;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,13 +28,18 @@ public class JusticeInvoiceRecordRetriever implements RecordRetriever {
     @Autowired
     private TripleSplitIdentifierSetter tripleSplitIdentifierSetter;
 
+    @Autowired
+    private AllAmountSetter allAmountSetter;
+
     @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
             throws TransformException, DateFormatException {
 
         String identifier = tripleSplitIdentifierSetter.getIdentifierFromSourceValues(sourceValues);
+        Double amountCzk = allAmountSetter.getAmountFromSourceValues(sourceValues);
         Map<String, String> stringFilters = new HashMap<>();
         stringFilters.put("authorityIdentifier", identifier);
+        stringFilters.put("amountCzk", amountCzk.toString());
         return propertyBasedRecordRetriever.retrieveRecordByStrings(currentRetrieval, stringFilters, RecordType.INVOICE);
     }
 }
