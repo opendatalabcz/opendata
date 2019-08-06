@@ -3,6 +3,7 @@ package eu.profinit.opendata.transform.convert.mk;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.RecordType;
 import eu.profinit.opendata.model.Retrieval;
+import eu.profinit.opendata.query.CurrentRetrievalExistingRecordException;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
 import eu.profinit.opendata.transform.TransformException;
@@ -26,7 +27,7 @@ public class MKCsvInvoiceRetriever implements RecordRetriever {
 
     @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
-            throws TransformException, DateFormatException {
+            throws TransformException, DateFormatException, CurrentRetrievalExistingRecordException {
         String identifier = yearTypeNumberIdentifierSetter.getIdentifierFromSourceValues(sourceValues);
         Map<String, String> stringFilters = new HashMap<>();
         stringFilters.put("authorityIdentifier", identifier);

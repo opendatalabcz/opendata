@@ -72,7 +72,6 @@ public class TransformDriverImpl implements TransformDriver {
 
     @Override
     public Retrieval doRetrieval(DataInstance dataInstance, String mappingFile, InputStream inputStream) {
-
         ThreadContext.put("TIMESTAMP", formatter.format(Instant.now()));
         log = LogManager.getLogger("transform");
         log.info("Starting retrieval on data instance " + dataInstance.getDataInstanceId());

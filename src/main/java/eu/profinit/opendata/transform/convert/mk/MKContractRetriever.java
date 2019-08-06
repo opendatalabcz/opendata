@@ -4,6 +4,7 @@ import eu.profinit.opendata.common.Util;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.RecordType;
 import eu.profinit.opendata.model.Retrieval;
+import eu.profinit.opendata.query.CurrentRetrievalExistingRecordException;
 import eu.profinit.opendata.query.PartnerQueryService;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
@@ -36,7 +37,7 @@ public class MKContractRetriever implements RecordRetriever {
 
     @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
-            throws TransformException, DateFormatException {
+            throws TransformException, DateFormatException, CurrentRetrievalExistingRecordException {
 
         // Get filter values
         String authId = sourceValues.get("authorityIdentifier").getStringCellValue();

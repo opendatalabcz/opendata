@@ -1,6 +1,7 @@
 package eu.profinit.opendata.transform.convert.mfcr;
 
 import eu.profinit.opendata.model.Record;
+import eu.profinit.opendata.query.CurrentRetrievalExistingRecordException;
 import eu.profinit.opendata.query.RecordQueryService;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordPropertyConverter;
@@ -10,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,12 @@ public class ContractParentSetter implements RecordPropertyConverter {
             filter.put("authorityIdentifier", record.getAuthorityIdentifier()
                     .substring(0, record.getAuthorityIdentifier().length() - 2));
 
-            List<Record> found = recordQueryService.findRecordsByFilter(filter, record.getRetrieval());
+            List<Record> found = new ArrayList<>();
+            try {
+                found = recordQueryService.findRecordsByFilter(filter, record.getRetrieval());
+            } catch (CurrentRetrievalExistingRecordException e) {
+                // the exception does not have any effect here
+            }
             if(!found.isEmpty()) {
                 record.setParentRecord(found.get(0));
             }

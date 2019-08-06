@@ -4,6 +4,7 @@ import eu.profinit.opendata.model.Entity;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.RecordType;
 import eu.profinit.opendata.model.Retrieval;
+import eu.profinit.opendata.query.CurrentRetrievalExistingRecordException;
 import eu.profinit.opendata.query.RecordQueryService;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
@@ -36,7 +37,7 @@ public class PropertyBasedRecordRetriever implements RecordRetriever {
 
     @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
-            throws TransformException, DateFormatException {
+            throws TransformException, DateFormatException, CurrentRetrievalExistingRecordException {
         HashMap<String, String> filters = new HashMap<>();
 
         for(Entry<String, Cell> entry : sourceValues.entrySet()) {
@@ -49,7 +50,7 @@ public class PropertyBasedRecordRetriever implements RecordRetriever {
     }
 
     public Record retrieveRecordByStrings(Retrieval currentRetrieval, Map<String, String> filters, RecordType type)
-            throws TransformException {
+            throws TransformException, CurrentRetrievalExistingRecordException {
 
         List<Record> found = recordQueryService.findRecordsByFilter(filters, currentRetrieval);
         Entity retrievalEntity = currentRetrieval.getDataInstance().getDataSource().getEntity();

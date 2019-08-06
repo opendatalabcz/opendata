@@ -29,13 +29,12 @@ public class RecordQueryService {
     private EntityManager em;
 
     /**
-     * Finds records in the database and/or in the specified Retrieval. Currently only supports querying by the
-     * "authorityIdentifier" field.
+     * Finds records in the database and/or in the specified Retrieval.
      * @param filter A map of attribute-value pairs to be used as filters.
      * @param currentRetrieval The Retrieval to be searched in along with the database.
      * @return A list of found records.
      */
-    public List<Record> findRecordsByFilter(Map<String, String> filter, Retrieval currentRetrieval) {
+    public List<Record> findRecordsByFilter(Map<String, String> filter, Retrieval currentRetrieval) throws CurrentRetrievalExistingRecordException {
         // Look in the retrieval first
         Collection<Record> finishedRecords = currentRetrieval.getRecords();
         Stream<Record> stream = finishedRecords.stream();
@@ -47,6 +46,11 @@ public class RecordQueryService {
         // Then try older records
         if(found.isEmpty()) {
             found = findRecordsByFilter(filter);
+        } else {
+            // If there is a record with given values in the current retrieval, we want to store the same one
+            // anyway (several same items) with adjusted authority identifier
+            throw new CurrentRetrievalExistingRecordException("Current record is already present in current retrieval. " +
+                    "The authority identifier should be enriched with appropriate suffix.");
         }
 
         return found;

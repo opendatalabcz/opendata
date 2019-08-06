@@ -2,6 +2,7 @@ package eu.profinit.opendata.transform.convert;
 
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.Retrieval;
+import eu.profinit.opendata.query.CurrentRetrievalExistingRecordException;
 import eu.profinit.opendata.query.RecordQueryService;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordPropertyConverter;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +48,12 @@ public class PropertyBasedMasterIdSetter implements RecordPropertyConverter {
             filters.put(entry.getKey(), entry.getValue().getStringCellValue());
         }
 
-        List<Record> found = recordQueryService.findRecordsByFilter(filters, record.getRetrieval());
+        List<Record> found = new ArrayList<>();
+        try {
+            found = recordQueryService.findRecordsByFilter(filters, record.getRetrieval());
+        } catch (CurrentRetrievalExistingRecordException e) {
+            // the exception does not have any effect here
+        }
 
         if(!found.isEmpty()) {
             Record first = found.get(0);

@@ -3,6 +3,7 @@ package eu.profinit.opendata.transform.convert.mmr.crr;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.RecordType;
 import eu.profinit.opendata.model.Retrieval;
+import eu.profinit.opendata.query.CurrentRetrievalExistingRecordException;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
 import eu.profinit.opendata.transform.TransformException;
@@ -29,7 +30,7 @@ public class CRRInvoiceRetriever implements RecordRetriever {
 
     @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
-            throws TransformException, DateFormatException {
+            throws TransformException, DateFormatException, CurrentRetrievalExistingRecordException {
         String authorityIdentifier = dateCategorySetter.getIdentifierFromSourceValues(sourceValues, logger);
 
         List<Record> allContracts = em.createQuery(
