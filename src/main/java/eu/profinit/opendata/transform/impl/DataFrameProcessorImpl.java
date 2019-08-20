@@ -3,7 +3,6 @@ package eu.profinit.opendata.transform.impl;
 import eu.profinit.opendata.common.Util;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.Retrieval;
-import eu.profinit.opendata.query.CurrentRetrievalExistingRecordException;
 import eu.profinit.opendata.transform.*;
 import eu.profinit.opendata.transform.convert.DateFormatException;
 import eu.profinit.opendata.transform.convert.RecordPropertyParameterConverter;
@@ -100,13 +99,7 @@ public abstract class DataFrameProcessorImpl implements DataFrameProcessor {
             return Optional.empty();
         }
 
-        Optional<Record> record = Optional.of(new Record());
-        try {
-            record = invokeOldRecordRetriever(row, mapping, retrieval, columnNames);
-        } catch (CurrentRetrievalExistingRecordException e) {
-            log.info("Appending to authority identifier: " + record.get().getAuthorityIdentifier());
-            record.ifPresent(r -> identifierAppender.append(r));
-        }
+        Optional<Record> record = invokeOldRecordRetriever(row, mapping, retrieval, columnNames);
 
         //Create the Record
         boolean newRecord;
@@ -159,7 +152,7 @@ public abstract class DataFrameProcessorImpl implements DataFrameProcessor {
      * Invoke an old record retriever, if there is one in the mapping
      * */
     protected Optional<Record> invokeOldRecordRetriever(Row row, MappedSheet mapping, Retrieval retrieval, Map<String, Integer> columnNames)
-            throws TransformException, DateFormatException, CurrentRetrievalExistingRecordException {
+            throws TransformException, DateFormatException {
         if(mapping.getRetriever() != null) {
             log.trace("Mapping specifies a retriever with class " + mapping.getRetriever().getClassName() + ", instantiating");
             RecordRetriever retriever = (RecordRetriever) instantiateComponent(mapping.getRetriever().getClassName());

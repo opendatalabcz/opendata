@@ -2,6 +2,8 @@ package eu.profinit.opendata.query;
 
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.Retrieval;
+import eu.profinit.opendata.transform.IdentifierAppender;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -13,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,13 +31,16 @@ public class RecordQueryService {
     @PersistenceContext
     private EntityManager em;
 
+    @Autowired
+    protected IdentifierAppender identifierAppender;
+
     /**
      * Finds records in the database and/or in the specified Retrieval.
      * @param filter A map of attribute-value pairs to be used as filters.
      * @param currentRetrieval The Retrieval to be searched in along with the database.
      * @return A list of found records.
      */
-    public List<Record> findRecordsByFilter(Map<String, String> filter, Retrieval currentRetrieval) throws CurrentRetrievalExistingRecordException {
+    public List<Record> findRecordsByFilter(Map<String, String> filter, Retrieval currentRetrieval) {
         // Look in the retrieval first
         Collection<Record> finishedRecords = currentRetrieval.getRecords();
         Stream<Record> stream = finishedRecords.stream();
@@ -47,14 +53,20 @@ public class RecordQueryService {
         if(found.isEmpty()) {
             found = findRecordsByFilter(filter);
         } else {
+            addAnotherRecord(found);
             // If there is a record with given values in the current retrieval, we want to store the same one
             // anyway (several same items) with adjusted authority identifier
-            throw new CurrentRetrievalExistingRecordException("Current record is already present in current retrieval. " +
-                    "The authority identifier should be enriched with appropriate suffix.");
         }
 
         return found;
 
+    }
+
+    private void addAnotherRecord(List<Record> found) {
+        Record lastCopy = found.get(found.size()-1).copy();
+        lastCopy.setMasterId(UUID.randomUUID().toString());
+        identifierAppender.append(lastCopy);
+        found.add(lastCopy);
     }
 
     /**
@@ -92,13 +104,17 @@ public class RecordQueryService {
             switch(property) {
                 case "authorityIdentifier":
                     return record.getAuthorityIdentifier() != null
-                            && record.getAuthorityIdentifier().equals(value);
+                            && (record.getAuthorityIdentifier().equals(value)
+                            || record.getAuthorityIdentifier().contains(value + "__")); // BUG 52483
                 case "budgetCategory":
                     return record.getBudgetCategory() != null
                             && record.getBudgetCategory().equals(value);
                 case "subject":
                     return record.getSubject() != null
                             && record.getSubject().equals(value);
+                case "amountCzk":
+                    return record.getAmountCzk() != null
+                            && record.getAmountCzk().toString().equals(value);
                 default:
                     return false;
             }

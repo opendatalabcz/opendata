@@ -37,7 +37,7 @@ public class Util {
 
         for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
             Cell cell = row.getCell(c);
-            if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
+            if (cell != null && !cell.isCellNull() && cell.getCellType() != Cell.CELL_TYPE_BLANK)
                 return false;
         }
         return true;

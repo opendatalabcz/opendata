@@ -3,7 +3,6 @@ package eu.profinit.opendata.transform.convert.mmr;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.RecordType;
 import eu.profinit.opendata.model.Retrieval;
-import eu.profinit.opendata.query.CurrentRetrievalExistingRecordException;
 import eu.profinit.opendata.query.PartnerQueryService;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
@@ -34,7 +33,7 @@ public class MMROrderRetriever implements RecordRetriever {
 
     @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
-            throws TransformException, DateFormatException, CurrentRetrievalExistingRecordException {
+            throws TransformException, DateFormatException {
 
         try {
             // Get filter values

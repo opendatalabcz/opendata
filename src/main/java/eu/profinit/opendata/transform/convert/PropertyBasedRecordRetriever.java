@@ -4,7 +4,6 @@ import eu.profinit.opendata.model.Entity;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.RecordType;
 import eu.profinit.opendata.model.Retrieval;
-import eu.profinit.opendata.query.CurrentRetrievalExistingRecordException;
 import eu.profinit.opendata.query.RecordQueryService;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
@@ -15,9 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -37,7 +34,7 @@ public class PropertyBasedRecordRetriever implements RecordRetriever {
 
     @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
-            throws TransformException, DateFormatException, CurrentRetrievalExistingRecordException {
+            throws TransformException, DateFormatException {
         HashMap<String, String> filters = new HashMap<>();
 
         for(Entry<String, Cell> entry : sourceValues.entrySet()) {
@@ -50,7 +47,7 @@ public class PropertyBasedRecordRetriever implements RecordRetriever {
     }
 
     public Record retrieveRecordByStrings(Retrieval currentRetrieval, Map<String, String> filters, RecordType type)
-            throws TransformException, CurrentRetrievalExistingRecordException {
+            throws TransformException {
 
         List<Record> found = recordQueryService.findRecordsByFilter(filters, currentRetrieval);
         Entity retrievalEntity = currentRetrieval.getDataInstance().getDataSource().getEntity();
@@ -61,14 +58,20 @@ public class PropertyBasedRecordRetriever implements RecordRetriever {
 
         if(!found.isEmpty()) {
             // There should only be one at this point - if there are more, it indicates a problem with the mapping
-            if(found.size() > 1) {
+            if(found.size() > 1 && hasSameIdentifiers(found)) {
                 throw new TransformException("More than one candidate record has been found",
                         TransformException.Severity.FATAL);
             }
-            return found.get(0);
+            return found.get(found.size()-1);
         }
 
         return null;
 
+    }
+
+    private boolean hasSameIdentifiers(List<Record> records) {
+        Set<String> ids = new HashSet<>();
+        records.forEach(r -> ids.add(r.getAuthorityIdentifier()));
+        return ids.size() < records.size();
     }
 }

@@ -406,4 +406,31 @@ public class Record {
         return result;
     }
 
+    public Record copy() {
+        Record record = new Record();
+        record.setAuthorityIdentifier(this.authorityIdentifier);
+        record.setAuthority(this.authority);
+        record.setMasterId(this.masterId);
+        record.setInEffect(this.inEffect);
+        record.setDueDate(this.dueDate);
+        record.setDateOfPayment(this.dateOfPayment);
+        record.setDateOfExpiry(this.dateOfExpiry);
+        record.setDateCreated(this.dateCreated);
+        record.setCurrency(this.currency);
+        record.setChildRecords(this.childRecords);
+        record.setBudgetCategory(this.budgetCategory);
+        record.setAuthorityRole(this.authorityRole);
+        record.setAmountCzk(this.amountCzk);
+        record.setOriginalCurrencyAmount(this.originalCurrencyAmount);
+        record.setParentRecord(this.parentRecord);
+        record.setPartner(this.partner);
+        record.setPeriodicity(this.periodicity);
+        record.setRecordId(this.recordId);
+        record.setRecordType(this.recordType);
+        record.setRetrieval(this.retrieval);
+        record.setSubject(this.subject);
+        record.setUnresolvedRelationships(this.unresolvedRelationships);
+        record.setVariableSymbol(this.variableSymbol);
+        return record;
+    }
 }

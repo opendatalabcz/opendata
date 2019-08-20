@@ -4,7 +4,6 @@ import eu.profinit.opendata.model.DataInstance;
 import eu.profinit.opendata.model.Record;
 import eu.profinit.opendata.model.RecordType;
 import eu.profinit.opendata.model.Retrieval;
-import eu.profinit.opendata.query.CurrentRetrievalExistingRecordException;
 import eu.profinit.opendata.transform.Cell;
 import eu.profinit.opendata.transform.RecordRetriever;
 import eu.profinit.opendata.transform.TransformException;
@@ -27,7 +26,7 @@ public class YearAppenderRetriever implements RecordRetriever {
 
     @Override
     public Record retrieveRecord(Retrieval currentRetrieval, Map<String, Cell> sourceValues, Logger logger)
-            throws TransformException, DateFormatException, CurrentRetrievalExistingRecordException {
+            throws TransformException, DateFormatException {
         try {
             String categoryType = sourceValues.get("categoryType").getStringCellValue();
             String serialNumber = sourceValues.get("serialNumber").getStringCellValue();
