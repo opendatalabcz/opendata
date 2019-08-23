@@ -7,47 +7,19 @@ import eu.profinit.opendata.model.DataSource;
 import eu.profinit.opendata.model.Periodicity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Optional;
 
 @Component
-public class MDCRHandler extends GenericDataSourceHandler {
+public abstract class MDCRHandler extends GenericDataSourceHandler {
 
-    @Value("${md.invoices.url.scheme}")
-    private String invoicesUrlScheme;
+    protected Logger log = LogManager.getLogger(MDCRHandler.class);
 
-    @Value("${md.invoices.mapping.file}")
-    private String invoicesMappingFile;
+    public abstract void updateDataInstances(DataSource ds);
 
-    @Value("${md.contracts.url.scheme}")
-    private String contractsUrlScheme;
-
-    @Value("${md.contracts.mapping.file}")
-    private String contractsMappingFile;
-
-    private Logger log = LogManager.getLogger(MDCRHandler.class);
-
-    @Override
-    protected void updateDataInstances(DataSource ds) {
-        switch(ds.getRecordType()) {
-            case INVOICE: updateInvoicesDataInstance(ds); break;
-            case CONTRACT: updateContractDataInstance(ds); break;
-            default: break;
-        }
-    }
-
-    private void updateInvoicesDataInstance(DataSource ds) {
-        updateDataInstance(ds, invoicesUrlScheme, invoicesMappingFile, "Faktury MDČR");
-    }
-
-    private void updateContractDataInstance(DataSource ds) {
-        updateDataInstance(ds, contractsUrlScheme, contractsMappingFile, "Smlouvy MDČR");
-    }
-
-    private void createDataInstance(Integer year, String url, DataSource ds, String format, String mappingFile, String description) {
+    public void createDataInstance(Integer year, String url, DataSource ds, String format, String mappingFile, String description) {
         String file = mappingFile;
 
         DataInstance di = new DataInstance();
@@ -65,7 +37,7 @@ public class MDCRHandler extends GenericDataSourceHandler {
         em.persist(di);
     }
 
-    private void updateDataInstance(DataSource ds, String urlScheme, String mappingFile, String description) {
+    protected void updateDataInstance(DataSource ds, String urlScheme, String mappingFile, String description) {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         for (Integer i = 2015; i <= currentYear; i++) {
             String url = urlScheme.replace("{year}", i.toString());
