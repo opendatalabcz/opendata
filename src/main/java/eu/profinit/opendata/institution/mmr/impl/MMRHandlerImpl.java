@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Calendar;
+
 @Component
 public class MMRHandlerImpl extends KANAPIHandler implements MMRHandler {
 
@@ -20,8 +22,12 @@ public class MMRHandlerImpl extends KANAPIHandler implements MMRHandler {
     @Value("${mmr.json.packages.url}")
     private String packagesPath;
 
-    @Value("${mmr.json.invoices.identifier}")
-    private String invoicesIdentifier;
+    @Value("${mmr.json.invoices.identifier1}")
+    private String invoicesIdentifier1;
+    @Value("${mmr.json.invoices.identifier2}")
+    private String invoicesIdentifier2;
+    @Value("${mmr.json.invoices.identifier3}")
+    private String invoicesIdentifier3;
 
     @Value("${mmr.mapping.invoices}")
     private String invoicesMappingFile;
@@ -41,16 +47,35 @@ public class MMRHandlerImpl extends KANAPIHandler implements MMRHandler {
 
     @Override
     public void updateDataInstances(DataSource ds) {
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         switch (ds.getRecordType()) {
             case INVOICE:
+                for (int year = 2016; year <= currentYear; year++) {
+
+                    String invoicesId = getInvoicesId(invoicesIdentifier1, year);
+                    if (jsonClient.checkUrlOK(jsonApiUrl, packagesPath, invoicesId)) {
+                        updateInvoicesDataInstance(ds, patternRegex, Periodicity.MONTHLY,
+                                jsonApiUrl, packagesPath, invoicesIdentifier1, invoicesMappingFile, log);
+                    }
+
+                    invoicesId = getInvoicesId(invoicesIdentifier2, year);
+                    if (jsonClient.checkUrlOK(jsonApiUrl, packagesPath, invoicesId)) {
+                        updateInvoicesDataInstance(ds, patternRegex, Periodicity.MONTHLY,
+                                jsonApiUrl, packagesPath, invoicesIdentifier2, invoicesMappingFile, log);
+                    }
+                }
+                // 2018 file has a different identifier.. -_-
                 updateInvoicesDataInstance(ds, patternRegex, Periodicity.MONTHLY,
-                        jsonApiUrl, packagesPath, invoicesIdentifier, invoicesMappingFile, log);
+                        jsonApiUrl, packagesPath, invoicesIdentifier3, invoicesMappingFile, log);
                 break;
             default:
                 throw new UnsupportedOperationException("Other type for update than INVOICE is not supported yet. " +
                         "Requested type: " + ds.getRecordType());
-
         }
+    }
+
+    private String getInvoicesId(String identifierPattern, Integer year) {
+        return identifierPattern.replace("{year}", year.toString());
     }
 
     @Override

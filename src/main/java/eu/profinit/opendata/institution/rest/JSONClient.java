@@ -5,6 +5,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -68,4 +70,15 @@ public class JSONClient {
         }
     }
 
+    public boolean checkUrlOK(String apiUrl, String packagesPath, String packageListIdentifier) {
+        try {
+            URI uri = URI.create(apiUrl + packagesPath + "?id=" + packageListIdentifier);
+            log.debug("Checking url of " + uri.toString());
+            ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
+            return response.getStatusCode().equals(HttpStatus.OK);
+        } catch (RestClientException e) {
+            log.error("Problem with retrieval.", e);
+            return false;
+        }
+    }
 }

@@ -50,7 +50,7 @@ public abstract class MDCRHandler extends GenericDataSourceHandler {
                 if(currentYear - i > 1 && oldDataInstance.get().getLastProcessedDate() != null) {
                     oldDataInstance.get().expire();
                     em.merge(oldDataInstance.get());
-                    log.info("Expired MSp " + description + " data instance for year " + i.toString());
+                    log.info("Expired " + description + " data instance for year " + i.toString());
                 }
             }
             else if(Util.isXLSFileAtURL(url)) {

@@ -90,7 +90,7 @@ public class CRRHandlerImpl  extends KANAPIHandler implements CRRHandler {
                 if (currentYear - year > 1 && oldDataInstance.get().getLastProcessedDate() != null) {
                     oldDataInstance.get().expire();
                     em.merge(oldDataInstance.get());
-                    log.info("Expired MSp invoices data instance for year " + year.toString());
+                    log.info("Expired CRR invoices data instance for year " + year.toString());
                 }
             } else if(Util.isFileAtURL(url)) {
                 createDataInstance(year, url, ds, "csv");

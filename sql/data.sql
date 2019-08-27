@@ -96,6 +96,7 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   );
 
 -- MK: Data instances are manual and must be periodically updated ----------------------------
+-- MK does not have any API yet, nor does it publish its data on data.gov.cz
 
 WITH mk AS (INSERT INTO entity(entity_type, name, ico, dic, is_public) VALUES
   ('ministry', 'Ministerstvo kultury ČR', '00023671', 'CZ00023671', TRUE) RETURNING entity_id),
@@ -323,21 +324,6 @@ INSERT INTO data_instance(data_source_id, url, format, periodicity, description,
   (
     (SELECT  data_source_id FROM invoices_ds), 'http://data.mmr.cz/dataset/cc7ef807-36a7-4058-886f-e352d6979026/resource/537dd862-5b5e-4068-8ffb-a4f2270de46b/download/cusersvanlukonedrive-mmrstaene-souboryfaktury_2015.csv',
     'csv', 'monthly', 'Faktury MMR 2015', 'mappings/mmr/mapping-csv-2015-invoices.xml', FALSE
-  ),
-
-  (
-    (SELECT  data_source_id FROM invoices_ds), 'http://data.mmr.cz/dataset/012d9e10-3779-484f-a8f9-ce8445d02141/resource/19691295-09e0-4f2b-8d10-3e36e023d873/download/cusersvanlukonedrive-mmrstaene-souboryfaktury_2016.csv',
-    'csv', 'monthly', 'Faktury MMR 2016', 'mappings/mmr/mapping-csv-invoices.xml', FALSE
-  ),
-
-  (
-    (SELECT  data_source_id FROM invoices_ds), 'http://data.mmr.cz/dataset/89717919-5db4-469d-842c-01d4f54b0ed9/resource/922a41d9-9bf2-4ba6-a9b3-0ab48a197077/download/cusersvanlukonedrive-mmrstaene-souboryfaktury_2017.csv',
-    'csv', 'monthly', 'Faktury MMR 2017', 'mappings/mmr/mapping-csv-invoices.xml', FALSE
-  ),
-
-  (
-    (SELECT  data_source_id FROM invoices_ds), 'http://data.mmr.cz/dataset/5f2d1e58-f7e5-4c00-af9c-2cdfe9a4965f/resource/0909932c-f6fc-4ca7-9126-f8c79ce0eecc/download/jsdilenedata-pro-katalogoufs___k-uveejnnifaktury_2018-12_20190101.csv',
-    'csv', 'monthly', 'Faktury MMR 2018', 'mappings/mmr/mapping-csv-invoices.xml', FALSE
   );
 
 -- MMR SFRB
