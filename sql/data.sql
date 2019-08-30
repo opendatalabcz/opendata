@@ -444,37 +444,25 @@ INSERT INTO data_source(entity_id, record_type, periodicity, handling_class, act
 -- MDCR: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
 
 WITH mdcr AS (INSERT INTO entity(entity_type, name, ico, dic, is_public) VALUES
-  ('ministry', 'Ministerstvo dopravy', '66003008', 'CZ66003008', TRUE) RETURNING entity_id),
+  ('ministry', 'Ministerstvo dopravy', '66003008', 'CZ66003008', TRUE) RETURNING entity_id)
 
-    contracts_ds AS (
-    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
-      (SELECT entity_id FROM mdcr),
-      'contract', 'yearly', 'eu.profinit.opendata.institution.mdcr.impl.MDCRHandlerImpl', TRUE, 'Smlouvy MDČR')
-    RETURNING data_source_id
-  ),
-
-    invoices_ds AS (
-    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
-      (SELECT entity_id FROM mdcr),
-      'invoice', 'yearly', 'eu.profinit.opendata.institution.mdcr.impl.MDCRHandlerImpl', TRUE, 'Faktury MDČR')
-    RETURNING data_source_id
-  );
+    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES
+      (
+		 (SELECT entity_id FROM mdcr),
+      	'contract', 'yearly', 'eu.profinit.opendata.institution.mdcr.impl.MDCRHandlerImpl', TRUE, 'Smlouvy MDČR'
+	  ),
+	  (
+		  (SELECT entity_id FROM mdcr),
+      	'invoice', 'yearly', 'eu.profinit.opendata.institution.mdcr.impl.MDCRHandlerImpl', TRUE, 'Faktury MDČR'
+	  );
 
 -- SFDI: Data instances are manual and experimentally periodic, but we don't know how updates are published. ----------------------------
 
 WITH sfdi AS (INSERT INTO entity(entity_type, name, ico, dic, is_public) VALUES
-  ('ministry-organization', 'Státní fond dopravní infrastruktury', '70856508', 'CZ70856508', TRUE) RETURNING entity_id),
+  ('ministry-organization', 'Státní fond dopravní infrastruktury', '70856508', 'CZ70856508', TRUE)RETURNING entity_id)
 
-    contracts_ds AS (
-    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
-      (SELECT entity_id FROM sfdi),
-      'contract', 'yearly', 'eu.profinit.opendata.institution.mdcr.sfdi.SFDIHandlerImpl', TRUE, 'Smlouvy SFDI')
-    RETURNING data_source_id
-  ),
-
-    invoices_ds AS (
-    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES (
-      (SELECT entity_id FROM sfdi),
-      'invoice', 'yearly', 'eu.profinit.opendata.institution.mdcr.sfdi.SFDIHandlerImpl', TRUE, 'Faktury SFDI')
-    RETURNING data_source_id
-  );
+    INSERT INTO data_source (entity_id, record_type, periodicity, handling_class, active, description) VALUES
+      ((SELECT entity_id FROM sfdi),
+      'contract', 'yearly', 'eu.profinit.opendata.institution.mdcr.sfdi.SFDIHandlerImpl', TRUE, 'Smlouvy SFDI'),
+      ((SELECT entity_id FROM sfdi),
+      'invoice', 'yearly', 'eu.profinit.opendata.institution.mdcr.sfdi.SFDIHandlerImpl', TRUE, 'Faktury SFDI');
