@@ -16,6 +16,14 @@ public class WorkbookCellImpl implements Cell {
 
     public WorkbookCellImpl(org.apache.poi.ss.usermodel.Cell cell) {
         this.cell = cell;
+        try {
+            String cellString = cell.getStringCellValue();
+            if (cellString.length() > 0 && cellString.matches("^\".*\"$")) {
+                this.cell.setCellValue(cell.getStringCellValue().replaceAll("^\"|\"$", ""));
+            }
+        } catch (Exception e) {
+            // the cell is not string which is ok
+        }
     }
 
     @Override
