@@ -124,8 +124,9 @@ public class WorkbookProcessorImpl extends DataFrameProcessorImpl implements Wor
      */
     private boolean headerIsBroken(Map<String, Integer> columnNames) {
         if (columnNames.containsKey("")) {
-            // sometimes the first empty cell is still considered as part of the header row and the header row is still ok
-            boolean lastIsEmpty = columnNames.get("") == (columnNames.size() - 1);
+            // sometimes the first or second empty cell is still considered as part of the header row and the header row is still ok
+            boolean lastIsEmpty = (columnNames.get("") == (columnNames.size() - 1) ||
+                    (columnNames.size() > 1 && columnNames.get("") == (columnNames.size() - 2)));
             return !lastIsEmpty;
         }
         return  false;

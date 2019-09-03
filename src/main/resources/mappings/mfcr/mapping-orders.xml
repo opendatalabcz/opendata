@@ -4,7 +4,7 @@
 
     <mappedSheet number="0">
 
-        <headerRow>1</headerRow>
+        <headerRow>0</headerRow>
 
         <property name="recordType" value="ORDER" onlyNewRecords="true"/>
 
