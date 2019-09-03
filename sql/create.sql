@@ -90,7 +90,7 @@ CREATE TABLE "record"
 	"amount_czk" double precision NULL,
 	"authority_identifier" varchar(50)	 NULL,
 	"currency" varchar(3)	 NOT NULL,
-	"date_created" date NOT NULL,
+	"date_created" date NULL,
 	"date_of_expiry" date NULL,
 	"date_of_payment" date NULL,
 	"due_date" date NULL,
